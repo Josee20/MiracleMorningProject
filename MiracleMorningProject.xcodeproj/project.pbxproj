@@ -10,6 +10,7 @@
 		49580DAE28CF028E002EE3CD /* DailyButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49580DAD28CF028E002EE3CD /* DailyButton.swift */; };
 		49580DB128CF07A7002EE3CD /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49580DB028CF07A7002EE3CD /* TimerView.swift */; };
 		49580DB328CF07B0002EE3CD /* TimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49580DB228CF07B0002EE3CD /* TimerViewController.swift */; };
+		49580DB728CF98AB002EE3CD /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49580DB628CF98AB002EE3CD /* UIButton+Extension.swift */; };
 		49F6D8C628CDAD10005AA757 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F6D8C528CDAD10005AA757 /* AppDelegate.swift */; };
 		49F6D8C828CDAD10005AA757 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F6D8C728CDAD10005AA757 /* SceneDelegate.swift */; };
 		49F6D8CA28CDAD10005AA757 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F6D8C928CDAD10005AA757 /* ViewController.swift */; };
@@ -41,6 +42,7 @@
 		49580DAD28CF028E002EE3CD /* DailyButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyButton.swift; sourceTree = "<group>"; };
 		49580DB028CF07A7002EE3CD /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
 		49580DB228CF07B0002EE3CD /* TimerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewController.swift; sourceTree = "<group>"; };
+		49580DB628CF98AB002EE3CD /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
 		49F6D8C228CDAD10005AA757 /* MiracleMorningProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MiracleMorningProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		49F6D8C528CDAD10005AA757 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		49F6D8C728CDAD10005AA757 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 				49F6D90428CDFC7A005AA757 /* SetScheduleViewController.swift */,
 				49F6D90628CDFCBB005AA757 /* SetScheduleTableViewCell.swift */,
 				49580DAD28CF028E002EE3CD /* DailyButton.swift */,
+				49580DB628CF98AB002EE3CD /* UIButton+Extension.swift */,
 			);
 			path = SetScheduleView;
 			sourceTree = "<group>";
@@ -289,6 +292,7 @@
 				49F6D8E828CDB595005AA757 /* SecondViewController.swift in Sources */,
 				49F6D8F028CDB84B005AA757 /* ThirdView.swift in Sources */,
 				49F6D90728CDFCBB005AA757 /* SetScheduleTableViewCell.swift in Sources */,
+				49580DB728CF98AB002EE3CD /* UIButton+Extension.swift in Sources */,
 				49F6D8E028CDB090005AA757 /* TabBarController.swift in Sources */,
 				49F6D8DD28CDAEDE005AA757 /* BaseView.swift in Sources */,
 				49F6D90028CDEA32005AA757 /* ReusableProtocol.swift in Sources */,

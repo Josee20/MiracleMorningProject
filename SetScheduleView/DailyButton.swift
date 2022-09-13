@@ -21,18 +21,10 @@ class DailyButton: UIButton {
     }
   
     func setupButton() {
-        
-        
         isSelected = true
         setTitleColor(UIColor.white, for: .normal)
         clipsToBounds = true
         layer.cornerRadius = 20
-        backgroundColor = UIColor.systemGray4
-        isMultipleTouchEnabled = true
-        setBackgroundImage(<#T##image: UIImage?##UIImage?#>, for: <#T##UIControl.State#>)
-        
-//        backgroundColor = UIColor(red: 85/255, green: 189/255, blue: 249/255, alpha: 1)
-//        setTitleColor(UIColor.green, for: .selected)
-        
+        backgroundColor = UIColor.lightGray
     }
 }

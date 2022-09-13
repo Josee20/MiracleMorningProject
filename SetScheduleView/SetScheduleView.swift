@@ -21,7 +21,7 @@ class SetScheduleView: BaseView {
     let textFieldBorder: UIView = {
         let view = UIView()
         view.layer.borderWidth = 1
-        view.layer.borderColor = UIColor.black.cgColor
+        view.layer.borderColor = UIColor.systemGray.cgColor
         return view
     }()
     
@@ -156,8 +156,6 @@ class SetScheduleView: BaseView {
             $0.trailingMargin.equalTo(-20)
             $0.topMargin.equalTo(textFieldBorder.snp.bottom).offset(40)
             $0.height.equalTo(40)
-        }
-        
-        
+        }   
     }
 }

@@ -26,7 +26,7 @@ class FirstView: BaseView {
     let borderWithTabBar: UIView = {
         let view = UIView()
         view.layer.borderWidth = 1
-        view.layer.borderColor = UIColor.systemGray3.cgColor
+        view.layer.borderColor = UIColor.systemGray4.cgColor
         return view
     }()
     

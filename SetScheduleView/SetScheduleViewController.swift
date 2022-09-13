@@ -14,6 +14,13 @@ class SetScheduleViewController: BaseViewController {
     
     override func loadView() {
         self.view = mainView
+
+        // 버튼에 tag 부여
+        let dayButtonArr = [mainView.sundayButton, mainView.mondayButton, mainView.tuesdayButton, mainView.wedensdayButton, mainView.thursdayButton, mainView.fridayButton, mainView.saturdayButton]
+        
+        for i in 0...6 {
+            dayButtonArr[i].tag = i
+        }
     }
     
     override func viewDidLoad() {
@@ -23,25 +30,27 @@ class SetScheduleViewController: BaseViewController {
         addCancelButton()
     }
     
+    
     override func configure() {
-
-//        setTextViewPlaceholder()
+        
+        // MARK: 버튼마다 dayButtonClicked 함수 넣어주기
+        let dayButtonArr = [mainView.sundayButton, mainView.mondayButton, mainView.tuesdayButton, mainView.wedensdayButton, mainView.thursdayButton, mainView.fridayButton, mainView.saturdayButton]
+        
+        for i in 0..<dayButtonArr.count {
+            dayButtonArr[i].addTarget(self, action: #selector(dayButtonClicked), for: .touchUpInside)
+        }
     }
     
-//    func setTextViewPlaceholder() {
-//        mainView.setScheduleTextView.delegate = self
-//        mainView.setScheduleTextView.text = "예) 알고리즘"
-//        mainView.setScheduleTextView.textColor = .lightGray
-//        mainView.setScheduleTextView.textAlignment = .center
-//    }
-    
-    
-    
-    
-    
-    
-    
-    
+    // MARK: 클릭하면 백그라운드 색 변경
+    @objc func dayButtonClicked(sender: UIButton) {
+        let dayButtonArr = [mainView.sundayButton, mainView.mondayButton, mainView.tuesdayButton, mainView.wedensdayButton, mainView.thursdayButton, mainView.fridayButton, mainView.saturdayButton]
+        
+        if dayButtonArr[sender.tag].backgroundColor == UIColor.lightGray {
+            dayButtonArr[sender.tag].backgroundColor = .orange
+        } else if dayButtonArr[sender.tag].backgroundColor == UIColor.orange {
+            dayButtonArr[sender.tag].backgroundColor = .lightGray
+        }
+    }
     
     func addCancelButton() {
         let cancelButton = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(cancelButtonClicked))
@@ -56,21 +65,6 @@ class SetScheduleViewController: BaseViewController {
     @objc func cancelButtonClicked() {
         self.dismiss(animated: true)
     }
+    
 }
 
-//extension SetScheduleViewController: UITextViewDelegate {
-//    
-//    func textViewDidBeginEditing(_ textView: UITextView) {
-//        if textView.textColor == .lightGray {
-//            textView.text = nil
-//            textView.textColor = .black
-//        }
-//    }
-//    
-//    func textViewDidEndEditing(_ textView: UITextView) {
-//        if textView.text.isEmpty {
-//            textView.text = "예) 알고리즘"
-//            textView.textColor = .lightGray
-//        }
-//    }
-//}
