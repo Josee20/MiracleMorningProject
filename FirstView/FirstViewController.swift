@@ -7,12 +7,15 @@
 
 import Foundation
 import UIKit
+import UserNotifications
 
 class FirstViewController: BaseViewController {
     
     let mainView = FirstView()
     
     var timer: Timer?
+    
+    let notificationCenter = UNUserNotificationCenter.current()
     
     override func loadView() {
         self.view = mainView
@@ -23,8 +26,7 @@ class FirstViewController: BaseViewController {
         
         mainView.backgroundColor = .systemBackground
         
-        
-        
+        requestNotificationAuthorization()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -57,10 +59,17 @@ class FirstViewController: BaseViewController {
         present(nav, animated: true)
     }
     
-    
-    
     @objc func getCurrentTime() {
         mainView.presentTimeLabel.text = DateFormatChange.shared.fullDate.string(from: Date())
+    }
+    
+    func requestNotificationAuthorization() {
+
+        notificationCenter.requestAuthorization(options: [.alert, .sound]) { success, error in
+            if let error = error {
+                print(error)
+            }
+        }
     }
 }
 

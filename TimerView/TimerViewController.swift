@@ -7,10 +7,13 @@
 
 import Foundation
 import UIKit
+import UserNotifications
 
 import SnapKit
 
 class TimerViewController: BaseViewController {
+    
+    let notificationCenter = UNUserNotificationCenter.current()
     
     private let cancelButton: UIButton = {
         let view = UIButton()
@@ -54,9 +57,15 @@ class TimerViewController: BaseViewController {
         self.view.backgroundColor = .systemBackground
         self.addTimerView(on: self.timeLabel)
         
+        self.callNotification(time: 1, title: "미션 완료!!!", body: "다음 미션도 완수해주세요~~\n다 마치셨다면 당신은 멋쟁이!!!")
+        
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { success, error in
+            print(error)
+        }
+        
+        // MARK: 타임레이블 설정
         self.timeLabel.textAlignment = .center
         self.timeLabel.font = .boldSystemFont(ofSize: 40)
-        
         self.view.addSubview(self.timeLabel)
         self.timeLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -134,6 +143,25 @@ class TimerViewController: BaseViewController {
         ])
         timerView.start(duration: Double(leftTime))
     }
+    
+    func callNotification(time: Double, title: String, body: String) {
+        notificationCenter.removeAllPendingNotificationRequests()
+        
+        let content = UNMutableNotificationContent()
+        content.title = title
+        content.body = body
+        content.sound = .defaultCritical
+        content.badge = 2
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: time, repeats: false)
+        
+        let request = UNNotificationRequest(identifier: "notification", content: content, trigger: trigger)
+        
+        UNUserNotificationCenter.current().add(request) { error in
+            guard let error = error else { return }
+            print(error)
+        }
+    }
 }
 
 final class RoundLabel: UILabel {
@@ -143,6 +171,5 @@ final class RoundLabel: UILabel {
         
         self.clipsToBounds = true
         self.layer.cornerRadius = self.bounds.height / 2.0
-
     }
 }

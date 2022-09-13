@@ -242,7 +242,7 @@ final class RoundLabel: UILabel {
 
 ## 2. multiple button click and change background color
 
-<img width="297" alt="스크린샷 2022-09-13 오전 3 24 57" src="https://user-images.githubusercontent.com/92367484/189813180-862bb376-5d1a-4cf3-9159-7cc9ad57c29b.png">
+![[스크린샷 2022-09-13 오전 3.24.57.png | 300]]
 
 
 ### 중요사항
@@ -291,4 +291,117 @@ ___
 
 # 220913
 
+
+## 1. Notification
+
+1.  처음 뷰컨트롤러에 notificationCenter 초기화(싱글톤 패턴)
+2.  requestNotificationAuthorization으로 처음에 알림 권한 설정
+
+```swift
+class FirstViewController: BaseViewController {
+    
+    let notificationCenter = UNUserNotificationCenter.current()
+    
+    override func loadView() {
+        self.view = mainView
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        requestNotificationAuthorization()
+    }
+    
+    func requestNotificationAuthorization() {
+
+        notificationCenter.requestAuthorization(options: [.alert, .sound]) { success, error in
+            if let error = error {
+                print(error)
+            }
+        }
+    }
+}
+```
+
+
+3. 알람 나타내고 싶은 뷰컨트롤러에 notificationCenter 다시초기화
+4. callNotification 함수 만들어주기
+
+```swift
+class TimerViewController: BaseViewController {
+    
+    let notificationCenter = UNUserNotificationCenter.current()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.callNotification(time: 1, title: "미션 완료!!!", body: "다음 미션도 완수해주세요~~\n다 마치셨다면 당신은 멋쟁이!!!")
+        
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { success, error in
+            print(error)
+        }
+    }
+    
+    func callNotification(time: Double, title: String, body: String) {
+        notificationCenter.removeAllPendingNotificationRequests()
+        
+        let content = UNMutableNotificationContent()
+        content.title = title
+        content.body = body
+        content.sound = .defaultCritical
+        content.badge = 2
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: time, repeats: false)
+        
+        let request = UNNotificationRequest(identifier: "notification", content: content, trigger: trigger)
+        
+        UNUserNotificationCenter.current().add(request) { error in
+            guard let error = error else { return }
+            print(error)
+        }
+    }
+}
+```
+
+
+
+## 2. Alert + DatePicker
+
+1.  UIDatePicker() 초기화 후 스타일 잡아주기
+2. UIAlertController 초기화 후 서브 뷰로 datePicker 넣어주기
+3. 레이아웃 잡아주고 얼럿 액션 추가해주기
+4. ok버튼 클릭시 시간선택 버튼 타이틀 해당 시간을 선택한 시간으로 변경해주기
+
+```swift
+@objc func setStartTimeButtonClicked(sender: UIDatePicker) {
+	
+	let datePicker = UIDatePicker()
+	
+	datePicker.datePickerMode = .time
+	datePicker.preferredDatePickerStyle = .wheels
+	datePicker.locale = NSLocale(localeIdentifier: "ko-KR") as Locale
+	
+	let alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n", message: nil, preferredStyle: .actionSheet)
+	
+	alert.view.addSubview(datePicker)
+	
+	datePicker.snp.makeConstraints {
+		$0.centerX.equalTo(alert.view)
+		$0.top.equalTo(alert.view).offset(8)
+	}
+	
+	let ok = UIAlertAction(title: "확인", style: .default) { (action) in
+		let dateString = DateFormatChange.shared.dateOfHourAndPM.string(from: datePicker.date)
+		self.mainView.setStartTimeButton.setTitle(dateString, for: .normal)
+		self.mainView.setStartTimeButton.setTitleColor(.systemBlue, for: .normal)
+	}
+	
+	let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+	
+	alert.addAction(ok)
+	alert.addAction(cancel)
+	
+	present(alert, animated: true, completion: nil)
+}
+```
 ___

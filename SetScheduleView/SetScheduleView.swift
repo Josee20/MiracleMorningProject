@@ -15,6 +15,8 @@ class SetScheduleView: BaseView {
         view.font = .boldSystemFont(ofSize: 20)
         view.textAlignment = .center
         view.placeholder = "예) 독서"
+        view.keyboardType = .default
+        view.returnKeyType = .done
         return view
     }()
     
@@ -80,25 +82,96 @@ class SetScheduleView: BaseView {
         let view = UIStackView()
         view.axis = .horizontal
         view.alignment = .fill
-        view.spacing = 8
+        view.spacing = 4
         view.translatesAutoresizingMaskIntoConstraints = false
         view.distribution = .equalSpacing
         return view
     }()
     
+    let headerView: UILabel = {
+        let view = UILabel()
+        view.text = "알림설정"
+        view.font = .boldSystemFont(ofSize: 18)
+        view.textColor = .systemGray3
+        return view
+    }()
     
+    let firstLineView: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = 20
+        view.backgroundColor = .systemGray6
+        return view
+    }()
+    
+    let secondLineView: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = 20
+        view.backgroundColor = .systemGray6
+        return view
+    }()
+    
+    let thirdLineView: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = 20
+        view.backgroundColor = .systemGray6
+        return view
+    }()
+    
+    let startTimeLabel: UILabel = {
+        let view = UILabel()
+        view.text = "시작시간"
+        view.textAlignment = .center
+        return view
+    }()
+    
+    let setStartTimeButton: UIButton = {
+        let view = UIButton()
+        view.setTitle("시간선택", for: .normal)
+        view.titleLabel?.font = .systemFont(ofSize: 15)
+        view.setTitleColor(.black, for: .normal)
+        return view
+    }()
+    
+    let setEndTimeButton: UIButton = {
+        let view = UIButton()
+        view.setTitle("시간선택", for: .normal)
+        view.titleLabel?.font = .systemFont(ofSize: 15)
+        view.setTitleColor(.black, for: .normal)
+        return view
+    }()
+    
+    let endTimeLabel: UILabel = {
+        let view = UILabel()
+        view.text = "종료시간"
+        view.textAlignment = .center
+        return view
+    }()
+    
+    let getAlarmLabel: UILabel = {
+        let view = UILabel()
+        view.text = "알림받기"
+        return view
+    }()
+    
+    let alarmToggle: UISwitch = {
+        let view = UISwitch()
+        view.isEnabled = true
+        return view
+    }()
     
     let okButton: UIButton = {
         let view = UIButton()
         view.setTitle("완료", for: .normal)
         view.backgroundColor = .systemGray
+        view.layer.cornerRadius = 25
         return view
     }()
     
     override func configureUI() {
         
+        setScheduleTextField.delegate = self
 
-        [setScheduleTextField, textFieldBorder, okButton, stackView].forEach { self.addSubview($0) }
+        [setScheduleTextField, textFieldBorder, okButton, stackView, headerView, firstLineView, secondLineView, thirdLineView, startTimeLabel, setStartTimeButton, endTimeLabel, setEndTimeButton, getAlarmLabel, alarmToggle].forEach { self.addSubview($0) }
         
         [sundayButton, mondayButton, tuesdayButton, wedensdayButton, thursdayButton, fridayButton, saturdayButton].forEach { self.stackView.addArrangedSubview($0) }
         
@@ -122,8 +195,8 @@ class SetScheduleView: BaseView {
         
         okButton.snp.makeConstraints {
             $0.bottom.equalTo(self.safeAreaLayoutGuide).offset(-40)
-            $0.leadingMargin.equalTo(60)
-            $0.trailingMargin.equalTo(-60)
+            $0.leadingMargin.equalTo(20)
+            $0.trailingMargin.equalTo(-20)
             $0.height.equalTo(52)
         }
         
@@ -135,7 +208,6 @@ class SetScheduleView: BaseView {
         }
         tuesdayButton.snp.makeConstraints {
             $0.height.width.equalTo(40)
-            
         }
         wedensdayButton.snp.makeConstraints {
             $0.height.width.equalTo(40)
@@ -152,10 +224,87 @@ class SetScheduleView: BaseView {
         }
         
         stackView.snp.makeConstraints {
+            $0.leadingMargin.equalTo(12)
+            $0.trailingMargin.equalTo(-12)
+            $0.topMargin.equalTo(textFieldBorder.snp.bottom).offset(48)
+            $0.height.equalTo(40)
+        }
+        
+        headerView.snp.makeConstraints {
+            $0.topMargin.equalTo(stackView.snp.bottom).offset(28)
+            $0.leadingMargin.equalTo(28)
+            $0.width.equalTo(100)
+            $0.height.equalTo(40)
+        }
+        
+        firstLineView.snp.makeConstraints {
             $0.leadingMargin.equalTo(20)
             $0.trailingMargin.equalTo(-20)
-            $0.topMargin.equalTo(textFieldBorder.snp.bottom).offset(40)
+            $0.height.equalTo(52)
+            $0.topMargin.equalTo(headerView.snp.bottom).offset(16)
+        }
+        
+        startTimeLabel.snp.makeConstraints {
+            $0.leadingMargin.equalTo(firstLineView.snp.leading).offset(12)
+            $0.centerY.equalTo(firstLineView)
+            $0.width.equalTo(100)
             $0.height.equalTo(40)
-        }   
+        }
+        
+        setStartTimeButton.snp.makeConstraints {
+            $0.centerY.equalTo(firstLineView)
+            $0.trailingMargin.equalTo(firstLineView.snp.trailing).offset(-12)
+            $0.width.equalTo(100)
+            $0.height.equalTo(30)
+        }
+        
+        secondLineView.snp.makeConstraints {
+            $0.leadingMargin.equalTo(20)
+            $0.trailingMargin.equalTo(-20)
+            $0.height.equalTo(52)
+            $0.topMargin.equalTo(firstLineView.snp.bottom).offset(16)
+        }
+        
+        endTimeLabel.snp.makeConstraints {
+            $0.leadingMargin.equalTo(secondLineView.snp.leading).offset(12)
+            $0.centerY.equalTo(secondLineView)
+            $0.width.equalTo(100)
+            $0.height.equalTo(40)
+        }
+        
+        setEndTimeButton.snp.makeConstraints {
+            $0.centerY.equalTo(secondLineView)
+            $0.trailingMargin.equalTo(secondLineView.snp.trailing).offset(-12)
+            $0.width.equalTo(100)
+            $0.height.equalTo(30)
+        }
+        
+        thirdLineView.snp.makeConstraints {
+            $0.leadingMargin.equalTo(20)
+            $0.trailingMargin.equalTo(-20)
+            $0.height.equalTo(52)
+            $0.topMargin.equalTo(secondLineView.snp.bottom).offset(16)
+        }
+        
+        getAlarmLabel.snp.makeConstraints {
+            $0.leadingMargin.equalTo(thirdLineView.snp.leading).offset(32)
+            $0.centerY.equalTo(thirdLineView)
+            $0.width.equalTo(100)
+            $0.height.equalTo(40)
+        }
+        
+        alarmToggle.snp.makeConstraints {
+            $0.centerY.equalTo(thirdLineView)
+            $0.centerX.equalTo(setEndTimeButton)
+            $0.width.equalTo(50)
+            $0.height.equalTo(30)
+        }
+    }
+}
+
+extension SetScheduleView: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        setScheduleTextField.resignFirstResponder()
+        return true
     }
 }

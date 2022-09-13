@@ -29,4 +29,11 @@ class DateFormatChange {
         formatter.dateFormat = "hh:mm"
         return formatter
     }()
+    
+    let dateOfHourAndPM: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "a hh:mm"
+        return formatter
+    }()
 }
