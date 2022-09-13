@@ -242,7 +242,7 @@ final class RoundLabel: UILabel {
 
 ## 2. multiple button click and change background color
 
-![[스크린샷 2022-09-13 오전 3.24.57.png | 300]]
+<img width="297" alt="스크린샷 2022-09-13 오전 3 24 57" src="https://user-images.githubusercontent.com/92367484/189813180-862bb376-5d1a-4cf3-9159-7cc9ad57c29b.png">
 
 
 ### 중요사항
