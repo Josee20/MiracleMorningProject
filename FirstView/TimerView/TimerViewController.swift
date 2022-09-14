@@ -15,6 +15,14 @@ class TimerViewController: BaseViewController {
     
     let notificationCenter = UNUserNotificationCenter.current()
     
+    private let missionLabel: UILabel = {
+        let view = UILabel()
+        view.textAlignment = .center
+        view.text = "운동"
+        view.font = .boldSystemFont(ofSize: 30)
+        return view
+    }()
+    
     private let cancelButton: UIButton = {
         let view = UIButton()
         view.setTitle("취소", for: .normal)
@@ -96,6 +104,7 @@ class TimerViewController: BaseViewController {
     
     override func configure() {
         self.view.addSubview(stackView)
+        self.view.addSubview(missionLabel)
         
         [cancelButton, okButton].forEach { stackView.addArrangedSubview($0) }
         
@@ -113,6 +122,13 @@ class TimerViewController: BaseViewController {
     }
     
     override func setConstraints() {
+        
+        missionLabel.snp.makeConstraints {
+            $0.topMargin.equalTo(60)
+            $0.leadingMargin.equalTo(40)
+            $0.trailingMargin.equalTo(-40)
+        }
+        
         
         stackView.snp.makeConstraints {
             $0.bottomMargin.equalTo(-40)

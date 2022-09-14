@@ -86,6 +86,7 @@ extension FirstViewController: UITableViewDelegate, UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: FirstTableViewCell.reuseIdentifier) as? FirstTableViewCell else {
             return UITableViewCell()
         }
+        
         cell.backgroundColor = .orange
         
         return cell

@@ -13,8 +13,6 @@ class DateFormatChange {
     
     static let shared = DateFormatChange()
     
-    
-    
     let fullDate: DateFormatter = {
         let formatter = DateFormatter()
         formatter.timeStyle = .medium

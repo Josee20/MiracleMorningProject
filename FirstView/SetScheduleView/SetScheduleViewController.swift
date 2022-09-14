@@ -36,8 +36,8 @@ class SetScheduleViewController: BaseViewController {
     override func configure() {
         
         mainView.setStartTimeButton.addTarget(self, action: #selector(setStartTimeButtonClicked), for: .touchUpInside)
-        
         mainView.setEndTimeButton.addTarget(self, action: #selector(setEndTimeButtonClicked), for: .touchUpInside)
+        mainView.okButton.addTarget(self, action: #selector(okButtonClicked), for: .touchUpInside)
         
         // MARK: 버튼마다 dayButtonClicked 함수 넣어주기
         let dayButtonArr = [mainView.sundayButton, mainView.mondayButton, mainView.tuesdayButton, mainView.wedensdayButton, mainView.thursdayButton, mainView.fridayButton, mainView.saturdayButton]
@@ -47,6 +47,33 @@ class SetScheduleViewController: BaseViewController {
         }
     }
     
+    // X버튼
+    func addCancelButton() {
+        let cancelButton = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(cancelButtonClicked))
+        
+        cancelButton.tintColor = .black
+        
+        let space = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: self, action: nil)
+        
+        self.navigationItem.setRightBarButtonItems([space, cancelButton], animated: false)
+    }
+    
+    @objc func cancelButtonClicked() {
+        self.dismiss(animated: true)
+    }
+    
+    // 요일 버튼 클릭
+    @objc func dayButtonClicked(sender: UIButton) {
+        let dayButtonArr = [mainView.sundayButton, mainView.mondayButton, mainView.tuesdayButton, mainView.wedensdayButton, mainView.thursdayButton, mainView.fridayButton, mainView.saturdayButton]
+        
+        if dayButtonArr[sender.tag].backgroundColor == UIColor.lightGray {
+            dayButtonArr[sender.tag].backgroundColor = .orange
+        } else if dayButtonArr[sender.tag].backgroundColor == UIColor.orange {
+            dayButtonArr[sender.tag].backgroundColor = .lightGray
+        }
+    }
+    
+    // 시작시간 선택버튼 클릭
     @objc func setStartTimeButtonClicked(sender: UIDatePicker) {
         
         let datePicker = UIDatePicker()
@@ -78,6 +105,7 @@ class SetScheduleViewController: BaseViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    // 종료시간 선택버튼 클릭
     @objc func setEndTimeButtonClicked() {
         
         let datePicker = UIDatePicker()
@@ -109,29 +137,25 @@ class SetScheduleViewController: BaseViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    // MARK: 클릭하면 백그라운드 색 변경
-    @objc func dayButtonClicked(sender: UIButton) {
-        let dayButtonArr = [mainView.sundayButton, mainView.mondayButton, mainView.tuesdayButton, mainView.wedensdayButton, mainView.thursdayButton, mainView.fridayButton, mainView.saturdayButton]
+    @objc func okButtonClicked() {
         
-        if dayButtonArr[sender.tag].backgroundColor == UIColor.lightGray {
-            dayButtonArr[sender.tag].backgroundColor = .orange
-        } else if dayButtonArr[sender.tag].backgroundColor == UIColor.orange {
-            dayButtonArr[sender.tag].backgroundColor = .lightGray
+//        let dayButtonArr = [mainView.sundayButton, mainView.mondayButton, mainView.tuesdayButton, mainView.wedensdayButton, mainView.thursdayButton, mainView.fridayButton, mainView.saturdayButton]
+        
+        if mainView.setScheduleTextField.text?.count == 0 {
+            showAlertOnlyOk(title: "미션을 입력해주세요")
+        } else if mainView.sundayButton.backgroundColor == UIColor.lightGray &&
+                    mainView.mondayButton.backgroundColor == UIColor.lightGray &&
+                    mainView.tuesdayButton.backgroundColor == UIColor.lightGray &&
+                    mainView.wedensdayButton.backgroundColor == UIColor.lightGray &&
+                    mainView.thursdayButton.backgroundColor == UIColor.lightGray &&
+                    mainView.fridayButton.backgroundColor == UIColor.lightGray &&
+                    mainView.saturdayButton.backgroundColor == UIColor.lightGray {
+    
+            showAlertOnlyOk(title: "요일을 하나 이상 선택해주세요")
+        } else if mainView.setStartTimeButton.titleLabel?.text == "시간선택" || mainView.setEndTimeButton.titleLabel?.text == "시간선택" {
+            showAlertOnlyOk(title: "시간을 둘 다 선택해주세요")
+        } else {
+            dismiss(animated: true)
         }
     }
-    
-    func addCancelButton() {
-        let cancelButton = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(cancelButtonClicked))
-        
-        cancelButton.tintColor = .black
-        
-        let space = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: self, action: nil)
-        
-        self.navigationItem.setRightBarButtonItems([space, cancelButton], animated: false)
-    }
-    
-    @objc func cancelButtonClicked() {
-        self.dismiss(animated: true)
-    }
-    
 }

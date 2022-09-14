@@ -11,6 +11,10 @@
 		49580DB128CF07A7002EE3CD /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49580DB028CF07A7002EE3CD /* TimerView.swift */; };
 		49580DB328CF07B0002EE3CD /* TimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49580DB228CF07B0002EE3CD /* TimerViewController.swift */; };
 		49580DB728CF98AB002EE3CD /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49580DB628CF98AB002EE3CD /* UIButton+Extension.swift */; };
+		49F0FB5228D19AFF004AD670 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 49F0FB5128D19AFF004AD670 /* FSCalendar */; };
+		49F0FB5428D1A32C004AD670 /* SecondTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F0FB5328D1A32C004AD670 /* SecondTableViewCell.swift */; };
+		49F0FB5628D1A4B6004AD670 /* BaseCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F0FB5528D1A4B6004AD670 /* BaseCollectionViewCell.swift */; };
+		49F0FB5828D1A566004AD670 /* SecondCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F0FB5728D1A566004AD670 /* SecondCollectionViewCell.swift */; };
 		49F6D8C628CDAD10005AA757 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F6D8C528CDAD10005AA757 /* AppDelegate.swift */; };
 		49F6D8C828CDAD10005AA757 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F6D8C728CDAD10005AA757 /* SceneDelegate.swift */; };
 		49F6D8CA28CDAD10005AA757 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F6D8C928CDAD10005AA757 /* ViewController.swift */; };
@@ -43,6 +47,9 @@
 		49580DB028CF07A7002EE3CD /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
 		49580DB228CF07B0002EE3CD /* TimerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewController.swift; sourceTree = "<group>"; };
 		49580DB628CF98AB002EE3CD /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
+		49F0FB5328D1A32C004AD670 /* SecondTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondTableViewCell.swift; sourceTree = "<group>"; };
+		49F0FB5528D1A4B6004AD670 /* BaseCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewCell.swift; sourceTree = "<group>"; };
+		49F0FB5728D1A566004AD670 /* SecondCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondCollectionViewCell.swift; sourceTree = "<group>"; };
 		49F6D8C228CDAD10005AA757 /* MiracleMorningProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MiracleMorningProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		49F6D8C528CDAD10005AA757 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		49F6D8C728CDAD10005AA757 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -77,6 +84,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				49F6D8F728CDBFB9005AA757 /* SnapKit in Frameworks */,
+				49F0FB5228D19AFF004AD670 /* FSCalendar in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,8 +104,6 @@
 			isa = PBXGroup;
 			children = (
 				49F6D8FF28CDEA32005AA757 /* ReusableProtocol.swift */,
-				49580DAF28CF0797002EE3CD /* TimerView */,
-				49F6D90128CDFC2B005AA757 /* SetScheduleView */,
 				49F6D8F828CDC3F8005AA757 /* DateFormat */,
 				49F6D8EC28CDB832005AA757 /* ForthView */,
 				49F6D8EB28CDB82B005AA757 /* ThirdView */,
@@ -138,6 +144,7 @@
 				49F6D8DA28CDAED7005AA757 /* BaseViewController.swift */,
 				49F6D8DC28CDAEDE005AA757 /* BaseView.swift */,
 				49F6D8FB28CDD5B1005AA757 /* BaseTableViewCell.swift */,
+				49F0FB5528D1A4B6004AD670 /* BaseCollectionViewCell.swift */,
 			);
 			path = BaseView;
 			sourceTree = "<group>";
@@ -156,6 +163,8 @@
 				49F6D8E428CDB440005AA757 /* FirstView.swift */,
 				49F6D8E228CDB2B4005AA757 /* FirstViewController.swift */,
 				49F6D8FD28CDD8F5005AA757 /* FirstTableViewCell.swift */,
+				49580DAF28CF0797002EE3CD /* TimerView */,
+				49F6D90128CDFC2B005AA757 /* SetScheduleView */,
 			);
 			path = FirstView;
 			sourceTree = "<group>";
@@ -165,6 +174,8 @@
 			children = (
 				49F6D8E928CDB59D005AA757 /* SecondView.swift */,
 				49F6D8E728CDB595005AA757 /* SecondViewController.swift */,
+				49F0FB5728D1A566004AD670 /* SecondCollectionViewCell.swift */,
+				49F0FB5328D1A32C004AD670 /* SecondTableViewCell.swift */,
 			);
 			path = SecondView;
 			sourceTree = "<group>";
@@ -225,6 +236,7 @@
 			name = MiracleMorningProject;
 			packageProductDependencies = (
 				49F6D8F628CDBFB9005AA757 /* SnapKit */,
+				49F0FB5128D19AFF004AD670 /* FSCalendar */,
 			);
 			productName = MiracleMorningProject;
 			productReference = 49F6D8C228CDAD10005AA757 /* MiracleMorningProject.app */;
@@ -256,6 +268,7 @@
 			mainGroup = 49F6D8B928CDAD10005AA757;
 			packageReferences = (
 				49F6D8F528CDBFB8005AA757 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				49F0FB5028D19AFF004AD670 /* XCRemoteSwiftPackageReference "FSCalendar" */,
 			);
 			productRefGroup = 49F6D8C328CDAD10005AA757 /* Products */;
 			projectDirPath = "";
@@ -284,6 +297,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49F0FB5828D1A566004AD670 /* SecondCollectionViewCell.swift in Sources */,
 				49F6D8F428CDB861005AA757 /* ForthView.swift in Sources */,
 				49F6D8CA28CDAD10005AA757 /* ViewController.swift in Sources */,
 				49F6D8C628CDAD10005AA757 /* AppDelegate.swift in Sources */,
@@ -293,7 +307,9 @@
 				49F6D8F028CDB84B005AA757 /* ThirdView.swift in Sources */,
 				49F6D90728CDFCBB005AA757 /* SetScheduleTableViewCell.swift in Sources */,
 				49580DB728CF98AB002EE3CD /* UIButton+Extension.swift in Sources */,
+				49F0FB5428D1A32C004AD670 /* SecondTableViewCell.swift in Sources */,
 				49F6D8E028CDB090005AA757 /* TabBarController.swift in Sources */,
+				49F0FB5628D1A4B6004AD670 /* BaseCollectionViewCell.swift in Sources */,
 				49F6D8DD28CDAEDE005AA757 /* BaseView.swift in Sources */,
 				49F6D90028CDEA32005AA757 /* ReusableProtocol.swift in Sources */,
 				49F6D8FE28CDD8F5005AA757 /* FirstTableViewCell.swift in Sources */,
@@ -528,6 +544,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		49F0FB5028D19AFF004AD670 /* XCRemoteSwiftPackageReference "FSCalendar" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/WenchaoD/FSCalendar.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 		49F6D8F528CDBFB8005AA757 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
@@ -539,6 +563,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		49F0FB5128D19AFF004AD670 /* FSCalendar */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 49F0FB5028D19AFF004AD670 /* XCRemoteSwiftPackageReference "FSCalendar" */;
+			productName = FSCalendar;
+		};
 		49F6D8F628CDBFB9005AA757 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 49F6D8F528CDBFB8005AA757 /* XCRemoteSwiftPackageReference "SnapKit" */;

@@ -405,3 +405,48 @@ class TimerViewController: BaseViewController {
 }
 ```
 ___
+
+# 220914
+
+## 1. CollectionView
+
+<img width="669" alt="스크린샷 2022-09-14 오후 10 38 08" src="https://user-images.githubusercontent.com/92367484/190170742-2e358b39-679b-4686-ad33-57795f224fd2.png">
+
+코드베이스로 컬렉션뷰를 테이블뷰와 같이 추가해 주려 했으나 다음과 같은 오류가 발생했다.
+
+무슨 이유인지 알아보니 컬렉션뷰는 레이아웃이 없이 초기화가 불가능하다는 것이다.
+
+즉 collectionView는 TableView와 다르게 뷰객체를 만들기전에 레이아웃을 다 지정해주어야한다.
+
+다음과 같이 말이다.
+
+```swift
+public let collectionView: UICollectionView = {
+	let layout = UICollectionViewFlowLayout()
+	let space: CGFloat = 4
+	let width = UIScreen.main.bounds.width - (space * 7)
+	let height = width
+
+	layout.itemSize = CGSize(width: width / 6, height: width / 6)
+	layout.scrollDirection = .horizontal
+	layout.sectionInset = UIEdgeInsets(top: space, left: space, bottom: space, right: space)
+	layout.minimumLineSpacing = space
+	layout.minimumInteritemSpacing = space
+	
+	let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
+	
+	return view
+}()
+```
+
+
+
+##  2. TableView
+
+추가한 스케쥴을 유저가 캘린더에서 클릭 시 확인할 수 있도록 하기위해 테이블 뷰로 작성했다.
+
+아직은 UI만 된 상태....
+
+![Simulator Screen Shot - iPhone 11 - 2022-09-14 at 22 51 39 | 250](https://user-images.githubusercontent.com/92367484/190173335-bc13ec8a-a65e-4b56-9cb8-77e5362b153c.png)
+
+___
