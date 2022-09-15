@@ -9,22 +9,41 @@ import Foundation
 import UIKit
 
 import FSCalendar
+import RealmSwift
 
 class SecondViewController: BaseViewController {
     
+    let repository = UserScheduleRepository()
+    
     let mainView = SecondView()
+    
+    var tasks: Results<UserSchedule>! {
+        didSet {
+            mainView.tableView.reloadData()
+            mainView.collectionView.reloadData()
+        }
+    }
     
     override func loadView() {
         self.view = mainView
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         mainView.backgroundColor = .systemBackground
+        mainView.calendar.placeholderType = .none
+        print(repository.localRealm.configuration.fileURL!)
         
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tasks = repository.fetch()
+    }
+    
+    
     
     override func configure() {
         mainView.collectionView.delegate = self
@@ -37,8 +56,12 @@ class SecondViewController: BaseViewController {
         
         mainView.calendar.delegate = self
         mainView.calendar.dataSource = self
-        
     }
+    
+    func fetchRealm() {
+        tasks = repository.fetch()
+    }
+    
 }
 
 extension SecondViewController: UITableViewDelegate, UITableViewDataSource {
@@ -81,9 +104,7 @@ extension SecondViewController: UICollectionViewDelegate, UICollectionViewDataSo
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SecondCollectionViewCell.reuseIdentifier, for: indexPath) as? SecondCollectionViewCell else {
             return UICollectionViewCell()
         }
-        
-        
-        
+         
         cell.backgroundColor = .systemGray
         
         return cell

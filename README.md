@@ -447,6 +447,8 @@ public let collectionView: UICollectionView = {
 
 아직은 UI만 된 상태....
 
-![Simulator Screen Shot - iPhone 11 - 2022-09-14 at 22 51 39 | 250](https://user-images.githubusercontent.com/92367484/190173335-bc13ec8a-a65e-4b56-9cb8-77e5362b153c.png)
+![Simulator Screen Shot - iPhone 11 - 2022-09-14 at 22 51 39](https://user-images.githubusercontent.com/92367484/190173335-bc13ec8a-a65e-4b56-9cb8-77e5362b153c.png){: width="50%" height="50%"}
+
+
 
 ___
