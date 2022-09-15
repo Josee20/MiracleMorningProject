@@ -98,10 +98,13 @@ class SetScheduleViewController: BaseViewController {
         
         let ok = UIAlertAction(title: "확인", style: .default) { (action) in
             let dateString = DateFormatChange.shared.dateOfHourAndPM.string(from: datePicker.date)
-            self.mainView.setStartTimeButton.setTitle(dateString, for: .normal)
-            self.mainView.setStartTimeButton.setTitleColor(.systemBlue, for: .normal)
             
-            print("startTime : \(datePicker.date)")
+            if self.calendar.component(.hour, from: datePicker.date) > 3 && self.calendar.component(.hour, from: datePicker.date) < 9 {
+                self.mainView.setStartTimeButton.setTitle(dateString, for: .normal)
+                self.mainView.setStartTimeButton.setTitleColor(.systemBlue, for: .normal)
+            } else {
+                self.showAlertOnlyOk(title: "오전 4시부터 오전9시까지만 시간설정이 가능합니다")
+            }
         }
         
         let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
@@ -137,8 +140,12 @@ class SetScheduleViewController: BaseViewController {
             if self.mainView.setStartTimeButton.titleLabel?.text == dateString {
                 self.showAlertOnlyOk(title: "시작시간과 종료시간은\n같을 수 없습니다\n다른 시간을 선택해주세요")
             } else {
-                self.mainView.setEndTimeButton.setTitle(dateString, for: .normal)
-                self.mainView.setEndTimeButton.setTitleColor(.systemBlue, for: .normal)
+                if self.calendar.component(.hour, from: datePicker.date) > 3 && self.calendar.component(.hour, from: datePicker.date) < 9 {
+                    self.mainView.setEndTimeButton.setTitle(dateString, for: .normal)
+                    self.mainView.setEndTimeButton.setTitleColor(.systemBlue, for: .normal)
+                } else {
+                    self.showAlertOnlyOk(title: "오전 4시부터 오전9시까지만 시간설정이 가능합니다")
+                }
             }
         }
         
@@ -176,9 +183,7 @@ class SetScheduleViewController: BaseViewController {
                 
                 if currentMonth < month {
                     break
-                }
-                
-                if weekDayArr[day] == mainView.sundayButton.titleLabel?.text && mainView.sundayButton.backgroundColor == .lightGray ||
+                } else if weekDayArr[day] == mainView.sundayButton.titleLabel?.text && mainView.sundayButton.backgroundColor == .lightGray ||
                     weekDayArr[day] == mainView.mondayButton.titleLabel?.text && mainView.mondayButton.backgroundColor == .lightGray ||
                     weekDayArr[day] == mainView.tuesdayButton.titleLabel?.text && mainView.tuesdayButton.backgroundColor == .lightGray ||
                     weekDayArr[day] == mainView.wedensdayButton.titleLabel?.text && mainView.wedensdayButton.backgroundColor == .lightGray ||
@@ -187,11 +192,11 @@ class SetScheduleViewController: BaseViewController {
                     weekDayArr[day] == mainView.saturdayButton.titleLabel?.text && mainView.saturdayButton.backgroundColor == .lightGray {
                     now += 86400
                     continue
+                } else {
+                    repository.addSchedule(startTime: mainView.setStartTimeButton.titleLabel?.text ?? "", endTime: mainView.setEndTimeButton.titleLabel?.text ?? "", date: now, schedule: mainView.setScheduleTextField.text!, success: false)
+                    
+                    now += 86400
                 }
-                
-                repository.addSchedule(startTime: mainView.setStartTimeButton.titleLabel?.text ?? "", endTime: mainView.setEndTimeButton.titleLabel?.text ?? "", date: now, schedule: mainView.setScheduleTextField.text!, success: false)
-                
-                now += 86400
             }
                 
             dismiss(animated: true)

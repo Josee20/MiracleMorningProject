@@ -9,6 +9,8 @@ import Foundation
 import UIKit
 
 extension UIButton {
+    
+    // 버튼 백그라운드 컬러 
     func setBackgroundColor(_ color: UIColor, for state: UIControl.State) {
         UIGraphicsBeginImageContext(CGSize(width: 1.0, height: 1.0))
         
