@@ -34,4 +34,11 @@ class DateFormatChange {
         formatter.dateFormat = "a hh:mm"
         return formatter
     }()
+    
+    let dateOfYearMonthDay: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter
+    }()
 }

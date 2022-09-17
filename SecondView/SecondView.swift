@@ -13,6 +13,7 @@ class SecondView: BaseView {
     
     public let calendar: FSCalendar = {
         let view = FSCalendar()
+        view.locale = Locale(identifier: "ko-KR")
         return view
     }()
     

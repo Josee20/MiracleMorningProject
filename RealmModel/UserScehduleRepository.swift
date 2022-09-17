@@ -19,7 +19,7 @@ class UserScheduleRepository: UserScheduleRepositoryType {
     let localRealm = try! Realm()
     
     func fetch() -> Results<UserSchedule> {
-        return localRealm.objects(UserSchedule.self)
+        return localRealm.objects(UserSchedule.self).sorted(byKeyPath: "scheduleDate", ascending: false)
     }
     
     func addSchedule(startTime: String, endTime: String, date: Date, schedule: String, success: Bool) {

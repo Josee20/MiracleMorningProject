@@ -630,5 +630,235 @@ ___
 # 220916
 
 
+## 1. 캘린더에 점(스케쥴) 찍어주기
+
+```swift
+func setEvents() {
+
+	for i in 0..<tasks.count {
+		let eventDateString = DateFormatChange.shared.dateOfYearMonthDay.string(from: tasks[i].scheduleDate)
+		
+		guard let eventDate = DateFormatChange.shared.dateOfYearMonthDay.date(from: eventDateString) else {
+			return
+		}
+		
+		events.append(eventDate)
+	}
+}
+
+extension SecondViewController: FSCalendarDelegate, FSCalendarDataSource, FSCalendarDelegateAppearance {
+    
+    // ... 개수
+    func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
+        
+        var j = 0
+        
+        let koreanStringDate = DateFormatChange.shared.dateOfYearMonthDay.string(from: date)
+        guard let koreanDate = DateFormatChange.shared.dateOfYearMonthDay.date(from: koreanStringDate) else { return  1 }
+        
+        if self.events.contains(date) {
+            j = 0
+            for i in 0..<tasks.count {
+                if self.events[i] == date {
+                    j += 1
+                }
+            }
+            mainView.calendar.appearance.eventDefaultColor = .systemGray3
+            print("++++++++++ \(koreanDate)")
+            return j
+        } else {
+            return 0
+        }
+    }
+}
+
+```
+
+FSCalendar의 델리게이트 패턴을 이용하면 캘린더에서 다양한 기능들을 사용할 수 있게된다.
+
+스케쥴을 등록하면 해당 날짜 밑에 ...을 만들어주고 싶었고 그 메소드는 `numberOfEventsFor` 메소드에서 다룰 수 있었다.
+
+이 메소드는 이번 달의 date가 차례대로 모두 출력되게하는 기능?을 가지고 있는데 테이블뷰의 indexPath와 비슷하다.
+
+그래서 date 값을 서로 비교해서 스케쥴이 있으면 출력해줘야한다고 생각했고 가장 먼저 eventArr 배열을 만들어 Realm의 ScheduleDate를 형태에 맞춰 date 배열로 만들어 줬다.
+
+다음 이를 활용해 이벤트를 점으로 나타내려면 다음과 같은 로직이 필요하다고 생각했다.
+
+1. 해당 날에 스케쥴을 가지고있는지 없는지
+2. 만약 있다면 몇 개를 가지고 있는지
+3. 스케쥴 개수 만큼 리턴해서 점 찍어주기
+
+contain으로 확인해주고 변수 j를 활용해 스케쥴 개수만큼 리턴해줄 수 있도록했다.
+
+
+
+## 1-2 ❎ 문제발생 ❎
+
+앱을 껐다키면 제대로 ...이 날짜에 맞추어 인식되지만 스케쥴 등록 후 캘린더에 들어가면 제대로 ...이 안찍히는 현상일 발생했다.
+
+최초에 스케쥴 등록시엔 잘 등록이 되지만 두 번째 부턴 밀리기 시작한다...
+
+<img width="500" alt="스크린샷 2022-09-17 오후 4 06 21" src="https://user-images.githubusercontent.com/92367484/190851697-a11b02dd-911a-4caa-9a1c-e039160db9c9.png">
+
+어째서인지 22일 23일에 ..이 등록되지 않고 27, 28일로 넘어가 버렸다... 그런데 앱을 껐다키면 제대로 인식이 되어 나타난다...
+
+<img width="500" alt="스크린샷 2022-09-17 오후 4 08 28" src="https://user-images.githubusercontent.com/92367484/190851726-e3d31b21-b6bc-462f-8de7-3d85d279c391.png">
+
+
+```swift
+override func viewWillAppear(_ animated: Bool) {
+	super.viewWillAppear(animated)
+	
+	// 반드시 fetch를 해주고 setEvents를 실행시켜 해주어야함
+	// 그래야 Realm에서 tasks.count를 맞춰 setEvents메소드를 쓸 수 있음
+	
+	fetchRealm()
+	setEvents()
+	
+	mainView.calendar.reloadData()
+	print(eventArr)
+}
+
+
+func setEvents() -> [Date] {
+
+	for i in 0..<tasks.count {
+		let eventDateString = DateFormatChange.shared.dateOfYearMonthDay.string(from: tasks[i].scheduleDate
+			
+		guard let eventDate = DateFormatChange.shared.dateOfYearMonthDay.date(from: eventDateString) else {
+			return [Date()]
+		}
+		
+		eventArr.append(eventDate)
+	}
+	
+	return eventArr
+}
+
+extension SecondViewController: FSCalendarDelegate, FSCalendarDataSource, FSCalendarDelegateAppearance {
+    
+    // ... 개수
+    func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
+        
+        var j = 0
+        
+        if self.eventArr.contains(date) {
+            j = 0
+            for i in 0..<tasks.count {
+                if self.eventArr[i] == date {
+                    j += 1
+                }
+            }
+            mainView.calendar.appearance.eventDefaultColor = .systemGray3
+            return j
+        } else {
+            return 0
+        }
+    }
+}
+```
+
+
+하나씩 찍어보니 이와 같은 문제가 발생하고 있었다.
+
+<img width="900" alt="스크린샷 2022-09-17 오후 6 35 01" src="https://user-images.githubusercontent.com/92367484/190851625-e3b56b72-3780-4564-8699-d78cb64902a8.png">
+
+viewWillAppear 시점에 `setEvents()` 를 해주니 뷰가 나올 때 마다 `setEvents()`가 실행되었고 때문에 eventArr의 인덱스값이 꼬이게되어 ... 이 제대로 찍히지 않은 것이다.
+
+그렇다고 setEvents()의 시점을 바꾸자니 fetch 시점과 어긋나서 tasks.count와의 크기가 안 맞게되어버린다. 그렇다면 시점으로 해결할 문제는 일단 아니다.
+
+다음으로 시도해본 것은 바보같지만 그럼 `setEvents()` 에 조건을 주어 새로 값이 추가될 때만 실행되게하면 어떨까 해서 다음과 같은 조건을 주었다.
+
+```swift
+override func viewWillAppear(_ animated: Bool) {
+	super.viewWillAppear(animated)
+	
+	fetchRealm()
+
+	if tasks.count > eventArr {
+		setEvents()
+	}
+	
+	mainView.calendar.reloadData()
+	print(eventArr)
+}
+```
+
+이렇게하면 분명 뷰가 나올 때마다 실행되는 것이 아니라 tasks에 이벤트가 업데이트 되어 `tasks.count`가 `eventArr`의 크기보다 커야 `setEvents()`가 실행 되게 될 것이다.
+
+그렇다면 데이터를 추가하고 뷰를 띄우면 어떻게 될까?
+
+새로운 값만 추가되는 것이 아니라 기존과 동일하게 기존값 + 새로운 값이 `eventArr`에 추가된다.
+
+왜냐하면 `tasks`가 `eventArr`보다 클 때만 `setEvents()`를 실행하라고 했지 중복된 값은 빼라고 한게 아니니깐....
+
+중복???? 그러면 배열에서 중복된 값을 없애주는 <span style="color:red">Set</span> 을 사용하면 어떨까???
+
+
+## 1-3 오류해결 (feat. Set)
+
+결국 문제는 중복된 값이 등록되기 때문이었다. 
+
+그렇다면 우리는 중복된 값을 없애주는 Set을 가지고 있기 때문에 이걸 잘 사용하면 해결할 수 있을거라 생각했다.
+
+```swift
+class SecondViewController: BaseViewController {
+    
+    var eventArr = Set<Date>()
+    
+    func setEvents() {
+
+        for i in 0..<tasks.count {
+            let eventDate = tasks[i].scheduleDate
+            eventArr.insert(eventDate)
+        }
+    }
+    
+}
+
+extension SecondViewController: FSCalendarDelegate, FSCalendarDataSource, FSCalendarDelegateAppearance {
+    
+    // ... 개수
+    func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
+        
+        var j = 0
+        
+        let tempArr = eventArr.map { DateFormatChange.shared.dateOfYearMonthDay.string(from: $0) }
+        let tempArr2 = tempArr.map { DateFormatChange.shared.dateOfYearMonthDay.date(from: $0) }
+        
+        if tempArr2.contains(date) {
+            j = 0
+            for i in 0..<tasks.count {
+                if tempArr2[i] == date {
+                    j += 1
+                }
+            }
+            mainView.calendar.appearance.eventDefaultColor = .systemGray3
+            return j
+        } else {
+            return 0
+        }
+    }
+}
+```
+
+
+1.  eventArr을 Array -> Set으로 변경
+
+2.   기존 eventArr에 yyyy-MM-dd 형태로 Date값을 변환시켜 담았지만 그냥 Realm의 scheduleDate를 그대로 담음
+	- 만약 변환시켜서 담으면 day 단위로 중복된게 다 없어지기 때문에 스케쥴 등록이 제대로 안이루어질 것임
+	- 때문에 초까지 나오는 ScheduleDate그대로의 값을 담음
+
+3. numberOfEventsFor에서 형변환을 시켜주고 비교후에 ... 의 개수를 리턴시켜줌
+
+
+이와 같이 만들어주면 viewWillAppear 할 때마다 Set이기 때문에 중복된 값이 추가되지 않아 tasks에 있는 scheduleDate를 그대로  eventArr에 담을 수 있게된다.
+
+그러면 인덱싱을 하는데 문제가 없기 때문에 제대로 달력에 ... 이 찍히게 된다.
+
+처음에 분명 껐다키면 제대로 ... 이 찍혔다고 했는데 왜냐하면 껐다키고 처음으로 화면을 띄우면 setEvents()가 한 번밖에 실행되지 않았기 때문에 제대로 인덱싱이 되어있어 ...이 제대로 나타난 것이였다.
+
+그리고 스케쥴을 추가하고 오면 viewWillAppear에 의해 setEvents()가 실행되고 eventArr에 중복된값들이 추가되어 제대로 나타나지 않은 것이었다.
+
 
 ___
