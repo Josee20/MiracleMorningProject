@@ -18,8 +18,10 @@ class UserScheduleRepository: UserScheduleRepositoryType {
     
     let localRealm = try! Realm()
     
+    let calendar = Calendar.current
+    
     func fetch() -> Results<UserSchedule> {
-        return localRealm.objects(UserSchedule.self).sorted(byKeyPath: "scheduleDate", ascending: false)
+        return localRealm.objects(UserSchedule.self)
     }
     
     func addSchedule(startTime: String, endTime: String, date: Date, schedule: String, success: Bool) {
@@ -35,4 +37,10 @@ class UserScheduleRepository: UserScheduleRepositoryType {
         }
     }
     
+    func dateArr(date: Date) -> Results<UserSchedule> {
+        
+        return localRealm.objects(UserSchedule.self).where {
+            $0.scheduleDate >= calendar.startOfDay(for: date) && $0.scheduleDate < calendar.startOfDay(for: date + 86400)
+        }
+    }
 }

@@ -9,21 +9,21 @@ import UIKit
 
 class SecondTableViewCell: BaseTableViewCell {
 
-    let scheduleTitle: UILabel = {
+    var scheduleTitle: UILabel = {
         let view = UILabel()
         view.font = .boldSystemFont(ofSize: 15)
         view.text = "운동하기"
         return view
     }()
     
-    let scheduleTime: UILabel = {
+    var scheduleTime: UILabel = {
         let view = UILabel()
         view.font = .systemFont(ofSize: 12)
         view.text = "10:00 ~ 12:00"
         return view
     }()
     
-    let checkButton: UIButton = {
+    var checkButton: UIButton = {
         let view = UIButton()
         view.backgroundColor = .systemGray6
         return view

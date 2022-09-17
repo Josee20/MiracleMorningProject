@@ -19,6 +19,8 @@ class SecondViewController: BaseViewController {
     
     var eventArr = Set<Date>()
     
+    var dayEventArr = [String]()
+    
     var tasks: Results<UserSchedule>! {
         didSet {
             mainView.tableView.reloadData()
@@ -36,11 +38,11 @@ class SecondViewController: BaseViewController {
         
         mainView.backgroundColor = .systemBackground
         mainView.calendar.placeholderType = .none
+        mainView.calendar.locale = Locale(identifier: "ko-KR")
         
         print(repository.localRealm.configuration.fileURL!)
+//        print(repository.dateArr(date: Date()))
         
-        
-//        setEvents()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -53,7 +55,7 @@ class SecondViewController: BaseViewController {
         setEvents()
 
         mainView.calendar.reloadData()
-        print(eventArr)
+//        print(eventArr)
         
     }
     
@@ -89,7 +91,7 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return 3
+        return dayEventArr.count
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -100,8 +102,9 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource {
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SecondTableViewCell.reuseIdentifier, for: indexPath) as? SecondTableViewCell else {
             return UITableViewCell()
-            
         }
+        
+        cell.scheduleTitle.text = dayEventArr[indexPath.row]
         
         return cell
     }
@@ -127,7 +130,6 @@ extension SecondViewController: UICollectionViewDelegate, UICollectionViewDataSo
         }
          
         cell.backgroundColor = .systemGray
-        
         return cell
     }
 }
@@ -139,13 +141,13 @@ extension SecondViewController: FSCalendarDelegate, FSCalendarDataSource, FSCale
         
         var j = 0
         
-        let tempArr = eventArr.map { DateFormatChange.shared.dateOfYearMonthDay.string(from: $0) }
-        let tempArr2 = tempArr.map { DateFormatChange.shared.dateOfYearMonthDay.date(from: $0) }
+        let eventStringArr = eventArr.map { DateFormatChange.shared.dateOfYearMonthDay.string(from: $0) }
+        let eventDateArr = eventStringArr.map { DateFormatChange.shared.dateOfYearMonthDay.date(from: $0) }
         
-        if tempArr2.contains(date) {
+        if eventDateArr.contains(date) {
             j = 0
             for i in 0..<tasks.count {
-                if tempArr2[i] == date {
+                if eventDateArr[i] == date {
                     j += 1
                 }
             }
@@ -154,5 +156,20 @@ extension SecondViewController: FSCalendarDelegate, FSCalendarDataSource, FSCale
         } else {
             return 0
         }
+    }
+    
+    func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        
+        // 다시 클릭하면 배열을 비워줘야함(append가 계속되기 때문)
+        dayEventArr = []
+        
+        for i in 0..<repository.dateArr(date: date).count {
+            dayEventArr.append(repository.dateArr(date: date)[i].schedule)
+        }
+        
+        mainView.tableView.reloadData()
+        
+        print(dayEventArr)
+        print(date)
     }
 }
