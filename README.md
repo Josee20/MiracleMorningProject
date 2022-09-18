@@ -862,3 +862,113 @@ extension SecondViewController: FSCalendarDelegate, FSCalendarDataSource, FSCale
 
 
 ___
+
+# 220917
+
+
+## 1. 캘린더 날짜 선택시 스케쥴 테이블뷰에 띄워주기
+
+2Page의 테이블뷰셀에 캘린더에서 선택한 날에 대한 데이터를 나타내고자 했다.
+
+먼저 클릭하면 해당 날짜와 일치한 스케쥴이 잘 출력되는 지 확인 했다.
+
+그런데 출력이 잘 되지 않았다...
+
+
+### 1-1. 문제발생(인덱싱?)
+
+반복문을 통해 tasks.count만큼 반복해주고 거기에서 선택한 날짜와 형변환 시켜준 날짜가 같으면 해당 인덱스의 tasks를 보여주면 되는식으로 하면 간단하게 나타낼 수 있을거라 생각했다.
+
+```swift
+func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+	
+	let eventStringArr = eventArr.map { DateFormatChange.shared.dateOfYearMonthDay.string(from: $0) }
+	let eventDateArr = eventStringArr.map { DateFormatChange.shared.dateOfYearMonthDay.date(from: $0) }
+	
+	for i in tasks.count {
+		if eventDateArr[i] == date {
+			dayEventArr.append(tasks[i].scheduleDate)
+		}
+	}
+	
+	mainView.tableView.reloadData()
+}
+```
+
+위 메소드는 fscalendar에서 지원하는 메소드로 캘린더의 날짜를 입력하면 해당 날의 date와 monthPosition(인덱스)를 반환해준다.
+
+이렇게 하면 분명 인덱스에 맞춰 잘 schedule을 뱉어낼거라고 생각한 내가 바보였다...
+
+왜냐하면 `eventDateArr[i]` 가 선택한 date와 같을 때의 인덱스 i값이 tasks의 인덱스로 쓰이게되는데 그럴 경우 해당날짜와 무조건 같은 스케쥴이 나올 수 없게된다.
+
+왜냐하면 현재 tasks의 구조는 이러하기 때문이다.
+
+<img width="300" alt="스크린샷 2022-09-18 오후 12 31 21" src="https://user-images.githubusercontent.com/92367484/190884938-7e81cd28-c61a-4439-98af-32a6418202a4.png">
+
+
+날짜에 맞춰 정렬이되어있으면 가능할 거 같았지만 데이터를 넣을 때 반복문으로 넣어서 그런지 fetch를 불러줘도 정렬이 계속 안 되었다...
+
+두 가지 생각을 했었다.
+
+1. Realm을 어떻게든 다시 Date로 정렬해주고 위의 반복문을 통해 나타낸다.
+2. Realm에서 filter?를 통해 가져와서 보여준다.
+
+
+
+### 1-2. 문제 해결( feat. where )
+
+더 좋은 방법이 뭘까 고민하다가 멘토님을 찾아가 조언을 구하니 반복문을 자제하고 쿼리에서 데이터를 가져오는식으로 하라는 솔루션을 받았다.
+
+그리고 Realm에서 where이라는 좋은 기능?을 발견했다.
+
+참고로 where은 원래 Realm에서 지원을 하지 않았지만 최근에 들어서 지원한 문법이라고 한다!!!
+
+where을 사용해 선택한 date 값이 해당 날의 00:00AM ~ 23:59PM 사이에 있는 값을 나타내면 되겠다 생각했다.
+
+```swift 
+class UserScheduleRepository: UserScheduleRepositoryType {
+    
+    let localRealm = try! Realm()
+    
+    let calendar = Calendar.current
+        
+    func dateArr(date: Date) -> Results<UserSchedule> {
+        
+        return localRealm.objects(UserSchedule.self).where {
+            $0.scheduleDate >= calendar.startOfDay(for: date) && $0.scheduleDate < calendar.startOfDay(for: date + 86400)
+        }
+    }
+}
+```
+
+`calnedar.startOfDay(for:_)` 메소드는 해당 날의 00:00AM을 나타내주는 함수이다.
+
+때문에 이거보다 date값이 크거나 같고  `calendar.startOfDay(for: date + 86400)`는 다음 날 00:00AM이니까 그것보다 작으면 00:00AM ~ 23:59PM의 범위를 특정할 수 있 게된다.
+
+그러면 클릭한 날의 date 값을 받아 Realm에서 그 날의 schedule, startTime, endTime 등등을 보여줄 수 있게되는 것이다.
+
+그리고 나서 캘린더에 코드를 작성해보면
+
+```swift
+func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+	
+	// 다시 클릭하면 배열을 비워줘야함(append가 계속되기 때문)
+	dayEventArr = []
+	
+	for i in 0..<repository.dateArr(date: date).count {
+		dayEventArr.append(repository.dateArr(date: date)[i].schedule)
+	}
+	
+	mainView.tableView.reloadData()
+
+}
+```
+
+클릭시에 dayEventArr 배열에 해당 스케쥴을 담아주게 된다.
+
+이를 그대로 테이블뷰 셀에 뿌려주면 데이터를 제대로 나타낼 수 있다.
+
+
+___
+
+# 220918

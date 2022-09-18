@@ -12,6 +12,7 @@ import RealmSwift
 protocol UserScheduleRepositoryType {
     func fetch() -> Results<UserSchedule>
     func addSchedule(startTime: String, endTime: String, date: Date, schedule: String, success: Bool)
+    func dateArr(date: Date) -> Results<UserSchedule>
 }
 
 class UserScheduleRepository: UserScheduleRepositoryType {

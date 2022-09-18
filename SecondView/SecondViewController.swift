@@ -168,8 +168,6 @@ extension SecondViewController: FSCalendarDelegate, FSCalendarDataSource, FSCale
         }
         
         mainView.tableView.reloadData()
-        
-        print(dayEventArr)
-        print(date)
+
     }
 }
