@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		490D8B0F28D8CF39000EA959 /* GlobalTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490D8B0E28D8CF39000EA959 /* GlobalTime.swift */; };
+		49314F3728D72B7F00D6156B /* ScheduleInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49314F3628D72B7F00D6156B /* ScheduleInfoModel.swift */; };
 		49580DAE28CF028E002EE3CD /* DailyButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49580DAD28CF028E002EE3CD /* DailyButton.swift */; };
 		49580DB128CF07A7002EE3CD /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49580DB028CF07A7002EE3CD /* TimerView.swift */; };
 		49580DB328CF07B0002EE3CD /* TimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49580DB228CF07B0002EE3CD /* TimerViewController.swift */; };
@@ -46,6 +48,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		490D8B0E28D8CF39000EA959 /* GlobalTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalTime.swift; sourceTree = "<group>"; };
+		49314F3628D72B7F00D6156B /* ScheduleInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleInfoModel.swift; sourceTree = "<group>"; };
 		49580DAD28CF028E002EE3CD /* DailyButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyButton.swift; sourceTree = "<group>"; };
 		49580DB028CF07A7002EE3CD /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
 		49580DB228CF07B0002EE3CD /* TimerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewController.swift; sourceTree = "<group>"; };
@@ -97,6 +101,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		490D8B0D28D8CF01000EA959 /* Time */ = {
+			isa = PBXGroup;
+			children = (
+				490D8B0E28D8CF39000EA959 /* GlobalTime.swift */,
+			);
+			path = Time;
+			sourceTree = "<group>";
+		};
 		49580DAF28CF0797002EE3CD /* TimerView */ = {
 			isa = PBXGroup;
 			children = (
@@ -120,6 +132,7 @@
 			children = (
 				49F6D8FF28CDEA32005AA757 /* ReusableProtocol.swift */,
 				49F0FB5928D2E78D004AD670 /* RealmModel */,
+				490D8B0D28D8CF01000EA959 /* Time */,
 				49F6D8F828CDC3F8005AA757 /* DateFormat */,
 				49F6D8EC28CDB832005AA757 /* ForthView */,
 				49F6D8EB28CDB82B005AA757 /* ThirdView */,
@@ -192,6 +205,7 @@
 				49F6D8E728CDB595005AA757 /* SecondViewController.swift */,
 				49F0FB5728D1A566004AD670 /* SecondCollectionViewCell.swift */,
 				49F0FB5328D1A32C004AD670 /* SecondTableViewCell.swift */,
+				49314F3628D72B7F00D6156B /* ScheduleInfoModel.swift */,
 			);
 			path = SecondView;
 			sourceTree = "<group>";
@@ -332,6 +346,7 @@
 				49F0FB5628D1A4B6004AD670 /* BaseCollectionViewCell.swift in Sources */,
 				49F6D8DD28CDAEDE005AA757 /* BaseView.swift in Sources */,
 				49F6D90028CDEA32005AA757 /* ReusableProtocol.swift in Sources */,
+				49314F3728D72B7F00D6156B /* ScheduleInfoModel.swift in Sources */,
 				49F6D8FE28CDD8F5005AA757 /* FirstTableViewCell.swift in Sources */,
 				49580DB128CF07A7002EE3CD /* TimerView.swift in Sources */,
 				49580DAE28CF028E002EE3CD /* DailyButton.swift in Sources */,
@@ -340,6 +355,7 @@
 				49F6D8EA28CDB59D005AA757 /* SecondView.swift in Sources */,
 				49F6D8F228CDB854005AA757 /* ForthViewController.swift in Sources */,
 				49F6D8E528CDB440005AA757 /* FirstView.swift in Sources */,
+				490D8B0F28D8CF39000EA959 /* GlobalTime.swift in Sources */,
 				49F6D8FC28CDD5B1005AA757 /* BaseTableViewCell.swift in Sources */,
 				49F6D8EE28CDB83D005AA757 /* ThirdViewController.swift in Sources */,
 				49F6D8DB28CDAED7005AA757 /* BaseViewController.swift in Sources */,

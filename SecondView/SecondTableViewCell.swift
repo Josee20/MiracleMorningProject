@@ -9,21 +9,19 @@ import UIKit
 
 class SecondTableViewCell: BaseTableViewCell {
 
-    var scheduleTitle: UILabel = {
+    public var scheduleTitle: UILabel = {
         let view = UILabel()
         view.font = .boldSystemFont(ofSize: 15)
-        view.text = "운동하기"
         return view
     }()
     
-    var scheduleTime: UILabel = {
+    public var scheduleTime: UILabel = {
         let view = UILabel()
         view.font = .systemFont(ofSize: 12)
-        view.text = "10:00 ~ 12:00"
         return view
     }()
     
-    var checkButton: UIButton = {
+    public var checkButton: UIButton = {
         let view = UIButton()
         view.backgroundColor = .systemGray6
         return view
@@ -37,14 +35,14 @@ class SecondTableViewCell: BaseTableViewCell {
         
         scheduleTitle.snp.makeConstraints {
             $0.centerY.equalTo(self)
-            $0.leadingMargin.equalTo(32)
+            $0.leadingMargin.equalTo(20)
             $0.width.equalTo(100)
         }
         
         scheduleTime.snp.makeConstraints {
-            $0.centerX.equalTo(UIScreen.main.bounds.width * 0.54)
+            $0.centerX.equalTo(UIScreen.main.bounds.width * 0.5)
             $0.centerY.equalTo(self)
-            $0.width.equalTo(100)
+            $0.width.equalTo(125)
         }
         
         checkButton.snp.makeConstraints {

@@ -46,7 +46,7 @@ class FirstTableViewCell: BaseTableViewCell {
         scheduleTime.snp.makeConstraints {
             $0.leadingMargin.equalTo(20)
             $0.bottomMargin.equalTo(-8)
-            $0.width.equalTo(100)
+            $0.width.equalTo(130)
         }
         
         checkButton.snp.makeConstraints {

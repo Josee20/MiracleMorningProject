@@ -14,8 +14,10 @@ class SetScheduleViewController: BaseViewController {
     
     let repository = UserScheduleRepository()
     
-    var now = Date() + 86400 // 다음날 아침에 알림이 생성되어야함, 만약 당일 새벽1시에 설정해서 당일 7시부터 하고싶으면 어떻게 할까??...
+    var now = GlobalTime.koreanNow + 86400
+    // 다음날 아침에 알림이 생성되어야함, 만약 당일 새벽1시에 설정해서 당일 7시부터 하고싶으면 어떻게 할까??...
     let calendar = Calendar.current
+
     let weekDayArr = ["일", "월", "화", "수", "목", "금", "토"]
     
     override func loadView() {
@@ -158,7 +160,7 @@ class SetScheduleViewController: BaseViewController {
     }
     
     @objc func okButtonClicked() {
-        
+
         let currentMonth = self.calendar.component(.month, from: now)
         
         if mainView.setScheduleTextField.text?.count == 0 {
@@ -193,7 +195,9 @@ class SetScheduleViewController: BaseViewController {
                     now += 86400
                     continue
                 } else {
-                    repository.addSchedule(startTime: mainView.setStartTimeButton.titleLabel?.text ?? "", endTime: mainView.setEndTimeButton.titleLabel?.text ?? "", date: now, schedule: mainView.setScheduleTextField.text!, success: false)
+                    repository.addSchedule(startTime: mainView.setStartTimeButton.titleLabel?.text ?? "", endTime: mainView.setEndTimeButton.titleLabel?.text ?? "", date: now, schedule: mainView.setScheduleTextField.text!, success: true)
+                    
+                    print(now)
                     
                     now += 86400
                 }

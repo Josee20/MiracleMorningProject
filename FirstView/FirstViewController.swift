@@ -13,9 +13,15 @@ class FirstViewController: BaseViewController {
     
     let mainView = FirstView()
     
+    let repository = UserScheduleRepository()
+    
     var timer: Timer?
     
+    var scheduleInfo = [scheduleInfoModel]()
+    
     let notificationCenter = UNUserNotificationCenter.current()
+    
+    let now = GlobalTime.koreanNow
     
     override func loadView() {
         self.view = mainView
@@ -27,12 +33,19 @@ class FirstViewController: BaseViewController {
         mainView.backgroundColor = .systemBackground
         
         requestNotificationAuthorization()
+        
+        // 해당일 정보 scheduleInfoModel에 값 넣어주기
+        for i in 0..<repository.filterDayTasks(date: now).count {
+            scheduleInfo.append(scheduleInfoModel(schedule: repository.filterDayTasks(date: now)[i].schedule, startTime: repository.filterDayTasks(date: now)[i].startTime, endTime: repository.filterDayTasks(date: now)[i].endTime, success: repository.filterDayTasks(date: now)[i].scheduleSuccess))
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         getCurrentTime()
+
+        mainView.tableView.reloadData()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -78,7 +91,7 @@ extension FirstViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return 2
+        return scheduleInfo.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -86,6 +99,11 @@ extension FirstViewController: UITableViewDelegate, UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: FirstTableViewCell.reuseIdentifier) as? FirstTableViewCell else {
             return UITableViewCell()
         }
+        
+        cell.scheduleTitle.text = scheduleInfo[indexPath.row].schedule
+        cell.scheduleTitle.text = scheduleInfo[indexPath.row].schedule
+        cell.scheduleTime.text = "\(scheduleInfo[indexPath.row].startTime)~\(scheduleInfo[indexPath.row].endTime)"
+        scheduleInfo[indexPath.row].success == true ? cell.checkButton.setImage(UIImage(systemName: "checkmark.square") , for: .normal) : cell.checkButton.setImage(UIImage(systemName: "x.square"), for: .normal)
         
         cell.backgroundColor = .orange
         
@@ -98,7 +116,7 @@ extension FirstViewController: UITableViewDelegate, UITableViewDataSource {
         headerView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 40)
 
         let titleLabel = UILabel()
-        titleLabel.text = "할 일"
+        titleLabel.text = "오늘의 할 일"
         titleLabel.textColor = .black
         titleLabel.font = .boldSystemFont(ofSize: 20)
         titleLabel.frame = CGRect(x: 0, y: 0, width: headerView.frame.width, height: headerView.frame.height)

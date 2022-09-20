@@ -18,16 +18,26 @@ class SecondViewController: BaseViewController {
     let mainView = SecondView()
     
     var eventArr = Set<Date>()
-    
     var dayEventArr = [String]()
+    var scheduleInfo = [scheduleInfoModel]()
+    var scheduleCountDic = [String:Int]()
+    
+    // 여기선 filterTasks에서 시간 처리를 해주기때문에 그냥 now로 써도 됨
+    let now = Date()
+    
+    var selectedDate: Date = Date()
     
     var tasks: Results<UserSchedule>! {
         didSet {
+            dayTasks = repository.filterDayTasks(date: selectedDate)
             mainView.tableView.reloadData()
             mainView.collectionView.reloadData()
             mainView.calendar.reloadData()
         }
     }
+    
+    var dayTasks: Results<UserSchedule>!
+    
     
     override func loadView() {
         self.view = mainView
@@ -37,12 +47,15 @@ class SecondViewController: BaseViewController {
         super.viewDidLoad()
         
         mainView.backgroundColor = .systemBackground
-        mainView.calendar.placeholderType = .none
-        mainView.calendar.locale = Locale(identifier: "ko-KR")
-        
+
         print(repository.localRealm.configuration.fileURL!)
-//        print(repository.dateArr(date: Date()))
         
+        
+        // 처음 캘린더에 선택된 날짜의 데이터 나타내기
+        mainView.tableViewHeaderLabel.text = DateFormatChange.shared.dateOfMonth.string(from: now)
+        
+        // 현재시간 기준으로 tasks 필터링
+        dayTasks = repository.filterDayTasks(date: now)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,13 +63,17 @@ class SecondViewController: BaseViewController {
         
         // 반드시 fetch를 해주고 setEvents를 실행시켜 해주어야함
         // 그래야 Realm에서 tasks.count를 맞춰 setEvents메소드를 쓸 수 있음
-        
         fetchRealm()
         setEvents()
 
+        mainView.tableView.reloadData()
         mainView.calendar.reloadData()
-//        print(eventArr)
+        mainView.collectionView.reloadData()
         
+        // 컬렉션뷰 업데이트
+        for i in 0..<repository.successSchedule().count {
+            scheduleCountDic.updateValue(repository.successScheduleNumber(key: repository.successSchedule()[i].schedule).count, forKey: repository.successSchedule()[i].schedule)
+        }
     }
     
     override func configure() {
@@ -84,14 +101,12 @@ class SecondViewController: BaseViewController {
             eventArr.insert(eventDate)
         }
     }
-    
 }
 
 extension SecondViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        return dayEventArr.count
+        return dayTasks.count
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -104,13 +119,28 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
         
-        cell.scheduleTitle.text = dayEventArr[indexPath.row]
+        cell.scheduleTitle.text = dayTasks[indexPath.row].schedule
+        cell.scheduleTime.text = "\(dayTasks[indexPath.row].startTime)~\(dayTasks[indexPath.row].endTime)"
+        dayTasks[indexPath.row].scheduleSuccess == true ? cell.checkButton.setImage(UIImage(systemName: "checkmark.square") , for: .normal) : cell.checkButton.setImage(UIImage(systemName: "x.square"), for: .normal)
         
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        
+        if editingStyle == .delete {
+            repository.delete(item: dayTasks?[indexPath.row])
+        }
+        
+        // 셀삭제하면 컬렉션뷰에 나타난 count 업데이트
+        for i in 0..<repository.successSchedule().count {
+            scheduleCountDic.updateValue(repository.successScheduleNumber(key: repository.successSchedule()[i].schedule).count, forKey: repository.successSchedule()[i].schedule)
+        }
+        
+        print("======================\(scheduleCountDic)")
+        self.fetchRealm()
+    }
 }
-
-
 
 extension SecondViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
@@ -120,16 +150,29 @@ extension SecondViewController: UICollectionViewDelegate, UICollectionViewDataSo
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        return 5
+        return scheduleCountDic.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
+        let space: CGFloat = 4
+        let width = UIScreen.main.bounds.width - (space * 7)
+        
+        // 딕셔너리 value 크기에 따라 정렬
+        let sortedScheduleCountDic = scheduleCountDic.sorted { (first, second) in
+            return first.value > second.value
+        }
+    
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SecondCollectionViewCell.reuseIdentifier, for: indexPath) as? SecondCollectionViewCell else {
             return UICollectionViewCell()
         }
-         
-        cell.backgroundColor = .systemGray
+        
+        cell.scheduleLabel.text = sortedScheduleCountDic[indexPath.item].key
+        cell.numberOfScheduleLabel.text = "\(sortedScheduleCountDic[indexPath.item].value)"
+        
+        cell.layer.cornerRadius = width / 6 / 2
+        cell.backgroundColor = .lightGray
+        
         return cell
     }
 }
@@ -138,21 +181,14 @@ extension SecondViewController: FSCalendarDelegate, FSCalendarDataSource, FSCale
     
     // ... 개수
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
-        
-        var j = 0
-        
+
         let eventStringArr = eventArr.map { DateFormatChange.shared.dateOfYearMonthDay.string(from: $0) }
         let eventDateArr = eventStringArr.map { DateFormatChange.shared.dateOfYearMonthDay.date(from: $0) }
-        
+                
         if eventDateArr.contains(date) {
-            j = 0
-            for i in 0..<tasks.count {
-                if eventDateArr[i] == date {
-                    j += 1
-                }
-            }
             mainView.calendar.appearance.eventDefaultColor = .systemGray3
-            return j
+            mainView.calendar.appearance.eventSelectionColor = .systemGray3
+            return repository.filterDayTasks(date: date).count
         } else {
             return 0
         }
@@ -160,14 +196,13 @@ extension SecondViewController: FSCalendarDelegate, FSCalendarDataSource, FSCale
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         
-        // 다시 클릭하면 배열을 비워줘야함(append가 계속되기 때문)
-        dayEventArr = []
+        selectedDate = date
+        scheduleInfo = []
         
-        for i in 0..<repository.dateArr(date: date).count {
-            dayEventArr.append(repository.dateArr(date: date)[i].schedule)
-        }
-        
-        mainView.tableView.reloadData()
+        dayTasks = repository.filterDayTasks(date: date)
+        self.fetchRealm()
 
+        mainView.tableViewHeaderLabel.text = DateFormatChange.shared.dateOfMonth.string(from: date)
     }
+    
 }

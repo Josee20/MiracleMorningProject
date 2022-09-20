@@ -13,11 +13,12 @@ class SecondView: BaseView {
     
     public let calendar: FSCalendar = {
         let view = FSCalendar()
+        view.placeholderType = .none
         view.locale = Locale(identifier: "ko-KR")
         return view
     }()
     
-    private let collectionViewHeaderLabel: UILabel = {
+    public let collectionViewHeaderLabel: UILabel = {
         let view = UILabel()
         view.text = "9월 미션 현황"
         view.font = .boldSystemFont(ofSize: 18)
@@ -48,7 +49,7 @@ class SecondView: BaseView {
         return view
     }()
     
-    private let tableViewHeaderLabel: UILabel = {
+    public let tableViewHeaderLabel: UILabel = {
         let view = UILabel()
         view.text = "9월 14일"
         view.font = .boldSystemFont(ofSize: 18)
@@ -106,7 +107,7 @@ class SecondView: BaseView {
         
         tableViewHeaderLabel.snp.makeConstraints {
             $0.leadingMargin.equalTo(20)
-            $0.topMargin.equalTo(borderWithCollectioinView.snp.bottom).offset(28)
+            $0.topMargin.equalTo(borderWithCollectioinView.snp.bottom).offset(36)
             $0.width.equalTo(100)
             $0.height.equalTo(20)
         }

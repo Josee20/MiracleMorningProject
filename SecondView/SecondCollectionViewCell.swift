@@ -9,17 +9,20 @@ import UIKit
 
 class SecondCollectionViewCell: BaseCollectionViewCell {
     
-    let scheduleLabel: UILabel = {
+    public var scheduleLabel: UILabel = {
         let view = UILabel()
         view.textAlignment = .center
-        view.font = .systemFont(ofSize: 12)
+        view.text = "운동"
+        view.font = .systemFont(ofSize: 14)
+        view.numberOfLines = 3
         return view
     }()
     
-    let numberOfScheduleLabel: UILabel = {
+    public var numberOfScheduleLabel: UILabel = {
         let view = UILabel()
         view.textAlignment = .center
-        view.font = .systemFont(ofSize: 7)
+        view.text = "10"
+        view.font = .systemFont(ofSize: 11)
         return view
     }()
     
@@ -37,10 +40,10 @@ class SecondCollectionViewCell: BaseCollectionViewCell {
         }
         
         numberOfScheduleLabel.snp.makeConstraints {
-            $0.top.equalTo(self)
-            $0.trailing.equalTo(self)
-            $0.width.equalTo(10)
-            $0.height.equalTo(7)
+            $0.top.equalTo(self).inset(5)
+            $0.trailing.equalTo(self).inset(4)
+            $0.width.equalTo(15)
+            $0.height.equalTo(8)
         }
     }
 }

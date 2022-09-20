@@ -24,6 +24,6 @@ class UserSchedule: Object {
         self.endTime = endTime
         self.scheduleDate = scheduleDate
         self.schedule = schedule
-        self.scheduleSuccess = false
+        self.scheduleSuccess = scheduleSuccess
     }
 }

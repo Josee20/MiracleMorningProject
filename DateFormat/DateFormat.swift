@@ -21,6 +21,13 @@ class DateFormatChange {
         return formatter
     }()
     
+    let endOfDayTime: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko-KR")
+        formatter.dateFormat = "yyyy-MM-dd hh:mm:ss +0000"
+        return formatter
+    }()
+    
     let dateOfHour: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ko_KR")
@@ -41,4 +48,12 @@ class DateFormatChange {
         formatter.dateFormat = "yyyy-MM-dd"
         return formatter
     }()
+    
+    let dateOfMonth: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko-KR")
+        formatter.dateFormat = "M월 dd일"
+        return formatter
+    }()
+    
 }
