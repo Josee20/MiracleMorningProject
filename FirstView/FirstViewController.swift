@@ -7,6 +7,8 @@
 
 import Foundation
 import UIKit
+
+import RealmSwift
 import UserNotifications
 
 class FirstViewController: BaseViewController {
@@ -21,7 +23,9 @@ class FirstViewController: BaseViewController {
     
     let notificationCenter = UNUserNotificationCenter.current()
     
-    let now = GlobalTime.koreanNow
+    let now = Date()
+    
+    var dayTasks: Results<UserSchedule>!
     
     override func loadView() {
         self.view = mainView
@@ -38,6 +42,8 @@ class FirstViewController: BaseViewController {
         for i in 0..<repository.filterDayTasks(date: now).count {
             scheduleInfo.append(scheduleInfoModel(schedule: repository.filterDayTasks(date: now)[i].schedule, startTime: repository.filterDayTasks(date: now)[i].startTime, endTime: repository.filterDayTasks(date: now)[i].endTime, success: repository.filterDayTasks(date: now)[i].scheduleSuccess))
         }
+        
+        print("-------\(now)")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -46,6 +52,9 @@ class FirstViewController: BaseViewController {
         getCurrentTime()
 
         mainView.tableView.reloadData()
+        
+        dayTasks = repository.filterDayTasks(date: now)
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -100,10 +109,10 @@ extension FirstViewController: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
         
-        cell.scheduleTitle.text = scheduleInfo[indexPath.row].schedule
-        cell.scheduleTitle.text = scheduleInfo[indexPath.row].schedule
-        cell.scheduleTime.text = "\(scheduleInfo[indexPath.row].startTime)~\(scheduleInfo[indexPath.row].endTime)"
-        scheduleInfo[indexPath.row].success == true ? cell.checkButton.setImage(UIImage(systemName: "checkmark.square") , for: .normal) : cell.checkButton.setImage(UIImage(systemName: "x.square"), for: .normal)
+        cell.scheduleTitle.text = dayTasks[indexPath.row].schedule
+        cell.scheduleTime.text = "\(dayTasks[indexPath.row].startTime)~\(dayTasks[indexPath.row].endTime)"
+        dayTasks[indexPath.row].scheduleSuccess == true ? cell.checkButton.setImage(UIImage(systemName: "checkmark.square") , for: .normal) : cell.checkButton.setImage(UIImage(systemName: "x.square"), for: .normal)
+        
         
         cell.backgroundColor = .orange
         

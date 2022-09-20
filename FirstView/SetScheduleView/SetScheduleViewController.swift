@@ -14,7 +14,7 @@ class SetScheduleViewController: BaseViewController {
     
     let repository = UserScheduleRepository()
     
-    var now = GlobalTime.koreanNow + 86400
+    var now = Date() + 86400
     // 다음날 아침에 알림이 생성되어야함, 만약 당일 새벽1시에 설정해서 당일 7시부터 하고싶으면 어떻게 할까??...
     let calendar = Calendar.current
 
@@ -36,6 +36,8 @@ class SetScheduleViewController: BaseViewController {
         for i in 0...6 {
             dayButtonArr[i].tag = i
         }
+        
+        print(now)
         
         addCancelButton()
     }
@@ -195,7 +197,7 @@ class SetScheduleViewController: BaseViewController {
                     now += 86400
                     continue
                 } else {
-                    repository.addSchedule(startTime: mainView.setStartTimeButton.titleLabel?.text ?? "", endTime: mainView.setEndTimeButton.titleLabel?.text ?? "", date: now, schedule: mainView.setScheduleTextField.text!, success: true)
+                    repository.addSchedule(startTime: mainView.setStartTimeButton.titleLabel?.text ?? "", endTime: mainView.setEndTimeButton.titleLabel?.text ?? "", date: now, schedule: mainView.setScheduleTextField.text!, success: false)
                     
                     print(now)
                     

@@ -20,7 +20,6 @@ class BaseViewController: UIViewController {
         
         configure()
         setConstraints()
-
     }
     
     func configure() { }
@@ -48,5 +47,4 @@ class BaseViewController: UIViewController {
         alert.addAction(ok)
         present(alert, animated: true)
     }
-    
 }

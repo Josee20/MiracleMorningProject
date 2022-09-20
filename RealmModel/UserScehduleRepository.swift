@@ -55,8 +55,7 @@ class UserScheduleRepository: UserScheduleRepositoryType {
     func filterDayTasks(date: Date) -> Results<UserSchedule> {
         
         return localRealm.objects(UserSchedule.self).where {
-            $0.scheduleDate >= calendar.startOfDay(for: date) + 3600 * 9 && $0.scheduleDate < calendar.startOfDay(for: date) + 86400 + 3600 * 9
-            
+            $0.scheduleDate >= calendar.startOfDay(for: date) && $0.scheduleDate < calendar.startOfDay(for: date)  + 86400
         }
     }
     

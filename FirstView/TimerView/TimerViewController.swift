@@ -23,6 +23,25 @@ class TimerViewController: BaseViewController {
         return view
     }()
     
+    private let playAndPauseButton: UIButton = {
+        let view = UIButton()
+        
+        let pointSize: CGFloat = 20
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: pointSize)
+        var config = UIButton.Configuration.plain()
+        config.preferredSymbolConfigurationForImage = imageConfig
+        view.configuration = config
+        
+        view.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+        view.tintColor = .black
+        view.backgroundColor = .systemBackground
+        view.layer.cornerRadius = 25
+        view.layer.borderColor = UIColor.black.cgColor
+        view.layer.borderWidth = 2
+        view.contentMode = .scaleToFill
+        return view
+    }()
+    
     private let cancelButton: UIButton = {
         let view = UIButton()
         view.setTitle("취소", for: .normal)
@@ -105,12 +124,15 @@ class TimerViewController: BaseViewController {
     override func configure() {
         self.view.addSubview(stackView)
         self.view.addSubview(missionLabel)
+        self.view.addSubview(playAndPauseButton)
         
         [cancelButton, okButton].forEach { stackView.addArrangedSubview($0) }
         
         cancelButton.addTarget(self, action: #selector(cancelButtonClicked), for: .touchUpInside)
         
         okButton.addTarget(self, action: #selector(okButtonClicked), for: .touchUpInside)
+        playAndPauseButton.addTarget(self, action: #selector(playAndPauseButtonClicked), for: .touchUpInside)
+        
     }
     
     @objc func cancelButtonClicked() {
@@ -121,6 +143,16 @@ class TimerViewController: BaseViewController {
         dismiss(animated: true)
     }
     
+    @objc func playAndPauseButtonClicked() {
+        if playAndPauseButton.imageView?.image == UIImage(systemName: "pause.fill") {
+            playAndPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+            
+            
+        } else {
+            playAndPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+        }
+    }
+    
     override func setConstraints() {
         
         missionLabel.snp.makeConstraints {
@@ -128,8 +160,7 @@ class TimerViewController: BaseViewController {
             $0.leadingMargin.equalTo(40)
             $0.trailingMargin.equalTo(-40)
         }
-        
-        
+
         stackView.snp.makeConstraints {
             $0.bottomMargin.equalTo(-40)
             $0.leadingMargin.equalTo(40)
@@ -145,6 +176,13 @@ class TimerViewController: BaseViewController {
         okButton.snp.makeConstraints {
             $0.height.equalTo(60)
         }
+        
+        playAndPauseButton.snp.makeConstraints {
+            $0.centerX.equalTo(view)
+            $0.width.height.equalTo(50)
+            $0.centerY.equalTo(UIScreen.main.bounds.height / 1.33)
+        }
+        
     }
     
     private func addTimerView(on subview: UIView) {

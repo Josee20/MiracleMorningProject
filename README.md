@@ -971,4 +971,286 @@ func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FS
 
 ___
 
-# 220918
+# 220919
+
+## 0. 개인피드백
+
+- 캘린더에 스케쥴 수행하면 색 표시
+- 삭제 기능(테이블뷰) -> 언제 어떻게 얼마나 지울지 생각해보기
+- 겹치는 시간 등록 X
+- 백그라운드 상태에서 체크
+- 퍼즈기능
+- 이미 시간이 지났으면 셀 삭제 불가하게
+
+
+## 1. 팀빌딩
+
+tableViewDelegate, tableViewDataSource 즉 델리게이트패턴 쪽은 최대한 가볍게 처리하는게 좋다.
+
+왜냐하면 뷰를 그릴 때 cellForRowAt 같은 경우 row가 하나 생길 때마다 안에있는 코드들을 반복하기 때문이다.
+
+
+### 1-1. 내가 막힌 부분
+
+컬렉션뷰를 사용해 이번 달 총 수행한 스케쥴의 개수를 나타내고 싶어서 수행한 스케쥴(true)인 부분을 필터로 가져와 배열에 담고 딕셔너리로 처리하고자했는데 값이 중복된 부분을 어떻게 처리해줘야할지 모르겠다.
+
+-> reduce를 활용해보라는 피드백을 받음
+
+
+## 2. Collection View에 데이터 띄워주기
+
+<img width="300" alt="스크린샷 2022-09-19 오후 3 04 44" src="https://user-images.githubusercontent.com/92367484/190958044-d3af8d8d-e293-46dd-87ee-4879d8f7a702.png">
+
+다음과 같이 컬렉션 뷰에 스케쥴과 수행횟수를 나타내주고 싶었습니다.
+
+수행한 스케쥴이기 때문에 가장먼저 Realm에서 Success여부가 true인 것을 필터해서 가져왔습니다.
+
+```swift
+func successSchedule() -> Results<UserSchedule> {
+	return localRealm.objects(UserSchedule.self).filter("scheduleSuccess == true")
+}
+```
+
+이렇게하면 `["운동", "운동","운동", "공부", "공부", "독서"]` 이런식으로 배열에 담을 수 있게됩니다.
+
+그리고 스케쥴, 횟수가 짝지어져 있기 때문에 이를 딕셔너리로 나타내고자했습니다.
+
+
+### 2-1. ❎문제발생❎
+
+반복문을 통해 스케쥴을 담았기 때문에 스케쥴들이 서로 섞일 수가 없는 구조입니다.
+
+때문에 반복문을 통해 앞의 인덱스와 현재 인덱스를 비교한 후 같으면 value를 1씩 추가해주는 식으로 딕셔너리를 나타내려고 시도했습니다.
+
+```swift
+var j = 1
+
+for i in 0..<repository.successSchedule().count {
+	if tempArr[i] == tempArr[i+1] {
+		j += 1
+	} else {
+		scheduleCountDic.updateValue(j, forKey: repository.successSchedule()[i].schedule)
+	}
+}
+```
+
+이런식으로 접근을 했습니다. 하지만 이렇게하면 해당배열의 크기보다 +1 더 큰 경우와 비교해야하는데 그렇게되면 index out of range 오류가 발생하게 됩니다...
+
+그리고 이렇게 반복문을 통해 접근하는게 별로 바람직한 생각이 아니라고 들었습니다... ( 쿼리에서 가져오라는 멘토님의 조언이... 떠올랐습니다!!!)
+
+
+### 2-2. ✅ 문제해결
+
+```swift
+for i in 0..<repository.successSchedule().count {
+	scheduleCountDic.updateValue(i+1, forKey: repository.successSchedule()[i].schedule)
+	print(repository.successSchedule()[i].schedule)
+}
+
+// ["강아지", "강아지", "강아지", "고양이", "악어", "악어"]
+// ["강아지":3, "고양이":4, "악어":6] 으로 딕셔너리가 업데이트됨
+```
+
+위의 코드를 활용해서 어떻게 해결해보자는 어리석은... 생각을 계속하고 있었습니다.
+
+대입은 되지만 배열의 아이템 개수에 맞춰 value가 업데이트 되지 않지만 어떻게 손을 보면 제대로 넣을 수 있을거라 생각했기 때문에...
+
+이 땐 Realm에 필터를 거는데는 무조건 상수??만 될 거라고 생각을 했습니다...(왜지?...) 다 filter처리를 " "안에서만 해줘서 그랬나봐요 ㅠㅠ
+
+하지만 filter에도 매개변수를 넣어 해당 값을 불러올 수 있다는 이야기를 팀원에게 들었습니다...
+
+그러면 해당스케쥴의 키값과 키에맞는 value를 쿼리에서 필터를 통해 가져올 수 있다는 이야기죠...
+
+```swift
+func successScheduleNumber(key: String) -> Results<UserSchedule> {
+	return localRealm.objects(UserSchedule.self).filter("scheduleSuccess == true AND schedule == '\(key)'")
+}
+```
+
+바로 scheduleSuccess가 true임과 동시에 스케쥴이 키값과 같은 경우의 쿼리를 리턴해주는 메소드를 만들었습니다.
+
+```swift
+for i in 0..<repository.successSchedule().count {
+	scheduleCountDic.updateValue(repository.successScheduleNumber(key: repository.successSchedule()[i].schedule).count, forKey: repository.successSchedule()[i].schedule)
+}
+```
+
+그 다음 딕셔너리에 키값과 밸류를 담아주었습니다.
+
+마지막으로 많이 성공한 스케쥴을 순서대로 보여주고 싶어 정렬을 해준 뒤 셀에 나타내줬습니다.
+
+```swift
+func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+
+	// value의 크기대로 딕셔너리 정렬
+	let sortedScheduleCountDic = scheduleCountDic.sorted { (first, second) in
+		return first.value > second.value
+	}
+
+	guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SecondCollectionViewCell.reuseIdentifier, for: indexPath) as? SecondCollectionViewCell else {
+		return UICollectionViewCell()
+	}
+
+	// 정렬된 딕셔너리에 맞춰 cell에 값 넣어주ㄱ
+	cell.scheduleLabel.text = sortedScheduleCountDic[indexPath.item].key
+	cell.numberOfScheduleLabel.text = "\(sortedScheduleCountDic[indexPath.item].value)"
+
+	return cell
+}
+```
+
+___
+
+# 220920
+
+
+## 0. 팀빌딩
+
+Date값으로 Realm에 저장을하면 그리니치천문대기준(UTC)로  저장된다.
+
+그래서 저는 한국과 시차가 9시간이여서 9시간을 더해서 한국시간으로 맞춰 더해주었다. (Realm에도 한국시간으로 맞춰 저장됨)
+
+
+### 피드백 
+1. Realm에 한국 시간으로 맞춰 저장해버리면 다른 국가에서 사용할 때 시간 조정이 어렵지 않을까요??
+2. timezone을  사용해서 맞춰 보세요!!!(String으로 바꾸어저장)
+
+
+### 내 생각
+- 이벤트를 추가할 때 Date값을 기준으로 86400을 더해서 반복문으로 넣어줬는데 그럼 Date를  String으로 저장한다면 또 어떻게 맞춰가야할까???
+
+
+## UTC Date To KST Date(UTC에서 KST Date값으로 변환하는 함수)
+```swift
+func changeToSystemTimeZone(_ date: Date, from: TimeZone, to: TimeZone = TimeZone.current) -> Date {
+    let sourceOffset = from.secondsFromGMT(for: date)
+    let destinationOffset = to.secondsFromGMT(for: date)
+    let timeInterval = TimeInterval(destinationOffset - sourceOffset)
+    return Date(timeInterval: timeInterval, since: date)
+}
+
+let myTime = "2019-11-02 02:00:00"
+let dateFormatter = DateFormatter()
+dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+
+if let date = dateFormatter.date(from: myTime), let timeZone = TimeZone(abbreviation: "UTC") {
+    let offsetedDate = changeToSystemTimeZone(date, from: timeZone)
+    print(date, Calendar.current.timeZone)
+    print(offsetedDate, timeZone)
+}
+
+let realmTime = Date.now
+print(realmTime)
+
+let utcSecondsFromGMT = TimeZone(abbreviation: "UTC")!.secondsFromGMT(for: realmTime)
+let kstSecondsFromGMT = TimeZone(abbreviation: "KST")!.secondsFromGMT(for: realmTime)
+let secondsBetweenUTCAndKST = TimeInterval(kstSecondsFromGMT - utcSecondsFromGMT)
+let realmTimeToKST = Date(timeInterval: secondsBetweenUTCAndKST, since: realmTime)
+print(realmTimeToKST)
+```
+
+
+
+## 1. 테이블뷰에 스케쥴 제대로 띄워주기(삽질)
+
+제가 삽질했던?! 내용은 대략적으로 이러합니다...
+
+FSCalendar에서 날짜를 클릭하면 해당 날짜의 범위에 있는 Realm 값을 필터링해서 dayTasks에 담고 나타내주는 것이었습니다.
+
+필터링을 할 때 
+
+```swift
+func filterDayTasks(date: Date) -> Results<UserSchedule> {
+	
+	return localRealm.objects(UserSchedule.self).where {
+		$0.scheduleDate >= calendar.startOfDay(for: date) && $0.scheduleDate < calendar.startOfDay(for: date)  + 86400
+	}
+}
+```
+
+다음과 같이 클릭한 date를 받아와서 필터링 해주었습니다...
+
+클릭한 날짜는 무조건 UTC기준으로 당일 15:00로 주었고 `calendar.startOfDay(for:Date)` 는 해당 날의 00:00을 나타내주기 때문에 +86400을 하면 다음 날 00:00을 특정할 수 있고 그것보다 작으면 00:00~23:59를 특정할 수 있게됩니다.
+
+하지만 `calendar.startOfDay(for:Date)` 는 UTC기준으로 나타내주기 때문에 한국시간보다 9시간 느렸습니다. 즉 한국시간으로 자정이면 15:00으로 인식되는 것이죠.
+
+
+### 1-1. 삽질(뻘 짓)의 시작...
+
+왜인지 모르겠지만 당시 Realm을 봤을 때 날짜와 비교해봤을 때 테이블뷰에 이상한 데이터를 띄워준다고 착각했습니다.
+
+오늘기준으로 다음 날부터 월말까지 정해진 요일에 스케쥴이 등록되는데 Date는 당연히 UTC 값으로 들어가겠죠... 그러면 Date 컬럼으의 데이터가 한국시간하곤 안 맞지만 제대로 정한 요일에 등록이 됐을거에요...
+
+그런데 어? 하루가밀렸네 착각하고... 이를 한국시간에 맞춰주려고 했습니다...
+
+```swift
+var now = Date() + 86400 + 3600 * 9
+
+func filterDayTasks(date: Date) -> Results<UserSchedule> {
+	
+	return localRealm.objects(UserSchedule.self).where {
+            $0.scheduleDate >= calendar.startOfDay(for: date) + 3600 * 9 && $0.scheduleDate < calendar.startOfDay(for: date) + 86400 + 3600 * 9
+	}
+}
+
+```
+
+9시간 차이가 나니까 범위를 한국시간 기준으로 00:00 ~ 23:59 맞추고 now의 값도 한국시간을 기준으로 맞춰줬습니다.
+
+굳이 이렇게 해 주지 않아도 잘 데이터가 들어가는데 제가 착각을 한 거죠... UTC로 등로된 Date 값을 보고 캘린더엔 KST로 등록된 걸 비교하니까... 값이 안맞지 ㅠㅠ...
+
+저렇게 한국시간을 기준으로 맞춰도 데이터가 잘 나오긴 하는데... 나중에 국제대응 하거나 다국화??? 시킬 때 분명 좋은 방법이 아닐거 같아 처음으로 되돌렸습니다...
+
+
+## 2. 스와이프 삭제기능
+
+테이블뷰에서 스와이프시 삭제기능을 넣었습니다.
+
+<img width="250" alt="스크린샷 2022-09-21 오전 2 03 55" src="https://user-images.githubusercontent.com/92367484/191320460-b6c8161a-7d44-4f58-85dc-343cf556c60a.png">
+
+제가 생각한 방법은 다음과 같습니다.
+
+1. 클릭시에 나오는 필터링된 daytasks를 가져온다.
+2. 삭제한다.
+3. 컬렉션뷰 업데이트(true인 셀을 지웠을 수도 있기 때문)
+
+```swift
+// In UserScheduleRepository
+func filterDayTasks(date: Date) -> Results<UserSchedule> {
+	
+	return localRealm.objects(UserSchedule.self).where {
+		$0.scheduleDate >= calendar.startOfDay(for: date) && $0.scheduleDate < calendar.startOfDay(for: date)  + 86400
+	}
+}
+
+// In SecondViewController
+// 스와이프시 삭제 
+func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+	
+	if editingStyle == .delete {
+		repository.delete(item: dayTasks?[indexPath.row])
+	}
+	
+	// 셀삭제하면 컬렉션뷰에 나타난 count 업데이트
+	for i in 0..<repository.successSchedule().count {
+		scheduleCountDic.updateValue(repository.successScheduleNumber(key: repository.successSchedule()[i].schedule).count, forKey: repository.successSchedule()[i].schedule)
+	}
+	
+	self.fetchRealm()
+}
+
+// 선택시 dayTasks에 선택한 날 데이터 필터링해주는 함수
+func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+	
+	selectedDate = date
+	
+	scheduleInfo = []
+	
+	dayTasks = repository.filterDayTasks(date: date)
+	self.fetchRealm()
+
+	mainView.tableViewHeaderLabel.text = DateFormatChange.shared.dateOfMonth.string(from: date)
+}
+```****
+```

@@ -38,7 +38,6 @@ class SecondViewController: BaseViewController {
     
     var dayTasks: Results<UserSchedule>!
     
-    
     override func loadView() {
         self.view = mainView
     }
@@ -137,7 +136,6 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource {
             scheduleCountDic.updateValue(repository.successScheduleNumber(key: repository.successSchedule()[i].schedule).count, forKey: repository.successSchedule()[i].schedule)
         }
         
-        print("======================\(scheduleCountDic)")
         self.fetchRealm()
     }
 }
@@ -197,6 +195,7 @@ extension SecondViewController: FSCalendarDelegate, FSCalendarDataSource, FSCale
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         
         selectedDate = date
+        
         scheduleInfo = []
         
         dayTasks = repository.filterDayTasks(date: date)
@@ -204,5 +203,4 @@ extension SecondViewController: FSCalendarDelegate, FSCalendarDataSource, FSCale
 
         mainView.tableViewHeaderLabel.text = DateFormatChange.shared.dateOfMonth.string(from: date)
     }
-    
 }
