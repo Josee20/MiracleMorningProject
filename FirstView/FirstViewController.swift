@@ -23,7 +23,7 @@ class FirstViewController: BaseViewController {
     
     let notificationCenter = UNUserNotificationCenter.current()
     
-    let now = Date() + 86400
+    let now = Date()
     
     var dayTasks: Results<UserSchedule>!
     
@@ -49,6 +49,7 @@ class FirstViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        // 현재시간 나타내기
         getCurrentTime()
 
         mainView.tableView.reloadData()

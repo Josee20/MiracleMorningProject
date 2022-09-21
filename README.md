@@ -1252,5 +1252,113 @@ func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FS
 
 	mainView.tableViewHeaderLabel.text = DateFormatChange.shared.dateOfMonth.string(from: date)
 }
-```****
 ```
+
+___
+
+# 220921
+
+
+## 1. FSCalendar 오류?
+
+특정 날을 찍으면 잠깐 다른 날에서 깜빡깜빡 거리는 현상이 발생했습니다.
+
+https://user-images.githubusercontent.com/92367484/191509176-178cdfe5-244e-467f-80e1-7dde14892785.mp4
+
+고민하던 중 reloadData 시점에서 무언가 문제가 있지 않았을까? 생각헀습니다.
+
+그래서 이 부분을 수정해주었습니다.
+
+```swift
+var tasks: Results<UserSchedule>! {
+	didSet {
+		dayTasks = repository.filterDayTasks(date: selectedDate)
+		mainView.tableView.reloadData()
+		mainView.collectionView.reloadData()
+//      mainView.calendar.reloadData()
+	}
+}
+```
+
+그랬더니 깜빡거리는 오류?가 사라졌습니다.
+
+https://user-images.githubusercontent.com/92367484/191509997-3a593b10-b0d3-4e50-9316-96f464f54434.mp4
+
+그런데 이렇게 하 경우 셀을 삭제할 때 캘린더의 ...이 초기화가 안 됩니다.
+
+task가 변할경우 `calendar.reloadData()` 가 안 되기 떄문이죠...
+
+그래서 셀을 삭제해 줄 때 `calendar.reloadData()` 를 해줍니다.
+
+```swift
+func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+	
+	if editingStyle == .delete {
+		repository.delete(item: dayTasks?[indexPath.row])
+	}
+	
+	// 셀삭제하면 컬렉션뷰에 나타난 count 업데이트
+	for i in 0..<repository.successSchedule().count {
+		scheduleCountDic.updateValue(repository.successScheduleNumber(key: repository.successSchedule()[i].schedule).count, forKey: repository.successSchedule()[i].schedule)
+	}
+	
+	mainView.calendar.reloadData()
+	self.fetchRealm()
+}
+```
+
+
+
+## 2. 타이머 중단기능 추가
+
+기존 취소 시작 버튼밖에 없었던 TimerView에 멈추는 기능을 추가해줬습니다.
+
+
+<img width="200" alt="스크린샷 2022-09-22 오전 12 43 54" src="https://user-images.githubusercontent.com/92367484/191550185-ae0bcccf-2df0-4d4f-8643-bb7ab184a887.png">
+
+
+### 2-0. ❎주의사항❎
+
+타이머는 한 번 실행되면 계속 돌아가기 때문에 사용이 끝나면 반드시 invalidate를 처리해주어야합니다.
+
+
+### 2-1. 고민했던 지점
+
+- 시간이 짧을 경우 끊겨서 보이는현상
+
+https://user-images.githubusercontent.com/92367484/191554374-73b85dad-1558-4042-bc32-ee23f51fba2a.mp4
+
+
+### 2-2. 해결
+
+사실 타이머를 멈추는 기능은 `timer?.invalidate()`  코드만 작성해주면 되어서  간단했지만 시간이 짧을 경우 프로그레스바가 끊겨서 보이는 현상이 발생했습니다.
+
+이를 해결하기위해 leftTime을 Double형으로 바꾸고 0.01초마다 프로그레스바가 갱신될 수 있도록 해주었습니다.
+
+```swift
+timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true, block: { (t) in
+	
+	self.leftTime -= 0.01
+	
+	let minute = Int(self.leftTime) / 60
+	let second = Int(self.leftTime) % 60
+	
+	if self.leftTime > 0 {
+		self.timeLabel.text = String(format: "%02d:%02d", minute, second)
+		self.progress = Double(self.leftTime) / Double(self.x)
+		self.timerView.start(duration: 0.0001 , value: 1.0 - self.progress)
+	} else {
+		// 완료시 노티주기
+		self.callNotification(time: 1, title: "미션 완료!!!", body: "다음 미션도 완수해주세요~~\n다 마치셨다면 당신은 멋쟁이!!!")
+		
+		self.timeLabel.text = "끝!"
+		self.okButton.layer.borderColor = UIColor.systemOrange.cgColor
+		self.okButton.backgroundColor = .systemOrange
+		self.okButton.isUserInteractionEnabled = true
+		self.pauseAndPlayButton.isUserInteractionEnabled = false
+		self.timer?.invalidate()
+	}
+})
+```
+
+https://user-images.githubusercontent.com/92367484/191554436-4f154f62-85a1-4f95-8314-56b9bf9880b7.mp4

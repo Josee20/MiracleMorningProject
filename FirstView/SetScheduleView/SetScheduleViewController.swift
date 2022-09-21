@@ -40,8 +40,6 @@ class SetScheduleViewController: BaseViewController {
             dayButtonArr[i].tag = i
         }
         
-        print(now)
-        
         // X 버튼 추가 메소드
         addCancelButton()
     }
@@ -213,8 +211,6 @@ class SetScheduleViewController: BaseViewController {
                     now += 86400
                 }
             }
-            print("------------\(setStartTimeDatePickerDate)")
-            print("=================\(setEndTimeDatePickerDate)")
             
             dismiss(animated: true)
         }

@@ -88,8 +88,6 @@ final class TimerView: BaseView {
         circularProgressAnimation.duration = duration
         circularProgressAnimation.fromValue = 0
         circularProgressAnimation.toValue = value
-//        circularProgressAnimation.fillMode = .forwards
-//        circularProgressAnimation.isRemovedOnCompletion = false
         circularProgressAnimation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.linear)
         
         self.progressLayer.strokeEnd = CGFloat(value)

@@ -15,6 +15,7 @@ class SecondView: BaseView {
         let view = FSCalendar()
         view.placeholderType = .none
         view.locale = Locale(identifier: "ko-KR")
+        view.appearance.selectionColor = .green
         return view
     }()
     

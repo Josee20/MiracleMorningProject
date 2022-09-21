@@ -21,10 +21,8 @@ class TimerViewController: BaseViewController {
     
     var timer: Timer?
     
-    var leftTime: Double = 60
-    var x: Double = 60
-    
-
+    var leftTime: Double = 10
+    var x: Double = 10
     
     let timeLabel = UILabel()
     
@@ -75,8 +73,6 @@ class TimerViewController: BaseViewController {
         
         self.addTimerView(on: self.timeLabel)
         
-        self.callNotification(time: 1, title: "미션 완료!!!", body: "다음 미션도 완수해주세요~~\n다 마치셨다면 당신은 멋쟁이!!!")
-        
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -86,6 +82,8 @@ class TimerViewController: BaseViewController {
     }
     
     override func configure() {
+        
+        
         self.view.addSubview(stackView)
         self.view.addSubview(missionLabel)
         
@@ -105,10 +103,6 @@ class TimerViewController: BaseViewController {
             self.timeLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
             self.timeLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
         ])
-        
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { success, error in
-            print(error)
-        }
            
         // MARK: 타이머
         timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true, block: { (t) in
@@ -118,23 +112,20 @@ class TimerViewController: BaseViewController {
             let minute = Int(self.leftTime) / 60
             let second = Int(self.leftTime) % 60
             
-            print(minute)
-            print(second)
- 
-            
             if self.leftTime > 0 {
                 self.timeLabel.text = String(format: "%02d:%02d", minute, second)
                 self.progress = Double(self.leftTime) / Double(self.x)
                 self.timerView.start(duration: 0.0001 , value: 1.0 - self.progress)
-//                print("progress : \(self.progress)")
-                
             } else {
+                // 완료시 노티주기
+                self.callNotification(time: 1, title: "미션 완료!!!", body: "다음 미션도 완수해주세요~~\n다 마치셨다면 당신은 멋쟁이!!!")
+                
                 self.timeLabel.text = "끝!"
                 self.okButton.layer.borderColor = UIColor.systemOrange.cgColor
                 self.okButton.backgroundColor = .systemOrange
                 self.okButton.isUserInteractionEnabled = true
                 self.pauseAndPlayButton.isUserInteractionEnabled = false
-                
+                self.timer?.invalidate()
             }
         })
         
@@ -162,7 +153,6 @@ class TimerViewController: BaseViewController {
                 
                 self.leftTime -= 0.01
                 
-                
                 let minute = Int(self.leftTime) / 60
                 let second = Int(self.leftTime) % 60
                 
@@ -170,18 +160,16 @@ class TimerViewController: BaseViewController {
                     self.timeLabel.text = String(format: "%02d:%02d", minute, second)
                     self.progress = Double(self.leftTime) / Double(self.x)
                     self.timerView.start(duration: 0.0001 , value: 1.0 - self.progress)
-                    print("progress : \(self.progress)")
-                    
+
                 } else {
-                    self.timeLabel.text = String(format: "%02d:%02d", minute, second)
-                    self.progress = Double(self.leftTime) / Double(self.x)
-                    self.timerView.start(duration: 0.0001 , value: 1.0 - self.progress)
-                    
+                    // 완료시 노티주기
+                    self.callNotification(time: 1, title: "미션 완료!!!", body: "다음 미션도 완수해주세요~~\n다 마치셨다면 당신은 멋쟁이!!!")
                     self.timeLabel.text = "끝!"
                     self.okButton.layer.borderColor = UIColor.systemOrange.cgColor
                     self.okButton.backgroundColor = .systemOrange
                     self.okButton.isUserInteractionEnabled = true
                     self.pauseAndPlayButton.isUserInteractionEnabled = false
+                    self.timer?.invalidate()
                 }
             })
         }

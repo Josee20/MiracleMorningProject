@@ -32,7 +32,7 @@ class SecondViewController: BaseViewController {
             dayTasks = repository.filterDayTasks(date: selectedDate)
             mainView.tableView.reloadData()
             mainView.collectionView.reloadData()
-            mainView.calendar.reloadData()
+//            mainView.calendar.reloadData()
         }
     }
     
@@ -136,6 +136,7 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource {
             scheduleCountDic.updateValue(repository.successScheduleNumber(key: repository.successSchedule()[i].schedule).count, forKey: repository.successSchedule()[i].schedule)
         }
         
+        mainView.calendar.reloadData()
         self.fetchRealm()
     }
 }
@@ -202,5 +203,9 @@ extension SecondViewController: FSCalendarDelegate, FSCalendarDataSource, FSCale
         self.fetchRealm()
 
         mainView.tableViewHeaderLabel.text = DateFormatChange.shared.dateOfMonth.string(from: date)
+        
+        
     }
+    
+    
 }
