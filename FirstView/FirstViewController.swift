@@ -23,7 +23,7 @@ class FirstViewController: BaseViewController {
     
     let notificationCenter = UNUserNotificationCenter.current()
     
-    let now = Date()
+    let now = Date() + 86400
     
     var dayTasks: Results<UserSchedule>!
     
@@ -112,7 +112,6 @@ extension FirstViewController: UITableViewDelegate, UITableViewDataSource {
         cell.scheduleTitle.text = dayTasks[indexPath.row].schedule
         cell.scheduleTime.text = "\(dayTasks[indexPath.row].startTime)~\(dayTasks[indexPath.row].endTime)"
         dayTasks[indexPath.row].scheduleSuccess == true ? cell.checkButton.setImage(UIImage(systemName: "checkmark.square") , for: .normal) : cell.checkButton.setImage(UIImage(systemName: "x.square"), for: .normal)
-        
         
         cell.backgroundColor = .orange
         

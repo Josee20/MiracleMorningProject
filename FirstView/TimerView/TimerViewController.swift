@@ -13,7 +13,20 @@ import SnapKit
 
 class TimerViewController: BaseViewController {
     
+    var progress: Double = 0.0
+    
     let notificationCenter = UNUserNotificationCenter.current()
+    
+    let timerView = TimerView()
+    
+    var timer: Timer?
+    
+    var leftTime: Double = 60
+    var x: Double = 60
+    
+
+    
+    let timeLabel = UILabel()
     
     private let missionLabel: UILabel = {
         let view = UILabel()
@@ -23,28 +36,9 @@ class TimerViewController: BaseViewController {
         return view
     }()
     
-    private let playAndPauseButton: UIButton = {
+    private let pauseAndPlayButton: UIButton = {
         let view = UIButton()
-        
-        let pointSize: CGFloat = 20
-        let imageConfig = UIImage.SymbolConfiguration(pointSize: pointSize)
-        var config = UIButton.Configuration.plain()
-        config.preferredSymbolConfigurationForImage = imageConfig
-        view.configuration = config
-        
-        view.setImage(UIImage(systemName: "pause.fill"), for: .normal)
-        view.tintColor = .black
-        view.backgroundColor = .systemBackground
-        view.layer.cornerRadius = 25
-        view.layer.borderColor = UIColor.black.cgColor
-        view.layer.borderWidth = 2
-        view.contentMode = .scaleToFill
-        return view
-    }()
-    
-    private let cancelButton: UIButton = {
-        let view = UIButton()
-        view.setTitle("취소", for: .normal)
+        view.setTitle("중단", for: .normal)
         view.layer.cornerRadius = 30
         view.layer.borderWidth = 1
         view.layer.borderColor = UIColor.systemOrange.cgColor
@@ -73,22 +67,32 @@ class TimerViewController: BaseViewController {
         view.distribution = .fillEqually
         return view
     }()
-    
-    let timeLabel = UILabel()
-    
-    var leftTime: Int = 10
-    
+  
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.view.backgroundColor = .systemBackground
+        
         self.addTimerView(on: self.timeLabel)
         
         self.callNotification(time: 1, title: "미션 완료!!!", body: "다음 미션도 완수해주세요~~\n다 마치셨다면 당신은 멋쟁이!!!")
         
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { success, error in
-            print(error)
-        }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        timer?.invalidate()
+    }
+    
+    override func configure() {
+        self.view.addSubview(stackView)
+        self.view.addSubview(missionLabel)
+        
+        [pauseAndPlayButton, okButton].forEach { stackView.addArrangedSubview($0) }
+        
+        pauseAndPlayButton.addTarget(self, action: #selector(pauseAndPlayButtonClicked), for: .touchUpInside)
+        okButton.addTarget(self, action: #selector(okButtonClicked), for: .touchUpInside)
         
         // MARK: 타임레이블 설정
         self.timeLabel.textAlignment = .center
@@ -102,37 +106,39 @@ class TimerViewController: BaseViewController {
             self.timeLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
         ])
         
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { success, error in
+            print(error)
+        }
+           
         // MARK: 타이머
-        Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (t) in
+        timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true, block: { (t) in
             
-            self.leftTime -= 1
+            self.leftTime -= 0.01
             
-            let minute = self.leftTime / 60
-            let second = self.leftTime % 60
+            let minute = Int(self.leftTime) / 60
+            let second = Int(self.leftTime) % 60
+            
+            print(minute)
+            print(second)
+ 
             
             if self.leftTime > 0 {
                 self.timeLabel.text = String(format: "%02d:%02d", minute, second)
+                self.progress = Double(self.leftTime) / Double(self.x)
+                self.timerView.start(duration: 0.0001 , value: 1.0 - self.progress)
+//                print("progress : \(self.progress)")
+                
             } else {
                 self.timeLabel.text = "끝!"
                 self.okButton.layer.borderColor = UIColor.systemOrange.cgColor
                 self.okButton.backgroundColor = .systemOrange
                 self.okButton.isUserInteractionEnabled = true
+                self.pauseAndPlayButton.isUserInteractionEnabled = false
+                
             }
         })
-    }
-    
-    override func configure() {
-        self.view.addSubview(stackView)
-        self.view.addSubview(missionLabel)
-        self.view.addSubview(playAndPauseButton)
         
-        [cancelButton, okButton].forEach { stackView.addArrangedSubview($0) }
-        
-        cancelButton.addTarget(self, action: #selector(cancelButtonClicked), for: .touchUpInside)
-        
-        okButton.addTarget(self, action: #selector(okButtonClicked), for: .touchUpInside)
-        playAndPauseButton.addTarget(self, action: #selector(playAndPauseButtonClicked), for: .touchUpInside)
-        
+        addCancelButton()
     }
     
     @objc func cancelButtonClicked() {
@@ -143,13 +149,81 @@ class TimerViewController: BaseViewController {
         dismiss(animated: true)
     }
     
-    @objc func playAndPauseButtonClicked() {
-        if playAndPauseButton.imageView?.image == UIImage(systemName: "pause.fill") {
-            playAndPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
-            
-            
+    @objc func pauseAndPlayButtonClicked() {
+        
+        if pauseAndPlayButton.titleLabel?.text == "중단" {
+            pauseAndPlayButton.setTitle("시작", for: .normal)
+            timer?.invalidate()
+
         } else {
-            playAndPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+            pauseAndPlayButton.setTitle("중단", for: .normal)
+
+            timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true, block: { (t) in
+                
+                self.leftTime -= 0.01
+                
+                
+                let minute = Int(self.leftTime) / 60
+                let second = Int(self.leftTime) % 60
+                
+                if self.leftTime > 0 {
+                    self.timeLabel.text = String(format: "%02d:%02d", minute, second)
+                    self.progress = Double(self.leftTime) / Double(self.x)
+                    self.timerView.start(duration: 0.0001 , value: 1.0 - self.progress)
+                    print("progress : \(self.progress)")
+                    
+                } else {
+                    self.timeLabel.text = String(format: "%02d:%02d", minute, second)
+                    self.progress = Double(self.leftTime) / Double(self.x)
+                    self.timerView.start(duration: 0.0001 , value: 1.0 - self.progress)
+                    
+                    self.timeLabel.text = "끝!"
+                    self.okButton.layer.borderColor = UIColor.systemOrange.cgColor
+                    self.okButton.backgroundColor = .systemOrange
+                    self.okButton.isUserInteractionEnabled = true
+                    self.pauseAndPlayButton.isUserInteractionEnabled = false
+                }
+            })
+        }
+    }
+    
+    private func addCancelButton() {
+        let cancelButton = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(cancelButtonClicked))
+        
+        cancelButton.tintColor = .black
+        
+        let space = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: self, action: nil)
+        
+        self.navigationItem.setRightBarButtonItems([space, cancelButton], animated: false)
+    }
+    
+    private func addTimerView(on subview: UIView) {
+        subview.addSubview(timerView)
+        timerView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            timerView.leftAnchor.constraint(equalTo: subview.leftAnchor),
+            timerView.rightAnchor.constraint(equalTo: subview.rightAnchor),
+            timerView.bottomAnchor.constraint(equalTo: subview.bottomAnchor),
+            timerView.topAnchor.constraint(equalTo: subview.topAnchor),
+        ])
+    }
+    
+    private func callNotification(time: Double, title: String, body: String) {
+        notificationCenter.removeAllPendingNotificationRequests()
+        
+        let content = UNMutableNotificationContent()
+        content.title = title
+        content.body = body
+        content.sound = .defaultCritical
+        content.badge = 2
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: time, repeats: false)
+        
+        let request = UNNotificationRequest(identifier: "notification", content: content, trigger: trigger)
+        
+        UNUserNotificationCenter.current().add(request) { error in
+            guard let error = error else { return }
+            print(error)
         }
     }
     
@@ -168,52 +242,13 @@ class TimerViewController: BaseViewController {
             $0.height.equalTo(60)
         }
         
-        cancelButton.snp.makeConstraints {
+        pauseAndPlayButton.snp.makeConstraints {
             $0.leading.equalTo(stackView.snp.leading)
             $0.trailingMargin.equalTo(okButton.snp.leading).offset(-8)
         }
         
         okButton.snp.makeConstraints {
             $0.height.equalTo(60)
-        }
-        
-        playAndPauseButton.snp.makeConstraints {
-            $0.centerX.equalTo(view)
-            $0.width.height.equalTo(50)
-            $0.centerY.equalTo(UIScreen.main.bounds.height / 1.33)
-        }
-        
-    }
-    
-    private func addTimerView(on subview: UIView) {
-        let timerView = TimerView()
-        subview.addSubview(timerView)
-        timerView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            timerView.leftAnchor.constraint(equalTo: subview.leftAnchor),
-            timerView.rightAnchor.constraint(equalTo: subview.rightAnchor),
-            timerView.bottomAnchor.constraint(equalTo: subview.bottomAnchor),
-            timerView.topAnchor.constraint(equalTo: subview.topAnchor),
-        ])
-        timerView.start(duration: Double(leftTime))
-    }
-    
-    func callNotification(time: Double, title: String, body: String) {
-        notificationCenter.removeAllPendingNotificationRequests()
-        
-        let content = UNMutableNotificationContent()
-        content.title = title
-        content.body = body
-        content.sound = .defaultCritical
-        content.badge = 2
-        
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: time, repeats: false)
-        
-        let request = UNNotificationRequest(identifier: "notification", content: content, trigger: trigger)
-        
-        UNUserNotificationCenter.current().add(request) { error in
-            guard let error = error else { return }
-            print(error)
         }
     }
 }

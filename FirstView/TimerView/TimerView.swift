@@ -9,6 +9,7 @@ import UIKit
 
 final class TimerView: BaseView {
     
+    
     private enum Const {
         static let progressLineWidth = 10.0
         static let backgroundLineWidth = progressLineWidth - 5.0
@@ -27,7 +28,7 @@ final class TimerView: BaseView {
         return layer
     }()
     
-    private let progressLayer: CAShapeLayer = {
+    public let progressLayer: CAShapeLayer = {
         let layer = CAShapeLayer()
         layer.lineWidth = Const.progressLineWidth
         layer.strokeEnd = 0
@@ -81,13 +82,17 @@ final class TimerView: BaseView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func start(duration: TimeInterval) {
+    func start(duration: TimeInterval, value: Double) {
         self.progressLayer.removeAnimation(forKey: "progress")
         let circularProgressAnimation = CABasicAnimation(keyPath: "strokeEnd")
         circularProgressAnimation.duration = duration
-        circularProgressAnimation.toValue = 1.0
-        circularProgressAnimation.fillMode = .forwards
-        circularProgressAnimation.isRemovedOnCompletion = false
+        circularProgressAnimation.fromValue = 0
+        circularProgressAnimation.toValue = value
+//        circularProgressAnimation.fillMode = .forwards
+//        circularProgressAnimation.isRemovedOnCompletion = false
+        circularProgressAnimation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.linear)
+        
+        self.progressLayer.strokeEnd = CGFloat(value)
         self.progressLayer.add(circularProgressAnimation, forKey: "progress")
     }
 }

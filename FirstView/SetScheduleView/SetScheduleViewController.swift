@@ -20,6 +20,9 @@ class SetScheduleViewController: BaseViewController {
 
     let weekDayArr = ["일", "월", "화", "수", "목", "금", "토"]
     
+    var setStartTimeDatePickerDate: Date?
+    var setEndTimeDatePickerDate: Date?
+    
     override func loadView() {
         self.view = mainView
 
@@ -39,6 +42,7 @@ class SetScheduleViewController: BaseViewController {
         
         print(now)
         
+        // X 버튼 추가 메소드
         addCancelButton()
     }
 
@@ -101,7 +105,9 @@ class SetScheduleViewController: BaseViewController {
         }
         
         let ok = UIAlertAction(title: "확인", style: .default) { (action) in
+            
             let dateString = DateFormatChange.shared.dateOfHourAndPM.string(from: datePicker.date)
+            self.setStartTimeDatePickerDate = datePicker.date
             
             if self.calendar.component(.hour, from: datePicker.date) > 3 && self.calendar.component(.hour, from: datePicker.date) < 9 {
                 self.mainView.setStartTimeButton.setTitle(dateString, for: .normal)
@@ -140,9 +146,14 @@ class SetScheduleViewController: BaseViewController {
         let ok = UIAlertAction(title: "확인", style: .default) { (action) in
         
             let dateString = DateFormatChange.shared.dateOfHourAndPM.string(from: datePicker.date)
+            self.setEndTimeDatePickerDate = datePicker.date
             
-            if self.mainView.setStartTimeButton.titleLabel?.text == dateString {
+            if self.mainView.setStartTimeButton.titleLabel?.text == "시간선택" {
+                self.showAlertOnlyOk(title: "시작시간을 먼저 선택해주세요")
+            } else if self.mainView.setStartTimeButton.titleLabel?.text == dateString {
                 self.showAlertOnlyOk(title: "시작시간과 종료시간은\n같을 수 없습니다\n다른 시간을 선택해주세요")
+            } else if self.setStartTimeDatePickerDate! > self.setEndTimeDatePickerDate! {
+                self.showAlertOnlyOk(title: "시작시간은 종료시간보다 빨라야합니다\n종료시간을 다시 선택해주세요")
             } else {
                 if self.calendar.component(.hour, from: datePicker.date) > 3 && self.calendar.component(.hour, from: datePicker.date) < 9 {
                     self.mainView.setEndTimeButton.setTitle(dateString, for: .normal)
@@ -198,13 +209,13 @@ class SetScheduleViewController: BaseViewController {
                     continue
                 } else {
                     repository.addSchedule(startTime: mainView.setStartTimeButton.titleLabel?.text ?? "", endTime: mainView.setEndTimeButton.titleLabel?.text ?? "", date: now, schedule: mainView.setScheduleTextField.text!, success: false)
-                    
-                    print(now)
-                    
+            
                     now += 86400
                 }
             }
-                
+            print("------------\(setStartTimeDatePickerDate)")
+            print("=================\(setEndTimeDatePickerDate)")
+            
             dismiss(animated: true)
         }
     }
