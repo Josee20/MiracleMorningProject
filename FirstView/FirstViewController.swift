@@ -49,9 +49,10 @@ class FirstViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        // 현재시간 나타내기
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(getCurrentTime), userInfo: nil, repeats: true)
+        
         getCurrentTime()
-
+        
         mainView.tableView.reloadData()
         
         dayTasks = repository.filterDayTasks(date: now)
@@ -66,8 +67,7 @@ class FirstViewController: BaseViewController {
     
     override func configure() {
         
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(getCurrentTime), userInfo: nil, repeats: true)
-        
+                
         mainView.tableView.register(FirstTableViewCell.self, forCellReuseIdentifier: FirstTableViewCell.reuseIdentifier)
         mainView.tableView.delegate = self
         mainView.tableView.dataSource = self
@@ -139,8 +139,17 @@ extension FirstViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let dateOfStartTime = DateFormatChange.shared.dateOfHourAndPM.date(from: dayTasks[indexPath.row].startTime)!.timeIntervalSince1970
+        let dateOfEndTime = DateFormatChange.shared.dateOfHourAndPM.date(from: dayTasks[indexPath.row].endTime)!.timeIntervalSince1970
+        
         let vc = TimerViewController()
         let nav = UINavigationController(rootViewController: vc)
+        
+        vc.missionLabelTitle = dayTasks[indexPath.row].schedule
+        vc.leftTime = dateOfEndTime - dateOfStartTime
+        vc.fixedLeftTime = dateOfEndTime - dateOfStartTime
+        
         nav.modalPresentationStyle = .fullScreen
         present(nav, animated: true)
     }

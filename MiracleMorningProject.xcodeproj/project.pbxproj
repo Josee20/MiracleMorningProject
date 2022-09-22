@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		490D8B0F28D8CF39000EA959 /* GlobalTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490D8B0E28D8CF39000EA959 /* GlobalTime.swift */; };
 		49314F3728D72B7F00D6156B /* ScheduleInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49314F3628D72B7F00D6156B /* ScheduleInfoModel.swift */; };
 		49580DAE28CF028E002EE3CD /* DailyButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49580DAD28CF028E002EE3CD /* DailyButton.swift */; };
 		49580DB128CF07A7002EE3CD /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49580DB028CF07A7002EE3CD /* TimerView.swift */; };
 		49580DB328CF07B0002EE3CD /* TimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49580DB228CF07B0002EE3CD /* TimerViewController.swift */; };
 		49580DB728CF98AB002EE3CD /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49580DB628CF98AB002EE3CD /* UIButton+Extension.swift */; };
+		49C3270E28DB7E4F000AF418 /* DateFormatChanger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C3270D28DB7E4F000AF418 /* DateFormatChanger.swift */; };
 		49F0FB5228D19AFF004AD670 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 49F0FB5128D19AFF004AD670 /* FSCalendar */; };
 		49F0FB5428D1A32C004AD670 /* SecondTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F0FB5328D1A32C004AD670 /* SecondTableViewCell.swift */; };
 		49F0FB5628D1A4B6004AD670 /* BaseCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F0FB5528D1A4B6004AD670 /* BaseCollectionViewCell.swift */; };
@@ -38,7 +38,6 @@
 		49F6D8F228CDB854005AA757 /* ForthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F6D8F128CDB854005AA757 /* ForthViewController.swift */; };
 		49F6D8F428CDB861005AA757 /* ForthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F6D8F328CDB861005AA757 /* ForthView.swift */; };
 		49F6D8F728CDBFB9005AA757 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 49F6D8F628CDBFB9005AA757 /* SnapKit */; };
-		49F6D8FA28CDC409005AA757 /* DateFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F6D8F928CDC409005AA757 /* DateFormat.swift */; };
 		49F6D8FC28CDD5B1005AA757 /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F6D8FB28CDD5B1005AA757 /* BaseTableViewCell.swift */; };
 		49F6D8FE28CDD8F5005AA757 /* FirstTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F6D8FD28CDD8F5005AA757 /* FirstTableViewCell.swift */; };
 		49F6D90028CDEA32005AA757 /* ReusableProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F6D8FF28CDEA32005AA757 /* ReusableProtocol.swift */; };
@@ -48,12 +47,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		490D8B0E28D8CF39000EA959 /* GlobalTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalTime.swift; sourceTree = "<group>"; };
 		49314F3628D72B7F00D6156B /* ScheduleInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleInfoModel.swift; sourceTree = "<group>"; };
 		49580DAD28CF028E002EE3CD /* DailyButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyButton.swift; sourceTree = "<group>"; };
 		49580DB028CF07A7002EE3CD /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
 		49580DB228CF07B0002EE3CD /* TimerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewController.swift; sourceTree = "<group>"; };
 		49580DB628CF98AB002EE3CD /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
+		49C3270D28DB7E4F000AF418 /* DateFormatChanger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatChanger.swift; sourceTree = "<group>"; };
 		49F0FB5328D1A32C004AD670 /* SecondTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondTableViewCell.swift; sourceTree = "<group>"; };
 		49F0FB5528D1A4B6004AD670 /* BaseCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewCell.swift; sourceTree = "<group>"; };
 		49F0FB5728D1A566004AD670 /* SecondCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -78,7 +77,6 @@
 		49F6D8EF28CDB84B005AA757 /* ThirdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdView.swift; sourceTree = "<group>"; };
 		49F6D8F128CDB854005AA757 /* ForthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForthViewController.swift; sourceTree = "<group>"; };
 		49F6D8F328CDB861005AA757 /* ForthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForthView.swift; sourceTree = "<group>"; };
-		49F6D8F928CDC409005AA757 /* DateFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormat.swift; sourceTree = "<group>"; };
 		49F6D8FB28CDD5B1005AA757 /* BaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
 		49F6D8FD28CDD8F5005AA757 /* FirstTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTableViewCell.swift; sourceTree = "<group>"; };
 		49F6D8FF28CDEA32005AA757 /* ReusableProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableProtocol.swift; sourceTree = "<group>"; };
@@ -101,14 +99,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		490D8B0D28D8CF01000EA959 /* Time */ = {
-			isa = PBXGroup;
-			children = (
-				490D8B0E28D8CF39000EA959 /* GlobalTime.swift */,
-			);
-			path = Time;
-			sourceTree = "<group>";
-		};
 		49580DAF28CF0797002EE3CD /* TimerView */ = {
 			isa = PBXGroup;
 			children = (
@@ -116,6 +106,14 @@
 				49580DB228CF07B0002EE3CD /* TimerViewController.swift */,
 			);
 			path = TimerView;
+			sourceTree = "<group>";
+		};
+		49C3270C28DB7E31000AF418 /* DateFormatChanger */ = {
+			isa = PBXGroup;
+			children = (
+				49C3270D28DB7E4F000AF418 /* DateFormatChanger.swift */,
+			);
+			path = DateFormatChanger;
 			sourceTree = "<group>";
 		};
 		49F0FB5928D2E78D004AD670 /* RealmModel */ = {
@@ -131,9 +129,8 @@
 			isa = PBXGroup;
 			children = (
 				49F6D8FF28CDEA32005AA757 /* ReusableProtocol.swift */,
+				49C3270C28DB7E31000AF418 /* DateFormatChanger */,
 				49F0FB5928D2E78D004AD670 /* RealmModel */,
-				490D8B0D28D8CF01000EA959 /* Time */,
-				49F6D8F828CDC3F8005AA757 /* DateFormat */,
 				49F6D8EC28CDB832005AA757 /* ForthView */,
 				49F6D8EB28CDB82B005AA757 /* ThirdView */,
 				49F6D8E628CDB575005AA757 /* SecondView */,
@@ -226,14 +223,6 @@
 				49F6D8F128CDB854005AA757 /* ForthViewController.swift */,
 			);
 			path = ForthView;
-			sourceTree = "<group>";
-		};
-		49F6D8F828CDC3F8005AA757 /* DateFormat */ = {
-			isa = PBXGroup;
-			children = (
-				49F6D8F928CDC409005AA757 /* DateFormat.swift */,
-			);
-			path = DateFormat;
 			sourceTree = "<group>";
 		};
 		49F6D90128CDFC2B005AA757 /* SetScheduleView */ = {
@@ -331,6 +320,7 @@
 			files = (
 				49F0FB5828D1A566004AD670 /* SecondCollectionViewCell.swift in Sources */,
 				49F0FB5D28D2E7BF004AD670 /* UserScehduleRepository.swift in Sources */,
+				49C3270E28DB7E4F000AF418 /* DateFormatChanger.swift in Sources */,
 				49F6D8F428CDB861005AA757 /* ForthView.swift in Sources */,
 				49F6D8CA28CDAD10005AA757 /* ViewController.swift in Sources */,
 				49F6D8C628CDAD10005AA757 /* AppDelegate.swift in Sources */,
@@ -351,11 +341,9 @@
 				49580DB128CF07A7002EE3CD /* TimerView.swift in Sources */,
 				49580DAE28CF028E002EE3CD /* DailyButton.swift in Sources */,
 				49F6D90528CDFC7A005AA757 /* SetScheduleViewController.swift in Sources */,
-				49F6D8FA28CDC409005AA757 /* DateFormat.swift in Sources */,
 				49F6D8EA28CDB59D005AA757 /* SecondView.swift in Sources */,
 				49F6D8F228CDB854005AA757 /* ForthViewController.swift in Sources */,
 				49F6D8E528CDB440005AA757 /* FirstView.swift in Sources */,
-				490D8B0F28D8CF39000EA959 /* GlobalTime.swift in Sources */,
 				49F6D8FC28CDD5B1005AA757 /* BaseTableViewCell.swift in Sources */,
 				49F6D8EE28CDB83D005AA757 /* ThirdViewController.swift in Sources */,
 				49F6D8DB28CDAED7005AA757 /* BaseViewController.swift in Sources */,

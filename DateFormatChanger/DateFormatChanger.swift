@@ -1,9 +1,11 @@
 //
-//  DateFormat.swift
+//  DateFormatChanger.swift
 //  MiracleMorningProject
 //
-//  Created by 이동기 on 2022/09/11.
+//  Created by 이동기 on 2022/09/22.
 //
+
+import Foundation
 
 import Foundation
 
@@ -46,6 +48,13 @@ class DateFormatChange {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ko_KR")
         formatter.dateFormat = "yyyy-MM-dd"
+        return formatter
+    }()
+    
+    let dateOfYearMonth: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "yyyy-MM"
         return formatter
     }()
     

@@ -88,7 +88,7 @@ class SecondView: BaseView {
         collectionViewHeaderLabel.snp.makeConstraints {
             $0.topMargin.equalTo(calendar.snp.bottom).offset(24)
             $0.leadingMargin.equalTo(19)
-            $0.width.equalTo(100)
+            $0.width.equalTo(110)
             $0.height.equalTo(20)
         }
         
@@ -125,6 +125,5 @@ class SecondView: BaseView {
             $0.height.equalTo(1)
             $0.bottom.equalTo(self.safeAreaLayoutGuide).offset(-12)
         }
-          
     }
 }

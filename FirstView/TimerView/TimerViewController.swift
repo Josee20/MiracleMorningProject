@@ -13,18 +13,17 @@ import SnapKit
 
 class TimerViewController: BaseViewController {
     
-    var progress: Double = 0.0
-    
     let notificationCenter = UNUserNotificationCenter.current()
     
-    let timerView = TimerView()
-    
     var timer: Timer?
+    var progress: Double = 0.0
     
-    var leftTime: Double = 10
-    var x: Double = 10
-    
+    let timerView = TimerView()
     let timeLabel = UILabel()
+    
+    var missionLabelTitle = ""
+    var leftTime: Double = 0.0
+    var fixedLeftTime: Double = 0.0
     
     private let missionLabel: UILabel = {
         let view = UILabel()
@@ -73,6 +72,7 @@ class TimerViewController: BaseViewController {
         
         self.addTimerView(on: self.timeLabel)
         
+        self.missionLabel.text = missionLabelTitle
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -109,12 +109,18 @@ class TimerViewController: BaseViewController {
             
             self.leftTime -= 0.01
             
-            let minute = Int(self.leftTime) / 60
-            let second = Int(self.leftTime) % 60
+            let hour = Int(self.leftTime) / 3600
+            let minute = Int(self.leftTime) % 3600 / 60
+            let second = Int(self.leftTime) % 3600 % 60
+            
             
             if self.leftTime > 0 {
-                self.timeLabel.text = String(format: "%02d:%02d", minute, second)
-                self.progress = Double(self.leftTime) / Double(self.x)
+                if hour >= 1 {
+                    self.timeLabel.text = String(format: "%02d:%02d:%02d", hour, minute, second)
+                } else {
+                    self.timeLabel.text = String(format: "%02d:%02d", minute, second)
+                }
+                self.progress = Double(self.leftTime) / Double(self.fixedLeftTime)
                 self.timerView.start(duration: 0.0001 , value: 1.0 - self.progress)
             } else {
                 // 완료시 노티주기
@@ -158,7 +164,7 @@ class TimerViewController: BaseViewController {
                 
                 if self.leftTime > 0 {
                     self.timeLabel.text = String(format: "%02d:%02d", minute, second)
-                    self.progress = Double(self.leftTime) / Double(self.x)
+                    self.progress = Double(self.leftTime) / Double(self.fixedLeftTime)
                     self.timerView.start(duration: 0.0001 , value: 1.0 - self.progress)
 
                 } else {

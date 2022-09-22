@@ -20,7 +20,7 @@ class UserScheduleRepository: UserScheduleRepositoryType {
     let localRealm = try! Realm()
     
     let calendar = Calendar.current
-
+    let date = Date()
     
     func fetch() -> Results<UserSchedule> {
         return localRealm.objects(UserSchedule.self)
@@ -48,7 +48,6 @@ class UserScheduleRepository: UserScheduleRepositoryType {
         } catch {
             print("cell delete error")
         }
-        
     }
     
     
@@ -59,9 +58,13 @@ class UserScheduleRepository: UserScheduleRepositoryType {
         }
     }
     
-    
-    func successSchedule() -> Results<UserSchedule> {
-        return localRealm.objects(UserSchedule.self).filter("scheduleSuccess == true")
+    func successSchedule(currentDate: Date) -> Results<UserSchedule> {
+
+        let nextMonth = calendar.date(byAdding: .month, value: +1, to: currentDate)
+
+        return localRealm.objects(UserSchedule.self).where {
+            $0.scheduleSuccess == true && $0.scheduleDate >= currentDate && $0.scheduleDate < nextMonth!
+        }
     }
     
     func successScheduleNumber(key: String) -> Results<UserSchedule> {

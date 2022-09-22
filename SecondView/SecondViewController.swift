@@ -22,8 +22,12 @@ class SecondViewController: BaseViewController {
     var scheduleInfo = [scheduleInfoModel]()
     var scheduleCountDic = [String:Int]()
     
-    // 여기선 filterTasks에서 시간 처리를 해주기때문에 그냥 now로 써도 됨
     let now = Date()
+    
+    var date = Date()
+    let calendar = Calendar.current
+//    var startOfMonth = Date()
+    
     
     var selectedDate: Date = Date()
     
@@ -32,7 +36,6 @@ class SecondViewController: BaseViewController {
             dayTasks = repository.filterDayTasks(date: selectedDate)
             mainView.tableView.reloadData()
             mainView.collectionView.reloadData()
-//            mainView.calendar.reloadData()
         }
     }
     
@@ -55,10 +58,14 @@ class SecondViewController: BaseViewController {
         
         // 현재시간 기준으로 tasks 필터링
         dayTasks = repository.filterDayTasks(date: now)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        let components = calendar.dateComponents([.year, .month], from: date)
+        let startOfMonth = calendar.date(from: components)!
         
         // 반드시 fetch를 해주고 setEvents를 실행시켜 해주어야함
         // 그래야 Realm에서 tasks.count를 맞춰 setEvents메소드를 쓸 수 있음
@@ -70,9 +77,11 @@ class SecondViewController: BaseViewController {
         mainView.collectionView.reloadData()
         
         // 컬렉션뷰 업데이트
-        for i in 0..<repository.successSchedule().count {
-            scheduleCountDic.updateValue(repository.successScheduleNumber(key: repository.successSchedule()[i].schedule).count, forKey: repository.successSchedule()[i].schedule)
+        for i in 0..<repository.successSchedule(currentDate: startOfMonth).count {
+            scheduleCountDic.updateValue(repository.successScheduleNumber(key: repository.successSchedule(currentDate: startOfMonth)[i].schedule).count, forKey: repository.successSchedule(currentDate: startOfMonth)[i].schedule)
         }
+        
+        print(scheduleCountDic)
     }
     
     override func configure() {
@@ -131,9 +140,11 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource {
             repository.delete(item: dayTasks?[indexPath.row])
         }
         
-        // 셀삭제하면 컬렉션뷰에 나타난 count 업데이트
-        for i in 0..<repository.successSchedule().count {
-            scheduleCountDic.updateValue(repository.successScheduleNumber(key: repository.successSchedule()[i].schedule).count, forKey: repository.successSchedule()[i].schedule)
+        let components = calendar.dateComponents([.year, .month], from: date)
+        let startOfMonth = calendar.date(from: components)!
+        
+        for i in 0..<repository.successSchedule(currentDate: startOfMonth).count {
+            scheduleCountDic.updateValue(repository.successScheduleNumber(key: repository.successSchedule(currentDate: startOfMonth)[i].schedule).count, forKey: repository.successSchedule(currentDate: startOfMonth)[i].schedule)
         }
         
         mainView.calendar.reloadData()
@@ -158,7 +169,7 @@ extension SecondViewController: UICollectionViewDelegate, UICollectionViewDataSo
         let width = UIScreen.main.bounds.width - (space * 7)
         
         // 딕셔너리 value 크기에 따라 정렬
-        let sortedScheduleCountDic = scheduleCountDic.sorted { (first, second) in
+        var sortedScheduleCountDic = scheduleCountDic.sorted { (first, second) in
             return first.value > second.value
         }
     
@@ -204,8 +215,33 @@ extension SecondViewController: FSCalendarDelegate, FSCalendarDataSource, FSCale
 
         mainView.tableViewHeaderLabel.text = DateFormatChange.shared.dateOfMonth.string(from: date)
         
-        
+        // 캘린더 스와이프시에 테이블뷰 나타내기
+        mainView.tableView.isHidden = false
     }
     
-    
+    func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
+
+        let currentPageDate = calendar.currentPage
+        let month = Calendar.current.component(.month, from: currentPageDate)
+        
+        scheduleCountDic = [:]
+        
+        // 스와이프시 date값을 변경시켜야 다른 페이지를 갔다와도 해당 월의 스케쥴 성공여부가 컬렉션뷰에 잘 나옴
+        date = currentPageDate
+        
+        print("emptyScheduleCountDic : \(scheduleCountDic)")
+        
+        for i in 0..<repository.successSchedule(currentDate: currentPageDate).count {
+            scheduleCountDic.updateValue(repository.successScheduleNumber(key: repository.successSchedule(currentDate: currentPageDate)[i].schedule).count, forKey: repository.successSchedule(currentDate: currentPageDate)[i].schedule)
+        }
+        
+        print(repository.successSchedule(currentDate: currentPageDate).count)
+        
+        mainView.collectionViewHeaderLabel.text = "\(month)월 미션 현황"
+                
+        // 캘린더 스와이프시에 테이블뷰 숨기기
+        mainView.tableView.isHidden = true
+
+        mainView.collectionView.reloadData()
+    }
 }
