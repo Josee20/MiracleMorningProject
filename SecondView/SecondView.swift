@@ -15,7 +15,31 @@ class SecondView: BaseView {
         let view = FSCalendar()
         view.placeholderType = .none
         view.locale = Locale(identifier: "ko-KR")
-        view.appearance.selectionColor = .green
+        view.appearance.headerDateFormat = "YYYY년 MM월"
+        view.appearance.headerMinimumDissolvedAlpha = 0.0
+        view.appearance.headerTitleFont = .boldSystemFont(ofSize: 18)
+        view.appearance.calendar.headerHeight = 60
+        view.appearance.weekdayTextColor = .black
+        view.appearance.headerTitleColor = .systemOrange
+//        view.appearance.borderRadius = 0
+//        view.backgroundColor = .blue
+        view.appearance.headerTitleFont = nil
+        view.appearance.titleDefaultColor = .systemGray2
+//        view.today = nil
+        return view
+    }()
+    
+    public let moveNextMonthButton: UIButton = {
+        let view = UIButton()
+        view.imageView?.image = UIImage(systemName: "chevron.right")
+        view.tintColor = .systemOrange
+        return view
+    }()
+    
+    public let movePreviousMonthButton: UIButton = {
+        let view = UIButton()
+        view.imageView?.image = UIImage(systemName: "chevron.left")
+        view.tintColor = .systemOrange
         return view
     }()
     
@@ -72,7 +96,7 @@ class SecondView: BaseView {
     }()
     
     override func configureUI() {
-        [calendar, collectionViewHeaderLabel, collectionView, borderWithCollectioinView, tableView, tableViewHeaderLabel, borderWithTabBar].forEach { self.addSubview($0) }
+        [calendar, movePreviousMonthButton, moveNextMonthButton, collectionViewHeaderLabel, collectionView, borderWithCollectioinView, tableView, tableViewHeaderLabel, borderWithTabBar].forEach { self.addSubview($0) }
         
     }
     
@@ -82,7 +106,21 @@ class SecondView: BaseView {
             $0.top.equalTo(self.safeAreaLayoutGuide)
             $0.leading.equalTo(self.safeAreaLayoutGuide)
             $0.trailing.equalTo(self.safeAreaLayoutGuide)
-            $0.height.equalTo(UIScreen.main.bounds.height * 0.36)
+            $0.height.equalTo(UIScreen.main.bounds.height * 0.38)
+        }
+        
+        movePreviousMonthButton.snp.makeConstraints {
+            $0.top.equalTo(self.calendar.safeAreaLayoutGuide)
+            $0.leading.equalTo(self.calendar.safeAreaLayoutGuide)
+            $0.width.equalTo(50)
+            $0.height.equalTo(20)
+        }
+        
+        moveNextMonthButton.snp.makeConstraints {
+            $0.top.equalTo(self.calendar.safeAreaLayoutGuide)
+            $0.leading.equalTo(self.calendar.safeAreaLayoutGuide)
+            $0.width.equalTo(50)
+            $0.height.equalTo(20)
         }
         
         collectionViewHeaderLabel.snp.makeConstraints {

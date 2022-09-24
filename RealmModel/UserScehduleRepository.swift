@@ -70,4 +70,27 @@ class UserScheduleRepository: UserScheduleRepositoryType {
     func successScheduleNumber(key: String) -> Results<UserSchedule> {
         return localRealm.objects(UserSchedule.self).filter("scheduleSuccess == true AND schedule == '\(key)'")
     }
+    
+    func updateSchedule(objectID: ObjectId, startTime: String, endTime: String, schedule: String) {
+        
+        do {
+            try localRealm.write {
+                localRealm.create(UserSchedule.self, value: ["objectID": objectID, "startTime": startTime, "endTime":endTime, "schedule":schedule], update: .modified)
+            }
+        } catch {
+            print("update error")
+        }
+    }
+    
+    func changeSchedule(objectID: ObjectId, startTime: String, endTime: String, schedule: String, scheduleDate: Date, scheduleSuccess: Bool) {
+        
+        do {
+            try localRealm.write {
+                localRealm.create(UserSchedule.self, value: ["objectID": objectID, "startTime": startTime, "endTime":endTime, "schedule":schedule, "scheduleDate":scheduleDate, "scheduleSuccess":scheduleSuccess ], update: .modified)
+            }
+        } catch {
+            print("update error")
+        }
+    }
+    
 }

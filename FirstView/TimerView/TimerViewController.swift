@@ -19,7 +19,6 @@ class TimerViewController: BaseViewController {
     var progress: Double = 0.0
     
     let timerView = TimerView()
-    let timeLabel = UILabel()
     
     var missionLabelTitle = ""
     var leftTime: Double = 0.0
@@ -64,6 +63,14 @@ class TimerViewController: BaseViewController {
         view.distribution = .fillEqually
         return view
     }()
+    
+    private let timeLabel: UILabel = {
+        let view = UILabel()
+        view.textAlignment = .center
+        view.font = .boldSystemFont(ofSize: 40)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
   
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -86,28 +93,19 @@ class TimerViewController: BaseViewController {
         
         self.view.addSubview(stackView)
         self.view.addSubview(missionLabel)
+        self.view.addSubview(timeLabel)
         
         [pauseAndPlayButton, okButton].forEach { stackView.addArrangedSubview($0) }
         
         pauseAndPlayButton.addTarget(self, action: #selector(pauseAndPlayButtonClicked), for: .touchUpInside)
         okButton.addTarget(self, action: #selector(okButtonClicked), for: .touchUpInside)
         
-        // MARK: 타임레이블 설정
-        self.timeLabel.textAlignment = .center
-        self.timeLabel.font = .boldSystemFont(ofSize: 40)
-        self.view.addSubview(self.timeLabel)
-        self.timeLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.timeLabel.heightAnchor.constraint(equalToConstant: 300),
-            self.timeLabel.widthAnchor.constraint(equalToConstant: 300),
-            self.timeLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
-            self.timeLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-        ])
-           
         // MARK: 타이머
         timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true, block: { (t) in
             
             self.leftTime -= 0.01
+            
+            print(self.leftTime)
             
             let hour = Int(self.leftTime) / 3600
             let minute = Int(self.leftTime) % 3600 / 60
@@ -120,7 +118,11 @@ class TimerViewController: BaseViewController {
                 } else {
                     self.timeLabel.text = String(format: "%02d:%02d", minute, second)
                 }
+                
+                // 9/10 ... 8/10 ... 7/10 ... 1/10... 0
                 self.progress = Double(self.leftTime) / Double(self.fixedLeftTime)
+                
+                // 1(회색) 에서 self.progress
                 self.timerView.start(duration: 0.0001 , value: 1.0 - self.progress)
             } else {
                 // 완료시 노티주기
@@ -227,6 +229,12 @@ class TimerViewController: BaseViewController {
             $0.topMargin.equalTo(60)
             $0.leadingMargin.equalTo(40)
             $0.trailingMargin.equalTo(-40)
+        }
+        
+        timeLabel.snp.makeConstraints {
+            $0.center.equalTo(self.view)
+            $0.width.equalTo(300)
+            $0.height.equalTo(300)
         }
 
         stackView.snp.makeConstraints {

@@ -66,13 +66,13 @@ class FirstView: BaseView {
             $0.topMargin.equalTo(40)
             $0.leadingMargin.equalTo(28)
             $0.trailingMargin.equalTo(-28)
-            $0.bottom.equalTo(self.safeAreaLayoutGuide).offset(-100)
+            $0.bottom.equalTo(addScheduleButton.snp.top).offset(-40)
         }
         
         addScheduleButton.snp.makeConstraints {
             $0.width.height.equalTo(50)
             $0.trailingMargin.equalTo(-20)
-            $0.bottom.equalTo(self.safeAreaLayoutGuide).offset(-50)
+            $0.bottom.equalTo(self.safeAreaLayoutGuide).offset(-40)
         }
     }
     

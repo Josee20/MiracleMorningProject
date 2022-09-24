@@ -14,7 +14,7 @@ class SetScheduleViewController: BaseViewController {
     
     let repository = UserScheduleRepository()
     
-    var now = Date() + 86400 * 10
+    var now = Date() + 86400
     
     let calendar = Calendar.current
 
@@ -205,7 +205,7 @@ class SetScheduleViewController: BaseViewController {
                     now += 86400
                     continue
                 } else {
-                    repository.addSchedule(startTime: mainView.setStartTimeButton.titleLabel?.text ?? "", endTime: mainView.setEndTimeButton.titleLabel?.text ?? "", date: now, schedule: mainView.setScheduleTextField.text!, success: true)
+                    repository.addSchedule(startTime: mainView.setStartTimeButton.titleLabel?.text ?? "", endTime: mainView.setEndTimeButton.titleLabel?.text ?? "", date: now, schedule: mainView.setScheduleTextField.text!, success: false)
             
                     now += 86400
                 }

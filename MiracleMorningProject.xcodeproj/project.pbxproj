@@ -12,6 +12,10 @@
 		49580DB128CF07A7002EE3CD /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49580DB028CF07A7002EE3CD /* TimerView.swift */; };
 		49580DB328CF07B0002EE3CD /* TimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49580DB228CF07B0002EE3CD /* TimerViewController.swift */; };
 		49580DB728CF98AB002EE3CD /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49580DB628CF98AB002EE3CD /* UIButton+Extension.swift */; };
+		4969B68628DC810400914A23 /* ChangeScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4969B68528DC810400914A23 /* ChangeScheduleView.swift */; };
+		4969B68828DC811000914A23 /* ChangeScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4969B68728DC811000914A23 /* ChangeScheduleViewController.swift */; };
+		499C654628DE26720005D659 /* BaseFSCalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499C654528DE26720005D659 /* BaseFSCalendarCell.swift */; };
+		499C654828DE26EA0005D659 /* SecondFSCalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499C654728DE26EA0005D659 /* SecondFSCalendarCell.swift */; };
 		49C3270E28DB7E4F000AF418 /* DateFormatChanger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C3270D28DB7E4F000AF418 /* DateFormatChanger.swift */; };
 		49F0FB5228D19AFF004AD670 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 49F0FB5128D19AFF004AD670 /* FSCalendar */; };
 		49F0FB5428D1A32C004AD670 /* SecondTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F0FB5328D1A32C004AD670 /* SecondTableViewCell.swift */; };
@@ -52,6 +56,10 @@
 		49580DB028CF07A7002EE3CD /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
 		49580DB228CF07B0002EE3CD /* TimerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewController.swift; sourceTree = "<group>"; };
 		49580DB628CF98AB002EE3CD /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
+		4969B68528DC810400914A23 /* ChangeScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeScheduleView.swift; sourceTree = "<group>"; };
+		4969B68728DC811000914A23 /* ChangeScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeScheduleViewController.swift; sourceTree = "<group>"; };
+		499C654528DE26720005D659 /* BaseFSCalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseFSCalendarCell.swift; sourceTree = "<group>"; };
+		499C654728DE26EA0005D659 /* SecondFSCalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondFSCalendarCell.swift; sourceTree = "<group>"; };
 		49C3270D28DB7E4F000AF418 /* DateFormatChanger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatChanger.swift; sourceTree = "<group>"; };
 		49F0FB5328D1A32C004AD670 /* SecondTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondTableViewCell.swift; sourceTree = "<group>"; };
 		49F0FB5528D1A4B6004AD670 /* BaseCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -106,6 +114,15 @@
 				49580DB228CF07B0002EE3CD /* TimerViewController.swift */,
 			);
 			path = TimerView;
+			sourceTree = "<group>";
+		};
+		4969B68428DC80D700914A23 /* ChangeScheduleView */ = {
+			isa = PBXGroup;
+			children = (
+				4969B68528DC810400914A23 /* ChangeScheduleView.swift */,
+				4969B68728DC811000914A23 /* ChangeScheduleViewController.swift */,
+			);
+			path = ChangeScheduleView;
 			sourceTree = "<group>";
 		};
 		49C3270C28DB7E31000AF418 /* DateFormatChanger */ = {
@@ -171,6 +188,7 @@
 				49F6D8DC28CDAEDE005AA757 /* BaseView.swift */,
 				49F6D8FB28CDD5B1005AA757 /* BaseTableViewCell.swift */,
 				49F0FB5528D1A4B6004AD670 /* BaseCollectionViewCell.swift */,
+				499C654528DE26720005D659 /* BaseFSCalendarCell.swift */,
 			);
 			path = BaseView;
 			sourceTree = "<group>";
@@ -202,7 +220,9 @@
 				49F6D8E728CDB595005AA757 /* SecondViewController.swift */,
 				49F0FB5728D1A566004AD670 /* SecondCollectionViewCell.swift */,
 				49F0FB5328D1A32C004AD670 /* SecondTableViewCell.swift */,
+				499C654728DE26EA0005D659 /* SecondFSCalendarCell.swift */,
 				49314F3628D72B7F00D6156B /* ScheduleInfoModel.swift */,
+				4969B68428DC80D700914A23 /* ChangeScheduleView */,
 			);
 			path = SecondView;
 			sourceTree = "<group>";
@@ -318,7 +338,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				499C654828DE26EA0005D659 /* SecondFSCalendarCell.swift in Sources */,
 				49F0FB5828D1A566004AD670 /* SecondCollectionViewCell.swift in Sources */,
+				4969B68628DC810400914A23 /* ChangeScheduleView.swift in Sources */,
 				49F0FB5D28D2E7BF004AD670 /* UserScehduleRepository.swift in Sources */,
 				49C3270E28DB7E4F000AF418 /* DateFormatChanger.swift in Sources */,
 				49F6D8F428CDB861005AA757 /* ForthView.swift in Sources */,
@@ -328,6 +350,7 @@
 				49580DB328CF07B0002EE3CD /* TimerViewController.swift in Sources */,
 				49F6D8E828CDB595005AA757 /* SecondViewController.swift in Sources */,
 				49F6D8F028CDB84B005AA757 /* ThirdView.swift in Sources */,
+				499C654628DE26720005D659 /* BaseFSCalendarCell.swift in Sources */,
 				49F6D90728CDFCBB005AA757 /* SetScheduleTableViewCell.swift in Sources */,
 				49580DB728CF98AB002EE3CD /* UIButton+Extension.swift in Sources */,
 				49F0FB5428D1A32C004AD670 /* SecondTableViewCell.swift in Sources */,
@@ -337,6 +360,7 @@
 				49F6D8DD28CDAEDE005AA757 /* BaseView.swift in Sources */,
 				49F6D90028CDEA32005AA757 /* ReusableProtocol.swift in Sources */,
 				49314F3728D72B7F00D6156B /* ScheduleInfoModel.swift in Sources */,
+				4969B68828DC811000914A23 /* ChangeScheduleViewController.swift in Sources */,
 				49F6D8FE28CDD8F5005AA757 /* FirstTableViewCell.swift in Sources */,
 				49580DB128CF07A7002EE3CD /* TimerView.swift in Sources */,
 				49580DAE28CF028E002EE3CD /* DailyButton.swift in Sources */,

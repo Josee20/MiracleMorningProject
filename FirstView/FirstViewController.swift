@@ -42,8 +42,6 @@ class FirstViewController: BaseViewController {
         for i in 0..<repository.filterDayTasks(date: now).count {
             scheduleInfo.append(scheduleInfoModel(schedule: repository.filterDayTasks(date: now)[i].schedule, startTime: repository.filterDayTasks(date: now)[i].startTime, endTime: repository.filterDayTasks(date: now)[i].endTime, success: repository.filterDayTasks(date: now)[i].scheduleSuccess))
         }
-        
-        print("-------\(now)")
     }
     
     override func viewWillAppear(_ animated: Bool) {

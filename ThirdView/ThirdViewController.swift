@@ -19,6 +19,5 @@ class ThirdViewController: BaseViewController {
         super.viewDidLoad()
         
         mainView.backgroundColor = .systemBackground
-        
     }
 }

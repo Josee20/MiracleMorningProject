@@ -1,14 +1,13 @@
 //
-//  SetScheduleView.swift
+//  ChangeScheduleView.swift
 //  MiracleMorningProject
 //
-//  Created by 이동기 on 2022/09/11.
+//  Created by 이동기 on 2022/09/22.
 //
 
-//import Foundation
 import UIKit
 
-class SetScheduleView: BaseView {
+class ChangeScheduleView: BaseView {
     
     let setScheduleTextField: UITextField = {
         let view = UITextField()
@@ -24,67 +23,6 @@ class SetScheduleView: BaseView {
         let view = UIView()
         view.layer.borderWidth = 1
         view.layer.borderColor = UIColor.systemGray.cgColor
-        return view
-    }()
-    
-    // MARK: 일 ~ 토
-    let sundayButton: DailyButton = {
-        let view = DailyButton()
-        view.setTitle("일", for: .normal)
-        view.setupButton()
-        return view
-    }()
-    
-    let mondayButton: DailyButton = {
-        let view = DailyButton()
-        view.setTitle("월", for: .normal)
-        view.setupButton()
-        return view
-    }()
-    
-    let tuesdayButton: DailyButton = {
-        let view = DailyButton()
-        view.setTitle("화", for: .normal)
-        view.setupButton()
-        return view
-    }()
-    
-    let wedensdayButton: DailyButton = {
-        let view = DailyButton()
-        view.setTitle("수", for: .normal)
-        view.setupButton()
-        return view
-    }()
-    
-    let thursdayButton: DailyButton = {
-        let view = DailyButton()
-        view.setTitle("목", for: .normal)
-        view.setupButton()
-        return view
-    }()
-    
-    let fridayButton: DailyButton = {
-        let view = DailyButton()
-        view.setTitle("금", for: .normal)
-        view.setupButton()
-        return view
-    }()
-    
-    let saturdayButton: DailyButton = {
-        let view = DailyButton()
-        view.setTitle("토", for: .normal)
-        view.setupButton()
-        return view
-    }()
-    
-    // MARK: 스택뷰
-    let stackView: UIStackView = {
-        let view = UIStackView()
-        view.axis = .horizontal
-        view.alignment = .fill
-        view.spacing = 4
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.distribution = .equalSpacing
         return view
     }()
     
@@ -104,13 +42,6 @@ class SetScheduleView: BaseView {
     }()
     
     let secondLineView: UIView = {
-        let view = UIView()
-        view.layer.cornerRadius = 20
-        view.backgroundColor = .systemGray6
-        return view
-    }()
-    
-    let thirdLineView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 20
         view.backgroundColor = .systemGray6
@@ -147,18 +78,6 @@ class SetScheduleView: BaseView {
         return view
     }()
     
-    let getAlarmLabel: UILabel = {
-        let view = UILabel()
-        view.text = "알림받기"
-        return view
-    }()
-    
-    let alarmToggle: UISwitch = {
-        let view = UISwitch()
-        view.isEnabled = true
-        return view
-    }()
-    
     let okButton: UIButton = {
         let view = UIButton()
         view.setTitle("완료", for: .normal)
@@ -168,13 +87,10 @@ class SetScheduleView: BaseView {
     }()
     
     override func configureUI() {
-
+        
         setScheduleTextField.delegate = self
         
-        [setScheduleTextField, textFieldBorder, okButton, stackView, headerView, firstLineView, secondLineView, thirdLineView, startTimeLabel, setStartTimeButton, endTimeLabel, setEndTimeButton, getAlarmLabel, alarmToggle].forEach { self.addSubview($0) }
-        
-        [sundayButton, mondayButton, tuesdayButton, wedensdayButton, thursdayButton, fridayButton, saturdayButton].forEach { self.stackView.addArrangedSubview($0) }
-        
+        [setScheduleTextField, textFieldBorder, okButton, headerView, firstLineView, secondLineView, startTimeLabel, setStartTimeButton, endTimeLabel, setEndTimeButton].forEach { self.addSubview($0) }
     }
     
     override func setConstraints() {
@@ -200,38 +116,9 @@ class SetScheduleView: BaseView {
             $0.height.equalTo(52)
         }
         
-        sundayButton.snp.makeConstraints {
-            $0.width.equalTo(40)
-        }
-        mondayButton.snp.makeConstraints {
-            $0.height.width.equalTo(40)
-        }
-        tuesdayButton.snp.makeConstraints {
-            $0.height.width.equalTo(40)
-        }
-        wedensdayButton.snp.makeConstraints {
-            $0.height.width.equalTo(40)
-            $0.center.equalTo(self.stackView)
-        }
-        thursdayButton.snp.makeConstraints {
-            $0.height.width.equalTo(40)
-        }
-        fridayButton.snp.makeConstraints {
-            $0.height.width.equalTo(40)
-        }
-        saturdayButton.snp.makeConstraints {
-            $0.height.width.equalTo(40)
-        }
-        
-        stackView.snp.makeConstraints {
-            $0.leadingMargin.equalTo(12)
-            $0.trailingMargin.equalTo(-12)
-            $0.topMargin.equalTo(textFieldBorder.snp.bottom).offset(48)
-            $0.height.equalTo(40)
-        }
         
         headerView.snp.makeConstraints {
-            $0.topMargin.equalTo(stackView.snp.bottom).offset(28)
+            $0.topMargin.equalTo(textFieldBorder.snp.bottom).offset(28)
             $0.leadingMargin.equalTo(28)
             $0.width.equalTo(100)
             $0.height.equalTo(40)
@@ -278,31 +165,10 @@ class SetScheduleView: BaseView {
             $0.width.equalTo(100)
             $0.height.equalTo(30)
         }
-        
-        thirdLineView.snp.makeConstraints {
-            $0.leadingMargin.equalTo(20)
-            $0.trailingMargin.equalTo(-20)
-            $0.height.equalTo(52)
-            $0.topMargin.equalTo(secondLineView.snp.bottom).offset(16)
-        }
-        
-        getAlarmLabel.snp.makeConstraints {
-            $0.leadingMargin.equalTo(thirdLineView.snp.leading).offset(32)
-            $0.centerY.equalTo(thirdLineView)
-            $0.width.equalTo(100)
-            $0.height.equalTo(40)
-        }
-        
-        alarmToggle.snp.makeConstraints {
-            $0.centerY.equalTo(thirdLineView)
-            $0.centerX.equalTo(setEndTimeButton)
-            $0.width.equalTo(50)
-            $0.height.equalTo(30)
-        }
     }
 }
 
-extension SetScheduleView: UITextFieldDelegate {
+extension ChangeScheduleView: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         setScheduleTextField.resignFirstResponder()
         return true

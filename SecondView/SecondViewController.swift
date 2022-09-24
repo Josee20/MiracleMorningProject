@@ -11,6 +11,13 @@ import UIKit
 import FSCalendar
 import RealmSwift
 
+//enum ColorSet {
+//    firstColor = R: 253 G: 242 B: 235
+//    secondColor = R: 242 G: 188 B: 153
+//    thirdColor = R: 240 G: 145 B: 89
+//    forthColor = R: 238 G: 123 B: 63
+//}
+
 class SecondViewController: BaseViewController {
     
     let repository = UserScheduleRepository()
@@ -26,11 +33,13 @@ class SecondViewController: BaseViewController {
     
     var date = Date()
     let calendar = Calendar.current
-//    var startOfMonth = Date()
     
+    var height: CGFloat?
     
     var selectedDate: Date = Date()
     
+    
+
     var tasks: Results<UserSchedule>! {
         didSet {
             dayTasks = repository.filterDayTasks(date: selectedDate)
@@ -80,8 +89,6 @@ class SecondViewController: BaseViewController {
         for i in 0..<repository.successSchedule(currentDate: startOfMonth).count {
             scheduleCountDic.updateValue(repository.successScheduleNumber(key: repository.successSchedule(currentDate: startOfMonth)[i].schedule).count, forKey: repository.successSchedule(currentDate: startOfMonth)[i].schedule)
         }
-        
-        print(scheduleCountDic)
     }
     
     override func configure() {
@@ -95,6 +102,7 @@ class SecondViewController: BaseViewController {
         
         mainView.calendar.delegate = self
         mainView.calendar.dataSource = self
+        mainView.calendar.register(SecondFSCalendarCell.self, forCellReuseIdentifier: "CELL")
     }
     
     func fetchRealm() {
@@ -130,7 +138,7 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource {
         cell.scheduleTitle.text = dayTasks[indexPath.row].schedule
         cell.scheduleTime.text = "\(dayTasks[indexPath.row].startTime)~\(dayTasks[indexPath.row].endTime)"
         dayTasks[indexPath.row].scheduleSuccess == true ? cell.checkButton.setImage(UIImage(systemName: "checkmark.square") , for: .normal) : cell.checkButton.setImage(UIImage(systemName: "x.square"), for: .normal)
-        
+
         return cell
     }
     
@@ -147,8 +155,30 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource {
             scheduleCountDic.updateValue(repository.successScheduleNumber(key: repository.successSchedule(currentDate: startOfMonth)[i].schedule).count, forKey: repository.successSchedule(currentDate: startOfMonth)[i].schedule)
         }
         
+        mainView.collectionView.reloadData()
         mainView.calendar.reloadData()
         self.fetchRealm()
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+            
+        let vc = ChangeScheduleViewController()
+        
+        vc.setScheduleTextFieldTitle = dayTasks[indexPath.row].schedule
+        vc.startTimeButtonTitle = dayTasks[indexPath.row].startTime
+        vc.endTimeButtonTitle = dayTasks[indexPath.row].endTime
+        vc.objectID = dayTasks[indexPath.row].objectID
+        vc.receivedDate = dayTasks[indexPath.row].scheduleDate
+        
+        // 2. 클로저 함수 정의
+        vc.okButtonActionHandler = {
+            self.mainView.tableView.reloadData()
+        }
+        
+        self.mainView.collectionView.reloadData()
+        
+        let nav = UINavigationController(rootViewController: vc)
+        present(nav, animated: true)
     }
 }
 
@@ -169,7 +199,7 @@ extension SecondViewController: UICollectionViewDelegate, UICollectionViewDataSo
         let width = UIScreen.main.bounds.width - (space * 7)
         
         // 딕셔너리 value 크기에 따라 정렬
-        var sortedScheduleCountDic = scheduleCountDic.sorted { (first, second) in
+        let sortedScheduleCountDic = scheduleCountDic.sorted { (first, second) in
             return first.value > second.value
         }
     
@@ -196,18 +226,51 @@ extension SecondViewController: FSCalendarDelegate, FSCalendarDataSource, FSCale
         let eventDateArr = eventStringArr.map { DateFormatChange.shared.dateOfYearMonthDay.date(from: $0) }
                 
         if eventDateArr.contains(date) {
-            mainView.calendar.appearance.eventDefaultColor = .systemGray3
-            mainView.calendar.appearance.eventSelectionColor = .systemGray3
             return repository.filterDayTasks(date: date).count
         } else {
             return 0
         }
     }
     
+    // ... 색깔
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, eventDefaultColorsFor date: Date) -> [UIColor]? {
+        
+        dayTasks
+        
+        if date < now {
+            return [UIColor.black, UIColor.purple, UIColor.systemGray]
+        } else {
+            return [UIColor.systemOrange, UIColor.systemRed, UIColor.systemCyan]
+        }
+    }
+    
+    func calendar(_ calendar: FSCalendar, cellFor date: Date, at position: FSCalendarMonthPosition) -> FSCalendarCell {
+
+        let cell = calendar.dequeueReusableCell(withIdentifier: "CELL", for: date, at: position)
+
+        return cell
+    }
+    
+    // 선택시 날짜 테두리 색상
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, borderSelectionColorFor date: Date) -> UIColor? {
+        return UIColor.black
+    }
+    
+    // 오늘날짜 -> "오늘"
+    func calendar(_ calendar: FSCalendar, titleFor date: Date) -> String? {
+        switch DateFormatChange.shared.dateOfYearMonthDay.string(from: date) {
+        case DateFormatChange.shared.dateOfYearMonthDay.string(from: now):
+            return "오늘"
+        default:
+            return nil
+        }
+    }
+    
+    
+    // 캘린더 날짜 선택
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         
         selectedDate = date
-        
         scheduleInfo = []
         
         dayTasks = repository.filterDayTasks(date: date)
@@ -215,10 +278,17 @@ extension SecondViewController: FSCalendarDelegate, FSCalendarDataSource, FSCale
 
         mainView.tableViewHeaderLabel.text = DateFormatChange.shared.dateOfMonth.string(from: date)
         
+        if date < Calendar.current.startOfDay(for: now) - 86400 + 3600 * 9 {
+            mainView.tableView.isUserInteractionEnabled = false
+        } else {
+            mainView.tableView.isUserInteractionEnabled = true
+        }
+        
         // 캘린더 스와이프시에 테이블뷰 나타내기
         mainView.tableView.isHidden = false
     }
     
+    // 캘린더 스와이프
     func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
 
         let currentPageDate = calendar.currentPage
@@ -229,13 +299,9 @@ extension SecondViewController: FSCalendarDelegate, FSCalendarDataSource, FSCale
         // 스와이프시 date값을 변경시켜야 다른 페이지를 갔다와도 해당 월의 스케쥴 성공여부가 컬렉션뷰에 잘 나옴
         date = currentPageDate
         
-        print("emptyScheduleCountDic : \(scheduleCountDic)")
-        
         for i in 0..<repository.successSchedule(currentDate: currentPageDate).count {
             scheduleCountDic.updateValue(repository.successScheduleNumber(key: repository.successSchedule(currentDate: currentPageDate)[i].schedule).count, forKey: repository.successSchedule(currentDate: currentPageDate)[i].schedule)
         }
-        
-        print(repository.successSchedule(currentDate: currentPageDate).count)
         
         mainView.collectionViewHeaderLabel.text = "\(month)월 미션 현황"
                 
