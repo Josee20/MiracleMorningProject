@@ -10,6 +10,13 @@ import UIKit
 
 import RealmSwift
 
+enum setTimeButtonColor {
+    static let notChangedColor = UIColor.black
+    static let changedColor = UIColor.systemBlue
+}
+
+
+
 final class ChangeScheduleViewController: BaseViewController {
     
     let repository = UserScheduleRepository()
@@ -33,8 +40,6 @@ final class ChangeScheduleViewController: BaseViewController {
     
     var dayTasks: Results<UserSchedule>!
     var receivedDate = Date()
-    
-    let SecondVC = SecondViewController()
     
     override func loadView() {
         self.view = mainView
@@ -81,11 +86,7 @@ final class ChangeScheduleViewController: BaseViewController {
             let dateString = DateFormatChange.shared.dateOfHourAndPM.string(from: datePicker.date)
             self.setStartTimeDatePickerDate = datePicker.date
             
-            if self.mainView.setEndTimeButton.titleLabel?.text == dateString {
-                self.showAlertOnlyOk(title: "시작시간과 종료시간은\n같을 수 없습니다\n다른 시간을 선택해주세요")
-            } else if self.setEndTimeDatePickerDate! > self.setEndTimeDatePickerDate! {
-                self.showAlertOnlyOk(title: "시작시간은 종료시간보다 빨라야합니다\n종료시간을 다시 선택해주세요")
-            } else if self.calendar.component(.hour, from: datePicker.date) > 3 && self.calendar.component(.hour, from: datePicker.date) < 9 {
+            if self.calendar.component(.hour, from: datePicker.date) > 3 && self.calendar.component(.hour, from: datePicker.date) < 9 {
                 self.mainView.setStartTimeButton.setTitle(dateString, for: .normal)
                 self.mainView.setStartTimeButton.setTitleColor(.systemBlue, for: .normal)
             } else {
@@ -124,12 +125,8 @@ final class ChangeScheduleViewController: BaseViewController {
             let dateString = DateFormatChange.shared.dateOfHourAndPM.string(from: datePicker.date)
             self.setEndTimeDatePickerDate = datePicker.date
             
-            if self.mainView.setStartTimeButton.titleLabel?.text == "시간선택" {
-                self.showAlertOnlyOk(title: "시작시간을 먼저 선택해주세요")
-            } else if self.mainView.setStartTimeButton.titleLabel?.text == dateString {
+            if self.mainView.setStartTimeButton.titleLabel?.text == self.mainView.setEndTimeButton.titleLabel?.text {
                 self.showAlertOnlyOk(title: "시작시간과 종료시간은\n같을 수 없습니다\n다른 시간을 선택해주세요")
-            } else if self.setStartTimeDatePickerDate! > self.setEndTimeDatePickerDate! {
-                self.showAlertOnlyOk(title: "시작시간은 종료시간보다 빨라야합니다\n종료시간을 다시 선택해주세요")
             } else {
                 if self.calendar.component(.hour, from: datePicker.date) > 3 && self.calendar.component(.hour, from: datePicker.date) < 9 {
                     self.mainView.setEndTimeButton.setTitle(dateString, for: .normal)
@@ -150,8 +147,16 @@ final class ChangeScheduleViewController: BaseViewController {
     
     @objc func okButtonClicked() {
         
+        guard let setStartTimeButtonDate = DateFormatChange.shared.dateOfHourAndPM.date(from: mainView.setStartTimeButton.titleLabel?.text ?? "") else { return }
+        
+        guard let setEndTimeButtonDate = DateFormatChange.shared.dateOfHourAndPM.date(from: mainView.setEndTimeButton.titleLabel?.text ?? "") else { return }
+        
         if mainView.setScheduleTextField.text?.count == 0 {
             showAlertOnlyOk(title: "미션을 입력해주세요")
+        } else if mainView.setStartTimeButton.titleLabel?.text == mainView.setEndTimeButton.titleLabel?.text {
+            showAlertOnlyOk(title: "시작시간과 종료시간은\n같을 수 없습니다\n다른 시간을 선택해주세요")
+        } else if setStartTimeButtonDate > setEndTimeButtonDate {
+            self.showAlertOnlyOk(title: "시작시간은 종료시간보다 빨라야합니다\n종료시간을 다시 선택해주세요")
         } else {
             
             // 렘 수정
@@ -159,7 +164,7 @@ final class ChangeScheduleViewController: BaseViewController {
 
             // 3. 클로저실행
             okButtonActionHandler?()
-  
+
             print("okayButtonClicked")
             dismiss(animated: true)
         }

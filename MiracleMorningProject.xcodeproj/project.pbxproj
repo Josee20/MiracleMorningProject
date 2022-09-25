@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		49314F3728D72B7F00D6156B /* ScheduleInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49314F3628D72B7F00D6156B /* ScheduleInfoModel.swift */; };
+		4949B33028DF4B7D00BB96F0 /* Calendar + Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4949B32F28DF4B7D00BB96F0 /* Calendar + Delegate.swift */; };
+		4949B33228DF64BE00BB96F0 /* TableView + Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4949B33128DF64BE00BB96F0 /* TableView + Delegate.swift */; };
+		4949B33428DF64D400BB96F0 /* CollectionView + Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4949B33328DF64D400BB96F0 /* CollectionView + Delegate.swift */; };
 		49580DAE28CF028E002EE3CD /* DailyButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49580DAD28CF028E002EE3CD /* DailyButton.swift */; };
 		49580DB128CF07A7002EE3CD /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49580DB028CF07A7002EE3CD /* TimerView.swift */; };
 		49580DB328CF07B0002EE3CD /* TimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49580DB228CF07B0002EE3CD /* TimerViewController.swift */; };
@@ -52,6 +55,9 @@
 
 /* Begin PBXFileReference section */
 		49314F3628D72B7F00D6156B /* ScheduleInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleInfoModel.swift; sourceTree = "<group>"; };
+		4949B32F28DF4B7D00BB96F0 /* Calendar + Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Calendar + Delegate.swift"; sourceTree = "<group>"; };
+		4949B33128DF64BE00BB96F0 /* TableView + Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TableView + Delegate.swift"; sourceTree = "<group>"; };
+		4949B33328DF64D400BB96F0 /* CollectionView + Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CollectionView + Delegate.swift"; sourceTree = "<group>"; };
 		49580DAD28CF028E002EE3CD /* DailyButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyButton.swift; sourceTree = "<group>"; };
 		49580DB028CF07A7002EE3CD /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
 		49580DB228CF07B0002EE3CD /* TimerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewController.swift; sourceTree = "<group>"; };
@@ -107,6 +113,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4949B32E28DF4B5900BB96F0 /* SecondVCExtension */ = {
+			isa = PBXGroup;
+			children = (
+				4949B32F28DF4B7D00BB96F0 /* Calendar + Delegate.swift */,
+				4949B33128DF64BE00BB96F0 /* TableView + Delegate.swift */,
+				4949B33328DF64D400BB96F0 /* CollectionView + Delegate.swift */,
+			);
+			path = SecondVCExtension;
+			sourceTree = "<group>";
+		};
 		49580DAF28CF0797002EE3CD /* TimerView */ = {
 			isa = PBXGroup;
 			children = (
@@ -223,6 +239,7 @@
 				499C654728DE26EA0005D659 /* SecondFSCalendarCell.swift */,
 				49314F3628D72B7F00D6156B /* ScheduleInfoModel.swift */,
 				4969B68428DC80D700914A23 /* ChangeScheduleView */,
+				4949B32E28DF4B5900BB96F0 /* SecondVCExtension */,
 			);
 			path = SecondView;
 			sourceTree = "<group>";
@@ -341,6 +358,7 @@
 				499C654828DE26EA0005D659 /* SecondFSCalendarCell.swift in Sources */,
 				49F0FB5828D1A566004AD670 /* SecondCollectionViewCell.swift in Sources */,
 				4969B68628DC810400914A23 /* ChangeScheduleView.swift in Sources */,
+				4949B33428DF64D400BB96F0 /* CollectionView + Delegate.swift in Sources */,
 				49F0FB5D28D2E7BF004AD670 /* UserScehduleRepository.swift in Sources */,
 				49C3270E28DB7E4F000AF418 /* DateFormatChanger.swift in Sources */,
 				49F6D8F428CDB861005AA757 /* ForthView.swift in Sources */,
@@ -348,6 +366,7 @@
 				49F6D8C628CDAD10005AA757 /* AppDelegate.swift in Sources */,
 				49F6D8C828CDAD10005AA757 /* SceneDelegate.swift in Sources */,
 				49580DB328CF07B0002EE3CD /* TimerViewController.swift in Sources */,
+				4949B33228DF64BE00BB96F0 /* TableView + Delegate.swift in Sources */,
 				49F6D8E828CDB595005AA757 /* SecondViewController.swift in Sources */,
 				49F6D8F028CDB84B005AA757 /* ThirdView.swift in Sources */,
 				499C654628DE26720005D659 /* BaseFSCalendarCell.swift in Sources */,
@@ -361,6 +380,7 @@
 				49F6D90028CDEA32005AA757 /* ReusableProtocol.swift in Sources */,
 				49314F3728D72B7F00D6156B /* ScheduleInfoModel.swift in Sources */,
 				4969B68828DC811000914A23 /* ChangeScheduleViewController.swift in Sources */,
+				4949B33028DF4B7D00BB96F0 /* Calendar + Delegate.swift in Sources */,
 				49F6D8FE28CDD8F5005AA757 /* FirstTableViewCell.swift in Sources */,
 				49580DB128CF07A7002EE3CD /* TimerView.swift in Sources */,
 				49580DAE28CF028E002EE3CD /* DailyButton.swift in Sources */,

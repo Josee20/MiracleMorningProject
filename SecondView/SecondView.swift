@@ -21,11 +21,8 @@ class SecondView: BaseView {
         view.appearance.calendar.headerHeight = 60
         view.appearance.weekdayTextColor = .black
         view.appearance.headerTitleColor = .systemOrange
-//        view.appearance.borderRadius = 0
-//        view.backgroundColor = .blue
         view.appearance.headerTitleFont = nil
-        view.appearance.titleDefaultColor = .systemGray2
-//        view.today = nil
+        view.appearance.titleDefaultColor = .systemGray
         return view
     }()
     
@@ -124,7 +121,7 @@ class SecondView: BaseView {
         }
         
         collectionViewHeaderLabel.snp.makeConstraints {
-            $0.topMargin.equalTo(calendar.snp.bottom).offset(24)
+            $0.topMargin.equalTo(calendar.snp.bottom).offset(28)
             $0.leadingMargin.equalTo(19)
             $0.width.equalTo(110)
             $0.height.equalTo(20)

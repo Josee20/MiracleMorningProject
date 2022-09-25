@@ -106,7 +106,7 @@ class SetScheduleViewController: BaseViewController {
             let dateString = DateFormatChange.shared.dateOfHourAndPM.string(from: datePicker.date)
             self.setStartTimeDatePickerDate = datePicker.date
             
-            if self.calendar.component(.hour, from: datePicker.date) > 3 && self.calendar.component(.hour, from: datePicker.date) < 9 {
+           if self.calendar.component(.hour, from: datePicker.date) > 3 && self.calendar.component(.hour, from: datePicker.date) < 9 {
                 self.mainView.setStartTimeButton.setTitle(dateString, for: .normal)
                 self.mainView.setStartTimeButton.setTitleColor(.systemBlue, for: .normal)
             } else {
@@ -186,10 +186,10 @@ class SetScheduleViewController: BaseViewController {
             showAlertOnlyOk(title: "요일을 하나 이상 선택해주세요")
         } else if mainView.setStartTimeButton.titleLabel?.text == "시간선택" || mainView.setEndTimeButton.titleLabel?.text == "시간선택" {
             showAlertOnlyOk(title: "시간을 둘 다 선택해주세요")
+        } else if self.setStartTimeDatePickerDate! > self.setEndTimeDatePickerDate! {
+            self.showAlertOnlyOk(title: "시작시간은 종료시간보다 빨라야합니다\n종료시간을 다시 선택해주세요")
         } else {
-            
             while true {
-                
                 let month = calendar.component(.month, from: now)
                 let day = calendar.component(.weekday, from: now) - 1
                 
