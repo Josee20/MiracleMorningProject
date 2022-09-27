@@ -32,9 +32,18 @@ extension SecondViewController: FSCalendarDelegate, FSCalendarDataSource, FSCale
         let eventDateArr = eventStringArr.map { DateFormatChange.shared.dateOfYearMonthDay.date(from: $0) }
                 
         if eventDateArr.contains(date) {
-    
-            
-            return repository.filterDayTasks(date: date).count
+            switch repository.filterDayTasks(date: date).count {
+            case 0:
+                return 0
+            case 1:
+                return 1
+            case 2:
+                return 2
+            case 3:
+                return 3
+            default:
+                return 3
+            }
         } else {
             return 0
         }
@@ -43,17 +52,9 @@ extension SecondViewController: FSCalendarDelegate, FSCalendarDataSource, FSCale
     // ... 색깔
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, eventDefaultColorsFor date: Date) -> [UIColor]? {
         
-        var successCount = 0
+        dayTasksAndSuccess = repository.filterDayTasksAndSuccess(date: date)
         
-        dayTasks = repository.filterDayTasks(date: date)
-        
-        for i in 0..<dayTasks.count {
-            if dayTasks[i].scheduleSuccess == true {
-                successCount += 1
-            }
-        }
-        
-        switch successCount {
+        switch dayTasksAndSuccess.count {
         case 0:
             return EventDotColor.successZeroTime
         case 1:
@@ -66,20 +67,10 @@ extension SecondViewController: FSCalendarDelegate, FSCalendarDataSource, FSCale
             return EventDotColor.successThreeTime
         }
     }
-    
+
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, eventSelectionColorsFor date: Date) -> [UIColor]? {
-        
-        var successCount = 0
-        
-        dayTasks = repository.filterDayTasks(date: date)
-        
-        for i in 0..<dayTasks.count {
-            if dayTasks[i].scheduleSuccess == true {
-                successCount += 1
-            }
-        }
-        
-        switch successCount {
+
+        switch dayTasksAndSuccess.count {
         case 0:
             return EventDotColor.successZeroTime
         case 1:
@@ -97,6 +88,8 @@ extension SecondViewController: FSCalendarDelegate, FSCalendarDataSource, FSCale
 
         let cell = calendar.dequeueReusableCell(withIdentifier: "CELL", for: date, at: position)
 
+
+        
         return cell
     }
     
@@ -122,16 +115,10 @@ extension SecondViewController: FSCalendarDelegate, FSCalendarDataSource, FSCale
         selectedDate = date
         scheduleInfo = []
         
-        dayTasks = repository.filterDayTasks(date: date)
+//        dayTasks = repository.filterDayTasks(date: date)
         self.fetchRealm()
 
         mainView.tableViewHeaderLabel.text = DateFormatChange.shared.dateOfMonth.string(from: date)
-        
-        if date < Calendar.current.startOfDay(for: now) - 86400 + 3600 * 9 {
-            mainView.tableView.isUserInteractionEnabled = false
-        } else {
-            mainView.tableView.isUserInteractionEnabled = true
-        }
         
         // 캘린더 스와이프시에 테이블뷰 나타내기
         mainView.tableView.isHidden = false
@@ -144,12 +131,13 @@ extension SecondViewController: FSCalendarDelegate, FSCalendarDataSource, FSCale
         let month = Calendar.current.component(.month, from: currentPageDate)
         
         scheduleCountDic = [:]
+        successCount = 0
         
         // 스와이프시 date값을 변경시켜야 다른 페이지를 갔다와도 해당 월의 스케쥴 성공여부가 컬렉션뷰에 잘 나옴
         date = currentPageDate
         
-        for i in 0..<repository.successSchedule(currentDate: currentPageDate).count {
-            scheduleCountDic.updateValue(repository.successScheduleNumber(key: repository.successSchedule(currentDate: currentPageDate)[i].schedule).count, forKey: repository.successSchedule(currentDate: currentPageDate)[i].schedule)
+        for i in 0..<repository.successScheduleInMonth(currentDate: currentPageDate).count {
+            scheduleCountDic.updateValue(repository.successScheduleNumber(key: repository.successScheduleInMonth(currentDate: currentPageDate)[i].schedule).count, forKey: repository.successScheduleInMonth(currentDate: currentPageDate)[i].schedule)
         }
         
         mainView.collectionViewHeaderLabel.text = "\(month)월 미션 현황"
@@ -160,4 +148,5 @@ extension SecondViewController: FSCalendarDelegate, FSCalendarDataSource, FSCale
         mainView.collectionView.reloadData()
     }
 }
+
 

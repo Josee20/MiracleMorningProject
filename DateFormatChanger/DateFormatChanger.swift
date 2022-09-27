@@ -65,4 +65,17 @@ class DateFormatChange {
         return formatter
     }()
     
+    let dateOfOnlyYear: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko-KR")
+        formatter.dateFormat = "yyyy"
+        return formatter
+    }()
+    
+    let dateOfOnlyMonth: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko-KR")
+        formatter.dateFormat = "MM"
+        return formatter
+    }()
 }

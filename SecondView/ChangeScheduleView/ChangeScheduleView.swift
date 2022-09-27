@@ -80,7 +80,7 @@ class ChangeScheduleView: BaseView {
     
     let okButton: UIButton = {
         let view = UIButton()
-        view.setTitle("완료", for: .normal)
+        view.setTitle("수정", for: .normal)
         view.backgroundColor = .systemGray
         view.layer.cornerRadius = 25
         return view

@@ -20,7 +20,7 @@ extension SecondViewController: UICollectionViewDelegate, UICollectionViewDataSo
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
-        let space: CGFloat = 4
+        let space: CGFloat = 8
         let width = UIScreen.main.bounds.width - (space * 7)
         
         // 딕셔너리 value 크기에 따라 정렬

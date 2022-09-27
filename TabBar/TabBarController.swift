@@ -13,8 +13,16 @@ class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let appearance = UITabBarAppearance()
+        appearance.backgroundColor = .systemBackground
+        
         self.tabBar.tintColor = .black
         self.tabBar.unselectedItemTintColor = .systemGray3
+        self.tabBar.layer.borderWidth = 0
+        self.tabBarController?.tabBar.backgroundColor = .systemBackground
+        self.tabBar.clipsToBounds = true
+        
+        self.tabBar.standardAppearance = appearance
         
         let firstVC = UINavigationController(rootViewController: FirstViewController())
         firstVC.tabBarItem.selectedImage = UIImage(systemName: "clock")
@@ -32,8 +40,7 @@ class TabBarController: UITabBarController {
         forthVC.tabBarItem.selectedImage = UIImage(systemName: "person.fill")
         forthVC.tabBarItem.image = UIImage(systemName: "person.fill")
         
+        
         viewControllers = [firstVC, secondVC, thirdVC, forthVC]
-        
-        
     }
 }

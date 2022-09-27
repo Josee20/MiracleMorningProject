@@ -24,7 +24,8 @@ class DailyButton: UIButton {
         isSelected = true
         setTitleColor(UIColor.white, for: .normal)
         clipsToBounds = true
-        layer.cornerRadius = 20
+        layer.cornerRadius = 24
         backgroundColor = UIColor.lightGray
+        titleLabel?.font = .boldSystemFont(ofSize: 15)
     }
 }

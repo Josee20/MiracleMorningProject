@@ -31,17 +31,19 @@ class SecondViewController: BaseViewController {
     
     var selectedDate: Date = Date()
     
+    var successCount = 0
     
-
     var tasks: Results<UserSchedule>! {
         didSet {
             dayTasks = repository.filterDayTasks(date: selectedDate)
+            dayTasksAndSuccess = repository.filterDayTasksAndSuccess(date: selectedDate)
             mainView.tableView.reloadData()
             mainView.collectionView.reloadData()
         }
     }
     
     var dayTasks: Results<UserSchedule>!
+    var dayTasksAndSuccess: Results<UserSchedule>!
     
     override func loadView() {
         self.view = mainView
@@ -51,15 +53,17 @@ class SecondViewController: BaseViewController {
         super.viewDidLoad()
         
         mainView.backgroundColor = .systemBackground
+        
+        self.navigationController?.isNavigationBarHidden = true
 
         print(repository.localRealm.configuration.fileURL!)
-        
         
         // 처음 캘린더에 선택된 날짜의 데이터 나타내기
         mainView.tableViewHeaderLabel.text = DateFormatChange.shared.dateOfMonth.string(from: now)
         
         // 현재시간 기준으로 tasks 필터링
         dayTasks = repository.filterDayTasks(date: now)
+        dayTasksAndSuccess = repository.filterDayTasksAndSuccess(date: now)
         
     }
     
@@ -79,8 +83,8 @@ class SecondViewController: BaseViewController {
         mainView.collectionView.reloadData()
         
         // 컬렉션뷰 업데이트
-        for i in 0..<repository.successSchedule(currentDate: startOfMonth).count {
-            scheduleCountDic.updateValue(repository.successScheduleNumber(key: repository.successSchedule(currentDate: startOfMonth)[i].schedule).count, forKey: repository.successSchedule(currentDate: startOfMonth)[i].schedule)
+        for i in 0..<repository.successScheduleInMonth(currentDate: startOfMonth).count {
+            scheduleCountDic.updateValue(repository.successScheduleNumber(key: repository.successScheduleInMonth(currentDate: startOfMonth)[i].schedule).count, forKey: repository.successScheduleInMonth(currentDate: startOfMonth)[i].schedule)
         }
     }
     

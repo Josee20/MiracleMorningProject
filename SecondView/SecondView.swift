@@ -49,7 +49,7 @@ class SecondView: BaseView {
     
     public let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        let space: CGFloat = 4
+        let space: CGFloat = 8
         let width = UIScreen.main.bounds.width - (space * 7)
         let height = width
 
@@ -67,7 +67,7 @@ class SecondView: BaseView {
     private let borderWithCollectioinView: UIView = {
         let view = UIView()
         view.layer.borderWidth = 1
-        view.layer.borderColor = UIColor.systemGray5.cgColor
+        view.layer.borderColor = UIColor.systemGray4.cgColor
         return view
     }()
     
@@ -106,19 +106,19 @@ class SecondView: BaseView {
             $0.height.equalTo(UIScreen.main.bounds.height * 0.38)
         }
         
-        movePreviousMonthButton.snp.makeConstraints {
-            $0.top.equalTo(self.calendar.safeAreaLayoutGuide)
-            $0.leading.equalTo(self.calendar.safeAreaLayoutGuide)
-            $0.width.equalTo(50)
-            $0.height.equalTo(20)
-        }
-        
-        moveNextMonthButton.snp.makeConstraints {
-            $0.top.equalTo(self.calendar.safeAreaLayoutGuide)
-            $0.leading.equalTo(self.calendar.safeAreaLayoutGuide)
-            $0.width.equalTo(50)
-            $0.height.equalTo(20)
-        }
+//        movePreviousMonthButton.snp.makeConstraints {
+//            $0.top.equalTo(self.calendar.safeAreaLayoutGuide)
+//            $0.leading.equalTo(self.calendar.safeAreaLayoutGuide)
+//            $0.width.equalTo(50)
+//            $0.height.equalTo(20)
+//        }
+//
+//        moveNextMonthButton.snp.makeConstraints {
+//            $0.top.equalTo(self.calendar.safeAreaLayoutGuide)
+//            $0.leading.equalTo(self.calendar.safeAreaLayoutGuide)
+//            $0.width.equalTo(50)
+//            $0.height.equalTo(20)
+//        }
         
         collectionViewHeaderLabel.snp.makeConstraints {
             $0.topMargin.equalTo(calendar.snp.bottom).offset(28)
@@ -128,7 +128,7 @@ class SecondView: BaseView {
         }
         
         collectionView.snp.makeConstraints {
-            $0.topMargin.equalTo(collectionViewHeaderLabel.snp.bottom).offset(20)
+            $0.topMargin.equalTo(collectionViewHeaderLabel.snp.bottom).offset(12)
             $0.leadingMargin.equalTo(40)
             $0.trailingMargin.equalTo(-12)
             $0.height.equalTo(UIScreen.main.bounds.height / 10)
@@ -137,7 +137,7 @@ class SecondView: BaseView {
         borderWithCollectioinView.snp.makeConstraints {
             $0.leadingMargin.equalTo(20)
             $0.trailingMargin.equalTo(0)
-            $0.height.equalTo(1)
+            $0.height.equalTo(0.5)
             $0.topMargin.equalTo(collectionView.snp.bottom).offset(8)
         }
         

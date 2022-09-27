@@ -27,7 +27,7 @@ class SetScheduleView: BaseView {
         return view
     }()
     
-    // MARK: 일 ~ 토
+    // MARK: - 일월화수목금토
     let sundayButton: DailyButton = {
         let view = DailyButton()
         view.setTitle("일", for: .normal)
@@ -77,12 +77,12 @@ class SetScheduleView: BaseView {
         return view
     }()
     
-    // MARK: 스택뷰
+    // MARK: - 스택뷰
     let stackView: UIStackView = {
         let view = UIStackView()
         view.axis = .horizontal
         view.alignment = .fill
-        view.spacing = 4
+        view.spacing = 0
         view.translatesAutoresizingMaskIntoConstraints = false
         view.distribution = .equalSpacing
         return view
@@ -201,33 +201,33 @@ class SetScheduleView: BaseView {
         }
         
         sundayButton.snp.makeConstraints {
-            $0.width.equalTo(40)
+            $0.width.height.equalTo(48)
         }
         mondayButton.snp.makeConstraints {
-            $0.height.width.equalTo(40)
+            $0.height.width.equalTo(48)
         }
         tuesdayButton.snp.makeConstraints {
-            $0.height.width.equalTo(40)
+            $0.height.width.equalTo(48)
         }
         wedensdayButton.snp.makeConstraints {
-            $0.height.width.equalTo(40)
+            $0.height.width.equalTo(48)
             $0.center.equalTo(self.stackView)
         }
         thursdayButton.snp.makeConstraints {
-            $0.height.width.equalTo(40)
+            $0.height.width.equalTo(48)
         }
         fridayButton.snp.makeConstraints {
-            $0.height.width.equalTo(40)
+            $0.height.width.equalTo(48)
         }
         saturdayButton.snp.makeConstraints {
-            $0.height.width.equalTo(40)
+            $0.height.width.equalTo(48)
         }
         
         stackView.snp.makeConstraints {
             $0.leadingMargin.equalTo(12)
             $0.trailingMargin.equalTo(-12)
             $0.topMargin.equalTo(textFieldBorder.snp.bottom).offset(48)
-            $0.height.equalTo(40)
+            $0.height.equalTo(48)
         }
         
         headerView.snp.makeConstraints {

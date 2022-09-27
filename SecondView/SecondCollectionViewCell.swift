@@ -13,7 +13,7 @@ class SecondCollectionViewCell: BaseCollectionViewCell {
         let view = UILabel()
         view.textAlignment = .center
         view.text = "운동"
-        view.font = .systemFont(ofSize: 14)
+        view.font = .systemFont(ofSize: 12)
         view.numberOfLines = 3
         return view
     }()
@@ -22,7 +22,7 @@ class SecondCollectionViewCell: BaseCollectionViewCell {
         let view = UILabel()
         view.textAlignment = .center
         view.text = "10"
-        view.font = .systemFont(ofSize: 11)
+        view.font = .systemFont(ofSize: 10)
         return view
     }()
     

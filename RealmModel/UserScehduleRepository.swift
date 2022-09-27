@@ -58,7 +58,21 @@ class UserScheduleRepository: UserScheduleRepositoryType {
         }
     }
     
-    func successSchedule(currentDate: Date) -> Results<UserSchedule> {
+    func filterDayTasksAndSuccess(date: Date) -> Results<UserSchedule> {
+        return localRealm.objects(UserSchedule.self).where {
+            $0.scheduleDate >= calendar.startOfDay(for: date) && $0.scheduleDate < calendar.startOfDay(for: date)  + 86400 && $0.scheduleSuccess == true
+        }
+    }
+    
+    func scheduleInMonth(currentDate: Date) -> Results<UserSchedule> {
+        let nextMonth = calendar.date(byAdding: .month, value: +1, to: currentDate)
+
+        return localRealm.objects(UserSchedule.self).where {
+            $0.scheduleDate >= currentDate && $0.scheduleDate < nextMonth!
+        }
+    }
+    
+    func successScheduleInMonth(currentDate: Date) -> Results<UserSchedule> {
 
         let nextMonth = calendar.date(byAdding: .month, value: +1, to: currentDate)
 
