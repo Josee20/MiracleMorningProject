@@ -7,11 +7,14 @@
 
 import Foundation
 import UIKit
-
-import RealmSwift
 import UserNotifications
 
+import RealmSwift
+
+
 class FirstViewController: BaseViewController {
+
+    
     
     let mainView = FirstView()
     
@@ -38,6 +41,7 @@ class FirstViewController: BaseViewController {
         
         requestNotificationAuthorization()
         
+        
         // 해당일 정보 scheduleInfoModel에 값 넣어주기
         for i in 0..<repository.filterDayTasks(date: now).count {
             scheduleInfo.append(scheduleInfoModel(schedule: repository.filterDayTasks(date: now)[i].schedule, startTime: repository.filterDayTasks(date: now)[i].startTime, endTime: repository.filterDayTasks(date: now)[i].endTime, success: repository.filterDayTasks(date: now)[i].scheduleSuccess))
@@ -54,7 +58,7 @@ class FirstViewController: BaseViewController {
         mainView.tableView.reloadData()
         
         dayTasks = repository.filterDayTasks(date: now)
-        
+
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -65,7 +69,6 @@ class FirstViewController: BaseViewController {
     
     override func configure() {
         
-                
         mainView.tableView.register(FirstTableViewCell.self, forCellReuseIdentifier: FirstTableViewCell.reuseIdentifier)
         mainView.tableView.delegate = self
         mainView.tableView.dataSource = self
@@ -85,8 +88,16 @@ class FirstViewController: BaseViewController {
     }
     
     func requestNotificationAuthorization() {
-
+        
+        
         notificationCenter.requestAuthorization(options: [.alert, .sound]) { success, error in
+            if success == true {
+                print("권한설정O")
+
+            } else {
+                print("권한설정X")
+            }
+            
             if let error = error {
                 print(error)
             }
@@ -112,24 +123,7 @@ extension FirstViewController: UITableViewDelegate, UITableViewDataSource {
         cell.scheduleTime.text = "\(dayTasks[indexPath.row].startTime)~\(dayTasks[indexPath.row].endTime)"
         dayTasks[indexPath.row].scheduleSuccess == true ? cell.checkButton.setImage(UIImage(systemName: "checkmark.square") , for: .normal) : cell.checkButton.setImage(UIImage(systemName: "x.square"), for: .normal)
         
-        cell.backgroundColor = .orange
-        
         return cell
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-
-        let headerView = UIView()
-        headerView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 40)
-
-        let titleLabel = UILabel()
-        titleLabel.text = "오늘의 할 일"
-        titleLabel.textColor = .black
-        titleLabel.font = .boldSystemFont(ofSize: 20)
-        titleLabel.frame = CGRect(x: 0, y: 0, width: headerView.frame.width, height: headerView.frame.height)
-        headerView.addSubview(titleLabel)
-
-        return headerView
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

@@ -22,6 +22,8 @@
 		499C654628DE26720005D659 /* BaseFSCalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499C654528DE26720005D659 /* BaseFSCalendarCell.swift */; };
 		499C654828DE26EA0005D659 /* SecondFSCalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499C654728DE26EA0005D659 /* SecondFSCalendarCell.swift */; };
 		49BB120828E19ED100948C91 /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = 49BB120728E19ED100948C91 /* Charts */; };
+		49BB121328E3DC2500948C91 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 49BB121228E3DC2500948C91 /* RealmSwift */; };
+		49BB121628E4813700948C91 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BB121528E4813700948C91 /* UIColor+Extension.swift */; };
 		49C3270E28DB7E4F000AF418 /* DateFormatChanger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C3270D28DB7E4F000AF418 /* DateFormatChanger.swift */; };
 		49F0FB5228D19AFF004AD670 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 49F0FB5128D19AFF004AD670 /* FSCalendar */; };
 		49F0FB5428D1A32C004AD670 /* SecondTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F0FB5328D1A32C004AD670 /* SecondTableViewCell.swift */; };
@@ -29,7 +31,6 @@
 		49F0FB5828D1A566004AD670 /* SecondCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F0FB5728D1A566004AD670 /* SecondCollectionViewCell.swift */; };
 		49F0FB5B28D2E7A2004AD670 /* RealmModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F0FB5A28D2E7A2004AD670 /* RealmModel.swift */; };
 		49F0FB5D28D2E7BF004AD670 /* UserScehduleRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F0FB5C28D2E7BF004AD670 /* UserScehduleRepository.swift */; };
-		49F0FB6028D2E876004AD670 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 49F0FB5F28D2E876004AD670 /* RealmSwift */; };
 		49F6D8C628CDAD10005AA757 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F6D8C528CDAD10005AA757 /* AppDelegate.swift */; };
 		49F6D8C828CDAD10005AA757 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F6D8C728CDAD10005AA757 /* SceneDelegate.swift */; };
 		49F6D8CA28CDAD10005AA757 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F6D8C928CDAD10005AA757 /* ViewController.swift */; };
@@ -71,6 +72,7 @@
 		4969B68728DC811000914A23 /* ChangeScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeScheduleViewController.swift; sourceTree = "<group>"; };
 		499C654528DE26720005D659 /* BaseFSCalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseFSCalendarCell.swift; sourceTree = "<group>"; };
 		499C654728DE26EA0005D659 /* SecondFSCalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondFSCalendarCell.swift; sourceTree = "<group>"; };
+		49BB121528E4813700948C91 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		49C3270D28DB7E4F000AF418 /* DateFormatChanger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatChanger.swift; sourceTree = "<group>"; };
 		49F0FB5328D1A32C004AD670 /* SecondTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondTableViewCell.swift; sourceTree = "<group>"; };
 		49F0FB5528D1A4B6004AD670 /* BaseCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -109,7 +111,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				49F0FB6028D2E876004AD670 /* RealmSwift in Frameworks */,
+				49BB121328E3DC2500948C91 /* RealmSwift in Frameworks */,
 				49F6D8F728CDBFB9005AA757 /* SnapKit in Frameworks */,
 				49F0FB5228D19AFF004AD670 /* FSCalendar in Frameworks */,
 				49BB120828E19ED100948C91 /* Charts in Frameworks */,
@@ -122,8 +124,8 @@
 		4949B32E28DF4B5900BB96F0 /* SecondVCExtension */ = {
 			isa = PBXGroup;
 			children = (
-				4949B32F28DF4B7D00BB96F0 /* Calendar + Delegate.swift */,
 				4949B33128DF64BE00BB96F0 /* TableView + Delegate.swift */,
+				4949B32F28DF4B7D00BB96F0 /* Calendar + Delegate.swift */,
 				4949B33328DF64D400BB96F0 /* CollectionView + Delegate.swift */,
 			);
 			path = SecondVCExtension;
@@ -147,6 +149,14 @@
 			path = ChangeScheduleView;
 			sourceTree = "<group>";
 		};
+		49BB121428E4811400948C91 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				49BB121528E4813700948C91 /* UIColor+Extension.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
 		49C3270C28DB7E31000AF418 /* DateFormatChanger */ = {
 			isa = PBXGroup;
 			children = (
@@ -168,6 +178,7 @@
 			isa = PBXGroup;
 			children = (
 				49F6D8FF28CDEA32005AA757 /* ReusableProtocol.swift */,
+				49BB121428E4811400948C91 /* Extension */,
 				49C3270C28DB7E31000AF418 /* DateFormatChanger */,
 				49F0FB5928D2E78D004AD670 /* RealmModel */,
 				49F6D8EC28CDB832005AA757 /* ForthView */,
@@ -301,8 +312,8 @@
 			packageProductDependencies = (
 				49F6D8F628CDBFB9005AA757 /* SnapKit */,
 				49F0FB5128D19AFF004AD670 /* FSCalendar */,
-				49F0FB5F28D2E876004AD670 /* RealmSwift */,
 				49BB120728E19ED100948C91 /* Charts */,
+				49BB121228E3DC2500948C91 /* RealmSwift */,
 			);
 			productName = MiracleMorningProject;
 			productReference = 49F6D8C228CDAD10005AA757 /* MiracleMorningProject.app */;
@@ -335,8 +346,8 @@
 			packageReferences = (
 				49F6D8F528CDBFB8005AA757 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				49F0FB5028D19AFF004AD670 /* XCRemoteSwiftPackageReference "FSCalendar" */,
-				49F0FB5E28D2E876004AD670 /* XCRemoteSwiftPackageReference "realm-swift" */,
 				49BB120628E19ED100948C91 /* XCRemoteSwiftPackageReference "Charts" */,
+				49BB121128E3DC2500948C91 /* XCRemoteSwiftPackageReference "realm-swift" */,
 			);
 			productRefGroup = 49F6D8C328CDAD10005AA757 /* Products */;
 			projectDirPath = "";
@@ -377,6 +388,7 @@
 				49F6D8C828CDAD10005AA757 /* SceneDelegate.swift in Sources */,
 				49580DB328CF07B0002EE3CD /* TimerViewController.swift in Sources */,
 				4949B33228DF64BE00BB96F0 /* TableView + Delegate.swift in Sources */,
+				49BB121628E4813700948C91 /* UIColor+Extension.swift in Sources */,
 				49F6D8E828CDB595005AA757 /* SecondViewController.swift in Sources */,
 				49F6D8F028CDB84B005AA757 /* ThirdView.swift in Sources */,
 				499C654628DE26720005D659 /* BaseFSCalendarCell.swift in Sources */,
@@ -632,20 +644,20 @@
 				minimumVersion = 3.0.0;
 			};
 		};
+		49BB121128E3DC2500948C91 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				kind = exactVersion;
+				version = 10.30.0;
+			};
+		};
 		49F0FB5028D19AFF004AD670 /* XCRemoteSwiftPackageReference "FSCalendar" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/WenchaoD/FSCalendar.git";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 2.0.0;
-			};
-		};
-		49F0FB5E28D2E876004AD670 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/realm/realm-swift.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 10.0.0;
 			};
 		};
 		49F6D8F528CDBFB8005AA757 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
@@ -664,15 +676,15 @@
 			package = 49BB120628E19ED100948C91 /* XCRemoteSwiftPackageReference "Charts" */;
 			productName = Charts;
 		};
+		49BB121228E3DC2500948C91 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 49BB121128E3DC2500948C91 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
 		49F0FB5128D19AFF004AD670 /* FSCalendar */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 49F0FB5028D19AFF004AD670 /* XCRemoteSwiftPackageReference "FSCalendar" */;
 			productName = FSCalendar;
-		};
-		49F0FB5F28D2E876004AD670 /* RealmSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 49F0FB5E28D2E876004AD670 /* XCRemoteSwiftPackageReference "realm-swift" */;
-			productName = RealmSwift;
 		};
 		49F6D8F628CDBFB9005AA757 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;

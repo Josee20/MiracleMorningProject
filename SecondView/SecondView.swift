@@ -16,12 +16,12 @@ class SecondView: BaseView {
         view.placeholderType = .none
         view.locale = Locale(identifier: "ko-KR")
         view.appearance.headerDateFormat = "YYYY년 MM월"
-        view.appearance.headerMinimumDissolvedAlpha = 0.0
-        view.appearance.headerTitleFont = .boldSystemFont(ofSize: 18)
+        view.appearance.headerMinimumDissolvedAlpha = 0.3
         view.appearance.calendar.headerHeight = 60
         view.appearance.weekdayTextColor = .black
-        view.appearance.headerTitleColor = .systemOrange
-        view.appearance.headerTitleFont = nil
+        view.appearance.headerTitleColor = .mainOrange
+        view.appearance.headerTitleFont = .boldSystemFont(ofSize: 20)
+//        view.appearance.headerTitleFont = nil
         view.appearance.titleDefaultColor = .systemGray
         return view
     }()

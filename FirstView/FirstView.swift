@@ -17,9 +17,17 @@ class FirstView: BaseView {
         return view
     }()
     
+    let todayToDoLabel: UILabel = {
+        let view = UILabel()
+        view.font = .boldSystemFont(ofSize: 20)
+        view.text = "오늘의 할 일"
+        view.textColor = .black
+        return view
+    }()
+    
     let tableView: UITableView = {
         let view = UITableView()
-        view.rowHeight = 60
+        view.rowHeight = 68
         return view
     }()
     
@@ -37,14 +45,14 @@ class FirstView: BaseView {
         
         view.layer.borderWidth = 1
         view.layer.cornerRadius = 25
-        view.layer.borderColor = UIColor.systemOrange.cgColor
-        view.tintColor = .systemOrange
+        view.layer.borderColor = UIColor.mainOrange.cgColor
+        view.tintColor = .mainOrange
         return view
     }()
     
     override func configureUI() {
 
-        [presentTimeLabel, borderWithTabBar, tableView, addScheduleButton].forEach { self.addSubview($0) }
+        [presentTimeLabel, borderWithTabBar, todayToDoLabel, tableView, addScheduleButton].forEach { self.addSubview($0) }
     }
     
     override func setConstraints() {
@@ -56,6 +64,14 @@ class FirstView: BaseView {
             $0.width.equalTo(200)
         }
         
+        todayToDoLabel.snp.makeConstraints {
+            $0.topMargin.equalTo(presentTimeLabel.snp.bottom).offset(40)
+            $0.leadingMargin.equalTo(20)
+            $0.height.equalTo(24)
+            $0.width.equalTo(100)
+            
+        }
+        
         borderWithTabBar.snp.makeConstraints {
             $0.width.equalTo(UIScreen.main.bounds.width)
             $0.height.equalTo(1)
@@ -63,9 +79,9 @@ class FirstView: BaseView {
         }
         
         tableView.snp.makeConstraints {
-            $0.topMargin.equalTo(40)
-            $0.leadingMargin.equalTo(28)
-            $0.trailingMargin.equalTo(-28)
+            $0.topMargin.equalTo(todayToDoLabel.snp.bottom).offset(36)
+            $0.leadingMargin.equalTo(24)
+            $0.trailingMargin.equalTo(-24)
             $0.bottom.equalTo(addScheduleButton.snp.top).offset(-40)
         }
         

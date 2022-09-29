@@ -41,7 +41,7 @@ class ForthProfileTableViewCell: BaseTableViewCell {
         }
         
         cellTitle.snp.makeConstraints {
-            $0.leadingMargin.equalTo(0)
+            $0.leadingMargin.equalTo(8)
             $0.width.equalTo(100)
             $0.height.equalTo(40)
             $0.centerY.equalTo(self)

@@ -21,6 +21,7 @@ class UserScheduleRepository: UserScheduleRepositoryType {
     
     let calendar = Calendar.current
     let date = Date()
+    let now = Date()
     
     func fetch() -> Results<UserSchedule> {
         return localRealm.objects(UserSchedule.self)
@@ -69,6 +70,30 @@ class UserScheduleRepository: UserScheduleRepositoryType {
 
         return localRealm.objects(UserSchedule.self).where {
             $0.scheduleDate >= currentDate && $0.scheduleDate < nextMonth!
+        }
+    }
+    
+    func successScheduleInMonthFromToday(startOfMonth: Date) -> Results<UserSchedule> {
+        let startOfTomorrow = calendar.startOfDay(for: now) + 86400
+        
+        return localRealm.objects(UserSchedule.self).where {
+            $0.scheduleSuccess == true && $0.scheduleDate >= startOfMonth && $0.scheduleDate < startOfTomorrow
+        }
+    }
+    
+    func failScheduleInMonthFromToday(startOfMonth: Date) -> Results<UserSchedule> {
+        let startOfTomorrow = calendar.startOfDay(for: now) + 86400
+        
+        return localRealm.objects(UserSchedule.self).where {
+            $0.scheduleSuccess == false && $0.scheduleDate >= startOfMonth && $0.scheduleDate < startOfTomorrow
+        }
+    }
+    
+    func numberOfScheduleFromToday(startOfMonth: Date) -> Results<UserSchedule> {
+        let startOfTomorrow = calendar.startOfDay(for: now) + 86400
+        
+        return localRealm.objects(UserSchedule.self).where {
+            $0.scheduleDate >= startOfMonth && $0.scheduleDate < startOfTomorrow
         }
     }
     

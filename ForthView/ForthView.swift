@@ -94,8 +94,17 @@ class ForthView: BaseView {
         return view
     }()
     
+    public let setTimeButton: UIButton = {
+        let view = UIButton()
+        view.titleLabel?.font = .systemFont(ofSize: 12)
+        view.setTitle("시간설정", for: .normal)
+        view.setTitleColor(UIColor.black, for: .normal)
+        return view
+    }()
+    
     public let alarmToggle: UISwitch = {
         let view = UISwitch()
+        view.isOn = true
         return view
     }()
     
@@ -133,7 +142,7 @@ class ForthView: BaseView {
     
     
     override func configureUI() {
-        [profileTitle, profileImageBackgroundView, profileImage,profileImageLabel, profileImageMoreInfoButton, profileTableView, settingTitle, settingView, settingAlarmLabel, alarmToggle, borderWithEtc, etcTitle, tableView, borderWithTabBar].forEach { contentsView.addSubview($0) }
+        [profileTitle, profileImageBackgroundView, profileImage,profileImageLabel, profileImageMoreInfoButton, profileTableView, settingTitle, settingView, settingAlarmLabel, setTimeButton, alarmToggle, borderWithEtc, etcTitle, tableView, borderWithTabBar].forEach { contentsView.addSubview($0) }
         
         scrollView.addSubview(contentsView)
         self.addSubview(scrollView)
@@ -151,7 +160,7 @@ class ForthView: BaseView {
         
         profileTitle.snp.makeConstraints {
             $0.topMargin.equalTo(20)
-            $0.leadingMargin.equalTo(12)
+            $0.leadingMargin.equalTo(16)
             $0.width.equalTo(100)
             $0.height.equalTo(48)
         }
@@ -191,7 +200,7 @@ class ForthView: BaseView {
         
         settingTitle.snp.makeConstraints {
             $0.topMargin.equalTo(profileTableView.snp.bottom).offset(28)
-            $0.leadingMargin.equalTo(12)
+            $0.leadingMargin.equalTo(16)
             $0.width.equalTo(100)
             $0.height.equalTo(48)
         }
@@ -207,14 +216,19 @@ class ForthView: BaseView {
         settingAlarmLabel.snp.makeConstraints {
             $0.centerY.equalTo(self.settingView)
             $0.height.equalTo(20)
-            $0.leading.equalTo(settingView.snp.leading).inset(8)
+            $0.leading.equalTo(settingView.snp.leading).inset(16)
+        }
+        
+        setTimeButton.snp.makeConstraints {
+            $0.centerY.equalTo(self.settingView)
+            $0.trailingMargin.equalTo(alarmToggle.snp.leading).offset(-24)
         }
         
         alarmToggle.snp.makeConstraints {
             $0.centerY.equalTo(self.settingView)
             $0.width.equalTo(40)
             $0.height.equalTo(28)
-            $0.trailing.equalTo(settingView.snp.trailing).inset(16)
+            $0.trailing.equalTo(settingView.snp.trailing).inset(20)
         }
         
         borderWithEtc.snp.makeConstraints {
@@ -230,7 +244,7 @@ class ForthView: BaseView {
         
         etcTitle.snp.makeConstraints {
             $0.topMargin.equalTo(borderWithEtc.snp.bottom).offset(28)
-            $0.leadingMargin.equalTo(12)
+            $0.leadingMargin.equalTo(16)
             $0.width.equalTo(100)
             $0.height.equalTo(48)
         }

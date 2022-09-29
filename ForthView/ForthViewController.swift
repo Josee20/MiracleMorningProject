@@ -7,14 +7,18 @@
 
 import Foundation
 import UIKit
+import UserNotifications
 
 enum EtcCell {
     static let contentsList = ["공지사항", "개인정보 보호 및 약관"]
 }
 
 class ForthViewController: BaseViewController {
-
+    
     let mainView = ForthView()
+    let notificationCenter = UNUserNotificationCenter.current()
+    let calendar = Calendar.current
+    var setStartTimeDatePickerDate: Date?
     
     override func loadView() {
         self.view = mainView
@@ -27,8 +31,65 @@ class ForthViewController: BaseViewController {
         
         mainView.backgroundColor = .systemBackground
         
+//        notificationCenter.getNotificationSettings { (settings) in
+//            if settings.authorizationStatus == .denied {
+//
+//                // 비동기처리로 alarmToggle을 메인쓰레드에서 바꾸게 해주어야함.
+//                DispatchQueue.main.async {
+//                    self.mainView.alarmToggle.setOn(false, animated: false)
+//                }
+//
+//                print("authorized")
+//
+//            } else {
+//                print("Push not authorized")
+//            }
+//        }
+        
+//        let storedToggleValue = UserDefaults.standard.bool(forKey: "toggle")
+//
+//        self.mainView.alarmToggle.setOn(storedToggleValue, animated: false)
+        
+        notificationCenter.getPendingNotificationRequests { requests in
+            if requests.isEmpty == true {
+                let storedSelectTime = UserDefaults.standard.string(forKey: "needTime")
+                
+                DispatchQueue.main.async {
+                    
+                    self.mainView.alarmToggle.setOn(false, animated: false)
+//                    self.mainView.setTimeButton.setTitle(storedSelectTime, for: .normal)
+                    self.mainView.setTimeButton.setTitle("시간설정", for: .normal)
+                }
+                
+                print("등록된 노티피케이션이 없습니다.")
+     
+            } else {
+                let storedTime = UserDefaults.standard.string(forKey: "settingTime")
+                
+                DispatchQueue.main.async {
+                    self.mainView.alarmToggle.setOn(true, animated: false)
+                    self.mainView.setTimeButton.setTitle(storedTime, for: .normal)
+                }
+                
+                print("노티피케이션이 있습니다")
+            }
+        }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        print("#####\(mainView.alarmToggle.isOn)")
+        
+        
+
+        print(notificationCenter.getPendingNotificationRequests(completionHandler: {requests in
+            for request in requests {
+                print(request)
+            }
+        }))
+    }
+        
     override func configure() {
         mainView.profileTableView.delegate = self
         mainView.profileTableView.dataSource = self
@@ -38,7 +99,124 @@ class ForthViewController: BaseViewController {
         mainView.tableView.dataSource = self
         mainView.tableView.register(ForthTableViewCell.self, forCellReuseIdentifier: ForthTableViewCell.reuseIdentifier)
         
+        mainView.setTimeButton.addTarget(self, action: #selector(setTimeButtonClicked), for: .touchUpInside)
+        mainView.alarmToggle.addTarget(self, action: #selector(alarmToggleClicked), for: .touchUpInside)
+        
     }
+    
+    @objc func alarmToggleClicked() {
+        if mainView.alarmToggle.isOn == true {
+            guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+            
+            if UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url)
+            }
+            
+            print(notificationCenter.getPendingNotificationRequests(completionHandler: {requests in
+                for request in requests {
+                    print(request)
+                }
+            }))
+            
+            print("true")
+        } else {
+            
+            notificationCenter.removeAllPendingNotificationRequests()
+            mainView.setTimeButton.setTitle("시간설정", for: .normal)
+                    
+            UserDefaults.standard.set("시간설정", forKey: "needTime")
+            
+            print(notificationCenter.getPendingNotificationRequests(completionHandler: {requests in
+                for request in requests {
+                    print(request)
+                }
+            }))
+            print("false")
+        }
+    }
+    
+    @objc func setTimeButtonClicked() {
+        if mainView.alarmToggle.isOn == false {
+            showAlertOnlyOk(title: "알람 권한을 먼저 허용해주세요")
+        } else {
+            let datePicker = UIDatePicker()
+            
+            datePicker.datePickerMode = .time
+            datePicker.preferredDatePickerStyle = .wheels
+            datePicker.locale = NSLocale(localeIdentifier: "ko-KR") as Locale
+            
+            let alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n", message: nil, preferredStyle: .actionSheet)
+            
+            alert.view.addSubview(datePicker)
+            
+            datePicker.snp.makeConstraints {
+                $0.centerX.equalTo(alert.view)
+                $0.top.equalTo(alert.view).offset(8)
+            }
+            
+            let ok = UIAlertAction(title: "확인", style: .default) { (action) in
+                
+                let dateString = DateFormatChange.shared.dateOfHourAndPM.string(from: datePicker.date)
+                self.setStartTimeDatePickerDate = datePicker.date
+                
+               if self.calendar.component(.hour, from: datePicker.date) > 3 && self.calendar.component(.hour, from: datePicker.date) < 9 {
+                    self.mainView.setTimeButton.setTitle(dateString, for: .normal)
+                    self.mainView.setTimeButton.setTitleColor(.systemBlue, for: .normal)
+                   
+                   print(datePicker.date)
+                   
+                   let componentsHour = self.calendar.component(.hour, from: datePicker.date)
+                   let componentsMinute = self.calendar.component(.minute, from: datePicker.date)
+                   
+                   self.sendNotification(alarmHour: componentsHour, alarmMinute: componentsMinute)
+                   
+                   UserDefaults.standard.set(dateString, forKey: "settingTime")
+                   
+
+                   print("datePickerValue: \(datePicker.date)")
+                   print("hour : \(componentsHour)")
+                   print("minute : \(componentsMinute)")
+                   
+                } else {
+                    self.showAlertOnlyOk(title: "오전 4시부터 오전9시까지만 시간설정이 가능합니다")
+                }
+            }
+            
+            let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+            
+            alert.addAction(ok)
+            alert.addAction(cancel)
+            
+            present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    func sendNotification(alarmHour: Int, alarmMinute: Int) {
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
+            if settings.authorizationStatus == UNAuthorizationStatus.authorized {
+
+                let notiContent = UNMutableNotificationContent()
+                notiContent.title = "Title"
+                notiContent.subtitle = "Subtitle"
+                notiContent.sound = .defaultCritical
+
+                var date = DateComponents()
+                date.hour = alarmHour
+                date.minute = alarmMinute
+
+                let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: true)
+                let request = UNNotificationRequest(identifier: "wakeup", content: notiContent, trigger: trigger)
+
+                UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+
+            } else {
+                print("User not agree")
+            }
+        }
+    }
+    
+    func getPendingNotificationRequests(completionHandler: ([UNNotificationRequest]) -> Void) { }
+    
     
     @objc func toggleSwitchClicked() {
         print("toggleSwitchClick")
@@ -80,13 +258,6 @@ extension ForthViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
-    }
-}
-
-extension ForthViewController: toggleDelegate {
-    func alarmToggleClickedP(_ sender: UISwitch) {
-        
-        mainView.tableView.reloadData()
     }
 }
 

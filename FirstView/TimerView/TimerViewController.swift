@@ -37,9 +37,9 @@ class TimerViewController: BaseViewController {
         view.setTitle("중단", for: .normal)
         view.layer.cornerRadius = 30
         view.layer.borderWidth = 1
-        view.layer.borderColor = UIColor.systemOrange.cgColor
+        view.layer.borderColor = UIColor.mainOrange.cgColor
         view.backgroundColor = .systemBackground
-        view.setTitleColor(UIColor.systemOrange, for: .normal)
+        view.setTitleColor(UIColor.mainOrange, for: .normal)
         return view
     }()
     
@@ -129,8 +129,8 @@ class TimerViewController: BaseViewController {
                 self.callNotification(time: 1, title: "미션 완료!!!", body: "다음 미션도 완수해주세요~~\n다 마치셨다면 당신은 멋쟁이!!!")
                 
                 self.timeLabel.text = "끝!"
-                self.okButton.layer.borderColor = UIColor.systemOrange.cgColor
-                self.okButton.backgroundColor = .systemOrange
+                self.okButton.layer.borderColor = UIColor.mainOrange.cgColor
+                self.okButton.backgroundColor = .mainOrange
                 self.okButton.isUserInteractionEnabled = true
                 self.pauseAndPlayButton.isUserInteractionEnabled = false
                 self.timer?.invalidate()

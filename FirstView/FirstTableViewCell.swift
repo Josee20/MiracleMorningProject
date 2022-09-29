@@ -10,9 +10,17 @@ import UIKit
 
 class FirstTableViewCell: BaseTableViewCell {
     
+    let tableBackgroundView: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = 28
+        view.backgroundColor = .mainOrange
+        return view
+    }()
+    
     let scheduleTitle: UILabel = {
         let view = UILabel()
         view.font = .boldSystemFont(ofSize: 15)
+        view.textColor = .white
         view.text = "운동하기"
         return view
     }()
@@ -20,6 +28,7 @@ class FirstTableViewCell: BaseTableViewCell {
     let scheduleTime: UILabel = {
         let view = UILabel()
         view.font = .systemFont(ofSize: 12)
+        view.textColor = .white
         view.text = "10:00 ~ 12:00"
         return view
     }()
@@ -31,10 +40,14 @@ class FirstTableViewCell: BaseTableViewCell {
     }()
     
     override func configureUI() {
-        [scheduleTitle, scheduleTime, checkButton].forEach { self.addSubview($0) }
+        [tableBackgroundView, scheduleTitle, scheduleTime, checkButton].forEach { self.addSubview($0) }
     }
     
     override func setConstraints() {
+        
+        tableBackgroundView.snp.makeConstraints {
+            $0.edges.equalToSuperview().inset(4)
+        }
         
         scheduleTitle.snp.makeConstraints {
             $0.topMargin.equalTo(12)

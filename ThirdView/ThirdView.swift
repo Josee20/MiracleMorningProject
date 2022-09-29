@@ -20,8 +20,7 @@ class ThirdView: BaseView {
         var config = UIButton.Configuration.plain()
         config.preferredSymbolConfigurationForImage = imageConfig
         view.configuration = config
-        
-        view.setTitle("2022년 11월 ", for: .normal)
+
         view.setTitleColor(UIColor.darkGray, for: .normal)
         view.setImage(UIImage(systemName: "arrowtriangle.down.fill"), for: .normal)
         view.tintColor = .black
@@ -81,5 +80,4 @@ class ThirdView: BaseView {
             $0.bottom.equalTo(self.safeAreaLayoutGuide).offset(-12)
         }
     }
-    
 }

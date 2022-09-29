@@ -41,7 +41,7 @@ class SecondViewController: BaseViewController {
             mainView.collectionView.reloadData()
         }
     }
-    
+     
     var dayTasks: Results<UserSchedule>!
     var dayTasksAndSuccess: Results<UserSchedule>!
     
@@ -86,6 +86,8 @@ class SecondViewController: BaseViewController {
         for i in 0..<repository.successScheduleInMonth(currentDate: startOfMonth).count {
             scheduleCountDic.updateValue(repository.successScheduleNumber(key: repository.successScheduleInMonth(currentDate: startOfMonth)[i].schedule).count, forKey: repository.successScheduleInMonth(currentDate: startOfMonth)[i].schedule)
         }
+        
+        
     }
     
     override func configure() {
