@@ -14,8 +14,6 @@ import RealmSwift
 
 class FirstViewController: BaseViewController {
 
-    
-    
     let mainView = FirstView()
     
     let repository = UserScheduleRepository()
@@ -28,7 +26,11 @@ class FirstViewController: BaseViewController {
     
     let now = Date()
     
+    let calendar = Calendar.current
+    
     var dayTasks: Results<UserSchedule>!
+    
+    let buttonSizeConfiguration = UIImage.SymbolConfiguration.init(pointSize: 20, weight: .semibold, scale: .large)
     
     override func loadView() {
         self.view = mainView
@@ -109,25 +111,25 @@ extension FirstViewController: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
         
+        
+        
+        cell.selectionStyle = .none
+        
         if dayTasks[indexPath.row].scheduleSuccess == true {
             cell.scheduleTitle.text = dayTasks[indexPath.row].schedule
             cell.scheduleTime.text = "\(dayTasks[indexPath.row].startTime)~\(dayTasks[indexPath.row].endTime)"
-//            dayTasks[indexPath.row].scheduleSuccess == true ? cell.checkButton.setImage(UIImage(systemName: "checkmark.square") , for: .normal) : cell.checkButton.setImage(UIImage(systemName: "x.square"), for: .normal)
-            cell.checkButton.setImage(UIImage(systemName: "checkmark.square") , for: .normal)
+
+            cell.checkButton.setImage(UIImage(systemName: "checkmark.square",withConfiguration: buttonSizeConfiguration), for: .normal)
+            
 //            cell.isUserInteractionEnabled = false
-            cell.tableBackgroundView.backgroundColor = .lightGray
+            cell.tableBackgroundView.backgroundColor = .mainGreen
         } else {
             cell.scheduleTitle.text = dayTasks[indexPath.row].schedule
             cell.scheduleTime.text = "\(dayTasks[indexPath.row].startTime)~\(dayTasks[indexPath.row].endTime)"
-            cell.checkButton.setImage(UIImage(systemName: "x.square"), for: .normal)
-            cell.tableBackgroundView.backgroundColor = .mainOrange
+            cell.checkButton.setImage(UIImage(systemName: "x.square",withConfiguration: buttonSizeConfiguration), for: .normal)
+            cell.tableBackgroundView.backgroundColor = .mainRed
         }
-        
-        
-        
-        
-        print("tableView Drawing")
-        
+
         return cell
     }
     
@@ -137,17 +139,26 @@ extension FirstViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let dateOfStartTime = DateFormatChange.shared.dateOfHourAndPM.date(from: dayTasks[indexPath.row].startTime)!.timeIntervalSince1970
-        let dateOfEndTime = DateFormatChange.shared.dateOfHourAndPM.date(from: dayTasks[indexPath.row].endTime)!.timeIntervalSince1970
+       
+        if now < calendar.startOfDay(for: now) + 14400 {
+            showAlertOnlyOk(title: "최소 오전 4시부터 수행이 가능합니다")
+        } else if now > calendar.startOfDay(for: now) + 32400 && now < calendar.startOfDay(for: now) + 86400 {
+            showAlertOnlyOk(title: "오전 9시가 넘어 수행이 불가합니다")
+        } else {
+            let dateOfStartTime = DateFormatChange.shared.dateOfHourAndPM.date(from: dayTasks[indexPath.row].startTime)!.timeIntervalSince1970
+            let dateOfEndTime = DateFormatChange.shared.dateOfHourAndPM.date(from: dayTasks[indexPath.row].endTime)!.timeIntervalSince1970
+            
+            let vc = TimerViewController()
+            let nav = UINavigationController(rootViewController: vc)
+            
+            vc.missionLabelTitle = dayTasks[indexPath.row].schedule
+            vc.leftTime = dateOfEndTime - dateOfStartTime
+            vc.fixedLeftTime = dateOfEndTime - dateOfStartTime
+            
+            nav.modalPresentationStyle = .fullScreen
+            present(nav, animated: true)
+        }
         
-        let vc = TimerViewController()
-        let nav = UINavigationController(rootViewController: vc)
         
-        vc.missionLabelTitle = dayTasks[indexPath.row].schedule
-        vc.leftTime = dateOfEndTime - dateOfStartTime
-        vc.fixedLeftTime = dateOfEndTime - dateOfStartTime
-        
-        nav.modalPresentationStyle = .fullScreen
-        present(nav, animated: true)
     }
 }

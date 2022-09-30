@@ -15,7 +15,7 @@ final class TimerView: BaseView {
         static let startAngle = CGFloat(-Double.pi / 2)
         static let endAngle = CGFloat(3 * Double.pi / 2)
         static let backgroundStrokeColor = UIColor.systemGray.cgColor
-        static let progressStrokeColor = UIColor.systemOrange.cgColor
+        static let progressStrokeColor = UIColor.mainGreen.cgColor
     }
     
     private let backgroundLayer: CAShapeLayer = {

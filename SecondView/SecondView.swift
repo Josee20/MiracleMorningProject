@@ -19,10 +19,12 @@ class SecondView: BaseView {
         view.appearance.headerMinimumDissolvedAlpha = 0.3
         view.appearance.calendar.headerHeight = 60
         view.appearance.weekdayTextColor = .black
-        view.appearance.headerTitleColor = .mainOrange
+        view.appearance.headerTitleColor = .mainGreen
         view.appearance.headerTitleFont = .boldSystemFont(ofSize: 20)
-//        view.appearance.headerTitleFont = nil
         view.appearance.titleDefaultColor = .systemGray
+        view.appearance.selectionColor = .mainGreen
+        view.appearance.todayColor = .mainBlue
+        
         return view
     }()
     
@@ -105,20 +107,6 @@ class SecondView: BaseView {
             $0.trailing.equalTo(self.safeAreaLayoutGuide)
             $0.height.equalTo(UIScreen.main.bounds.height * 0.38)
         }
-        
-//        movePreviousMonthButton.snp.makeConstraints {
-//            $0.top.equalTo(self.calendar.safeAreaLayoutGuide)
-//            $0.leading.equalTo(self.calendar.safeAreaLayoutGuide)
-//            $0.width.equalTo(50)
-//            $0.height.equalTo(20)
-//        }
-//
-//        moveNextMonthButton.snp.makeConstraints {
-//            $0.top.equalTo(self.calendar.safeAreaLayoutGuide)
-//            $0.leading.equalTo(self.calendar.safeAreaLayoutGuide)
-//            $0.width.equalTo(50)
-//            $0.height.equalTo(20)
-//        }
         
         collectionViewHeaderLabel.snp.makeConstraints {
             $0.topMargin.equalTo(calendar.snp.bottom).offset(28)

@@ -22,17 +22,41 @@ extension UIColor {
         alpha: 1
     )
     
-    static let collectionViewColor = UIColor (
-        red: 173/255,
-        green: 221/255,
-        blue: 208/255,
+    static let mainGreen = UIColor (
+        red: 56/255,
+        green: 229/255,
+        blue: 77/255,
         alpha: 1
     )
+    
+    static let mainRed = UIColor (
+        red: 245/255,
+        green: 115/255,
+        blue: 40/255,
+        alpha: 1
+    )
+    
+    static let collectionViewColor = UIColor.systemGray6
+    
+    static let collectionViewTextColor = UIColor (
+        red: 66/255,
+        green: 133/255,
+        blue: 91/255,
+        alpha: 1
+    )
+    
     
     static let mainBlue = UIColor (
         red: 33/255,
         green: 146/255,
         blue: 255/255,
+        alpha: 1
+    )
+    
+    static let mainGray = UIColor(
+        red: 209/255,
+        green: 209/255,
+        blue: 209/255,
         alpha: 1
     )
     

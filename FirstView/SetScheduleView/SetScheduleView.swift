@@ -110,12 +110,12 @@ class SetScheduleView: BaseView {
         return view
     }()
     
-    let thirdLineView: UIView = {
-        let view = UIView()
-        view.layer.cornerRadius = 20
-        view.backgroundColor = .systemGray6
-        return view
-    }()
+//    let thirdLineView: UIView = {
+//        let view = UIView()
+//        view.layer.cornerRadius = 20
+//        view.backgroundColor = .systemGray6
+//        return view
+//    }()
     
     let startTimeLabel: UILabel = {
         let view = UILabel()
@@ -147,18 +147,6 @@ class SetScheduleView: BaseView {
         return view
     }()
     
-    let getAlarmLabel: UILabel = {
-        let view = UILabel()
-        view.text = "알림받기"
-        return view
-    }()
-    
-    let alarmToggle: UISwitch = {
-        let view = UISwitch()
-        view.isEnabled = true
-        return view
-    }()
-    
     let okButton: UIButton = {
         let view = UIButton()
         view.setTitle("완료", for: .normal)
@@ -171,7 +159,7 @@ class SetScheduleView: BaseView {
 
         setScheduleTextField.delegate = self
         
-        [setScheduleTextField, textFieldBorder, okButton, stackView, headerView, firstLineView, secondLineView, thirdLineView, startTimeLabel, setStartTimeButton, endTimeLabel, setEndTimeButton, getAlarmLabel, alarmToggle].forEach { self.addSubview($0) }
+        [setScheduleTextField, textFieldBorder, okButton, stackView, headerView, firstLineView, secondLineView, startTimeLabel, setStartTimeButton, endTimeLabel, setEndTimeButton].forEach { self.addSubview($0) }
         
         [sundayButton, mondayButton, tuesdayButton, wedensdayButton, thursdayButton, fridayButton, saturdayButton].forEach { self.stackView.addArrangedSubview($0) }
         
@@ -276,27 +264,6 @@ class SetScheduleView: BaseView {
             $0.centerY.equalTo(secondLineView)
             $0.trailingMargin.equalTo(secondLineView.snp.trailing).offset(-12)
             $0.width.equalTo(100)
-            $0.height.equalTo(30)
-        }
-        
-        thirdLineView.snp.makeConstraints {
-            $0.leadingMargin.equalTo(20)
-            $0.trailingMargin.equalTo(-20)
-            $0.height.equalTo(52)
-            $0.topMargin.equalTo(secondLineView.snp.bottom).offset(16)
-        }
-        
-        getAlarmLabel.snp.makeConstraints {
-            $0.leadingMargin.equalTo(thirdLineView.snp.leading).offset(32)
-            $0.centerY.equalTo(thirdLineView)
-            $0.width.equalTo(100)
-            $0.height.equalTo(40)
-        }
-        
-        alarmToggle.snp.makeConstraints {
-            $0.centerY.equalTo(thirdLineView)
-            $0.centerX.equalTo(setEndTimeButton)
-            $0.width.equalTo(50)
             $0.height.equalTo(30)
         }
     }

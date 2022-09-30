@@ -27,7 +27,7 @@ class FirstView: BaseView {
     
     let tableView: UITableView = {
         let view = UITableView()
-        view.rowHeight = 68
+        view.rowHeight = 64
         return view
     }()
     
@@ -45,8 +45,8 @@ class FirstView: BaseView {
         
         view.layer.borderWidth = 1
         view.layer.cornerRadius = 25
-        view.layer.borderColor = UIColor.mainOrange.cgColor
-        view.tintColor = .mainOrange
+        view.layer.borderColor = UIColor.mainGreen.cgColor
+        view.tintColor = .mainGreen
         return view
     }()
     

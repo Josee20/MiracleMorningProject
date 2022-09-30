@@ -10,11 +10,11 @@ import UIKit
 import Charts
 import RealmSwift
 
-enum chartColor {
-    static let successColor = UIColor(red: 101/255, green: 166/255, blue: 114/255, alpha: 1)
-    static let failColor = UIColor(red: 227/255, green: 103/255, blue: 81/255, alpha: 1)
-    static let futureScheduleColor = UIColor(red: 209/255, green: 209/255, blue: 209/255, alpha: 1)
-}
+//enum chartColor {
+//    static let successColor = UIColor(red: 101/255, green: 166/255, blue: 114/255, alpha: 1)
+//    static let failColor = UIColor(red: 227/255, green: 103/255, blue: 81/255, alpha: 1)
+//    static let futureScheduleColor = UIColor(red: 209/255, green: 209/255, blue: 209/255, alpha: 1)
+//}
 
 
 class ThirdViewController: BaseViewController {
@@ -311,7 +311,7 @@ class ThirdViewController: BaseViewController {
         //2. Set ChartDataSet
         let pieChartDataSet = PieChartDataSet(entries: dataEntries, label: nil)
         pieChartDataSet.highlightEnabled = false
-        pieChartDataSet.colors = [chartColor.successColor, chartColor.failColor, chartColor.futureScheduleColor]
+        pieChartDataSet.colors = [.mainGreen, .mainRed, .mainGray]
         
         // 3. Set ChartData
         let pieChartData = PieChartData(dataSet: pieChartDataSet)

@@ -14,7 +14,9 @@ class SetScheduleViewController: BaseViewController {
     
     let repository = UserScheduleRepository()
     
-    var now = Date() + 86400
+//    var now = Date() + 86400
+    
+    var now = Date() - 86400 * 20
     
     let calendar = Calendar.current
 
@@ -77,8 +79,8 @@ class SetScheduleViewController: BaseViewController {
         let dayButtonArr = [mainView.sundayButton, mainView.mondayButton, mainView.tuesdayButton, mainView.wedensdayButton, mainView.thursdayButton, mainView.fridayButton, mainView.saturdayButton]
         
         if dayButtonArr[sender.tag].backgroundColor == UIColor.lightGray {
-            dayButtonArr[sender.tag].backgroundColor = .orange
-        } else if dayButtonArr[sender.tag].backgroundColor == UIColor.orange {
+            dayButtonArr[sender.tag].backgroundColor = .mainGreen
+        } else if dayButtonArr[sender.tag].backgroundColor == UIColor.mainGreen {
             dayButtonArr[sender.tag].backgroundColor = .lightGray
         }
     }
@@ -205,7 +207,11 @@ class SetScheduleViewController: BaseViewController {
                     now += 86400
                     continue
                 } else {
-                    repository.addSchedule(startTime: mainView.setStartTimeButton.titleLabel?.text ?? "", endTime: mainView.setEndTimeButton.titleLabel?.text ?? "", date: now, schedule: mainView.setScheduleTextField.text!, success: false)
+                    repository.addSchedule(startTime: mainView.setStartTimeButton.titleLabel?.text ?? "",
+                                           endTime: mainView.setEndTimeButton.titleLabel?.text ?? "",
+                                           date: calendar.startOfDay(for: now),
+                                           schedule: mainView.setScheduleTextField.text!,
+                                           success: false)
             
                     now += 86400
                 }

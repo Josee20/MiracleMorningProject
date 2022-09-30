@@ -11,9 +11,9 @@ import FSCalendar
 
 enum EventDotColor {
     static let successZeroTime = [UIColor.systemGray3, UIColor.systemGray3, UIColor.systemGray3]
-    static let successOneTime = [UIColor.systemCyan, UIColor.systemGray3, UIColor.systemGray3]
-    static let successTwoTime = [UIColor.systemCyan, UIColor.systemCyan, UIColor.systemGray3]
-    static let successThreeTime = [UIColor.systemCyan, UIColor.systemCyan, UIColor.systemCyan]
+    static let successOneTime = [UIColor.systemGreen, UIColor.systemGray3, UIColor.systemGray3]
+    static let successTwoTime = [UIColor.systemGreen, UIColor.systemGreen, UIColor.systemGray3]
+    static let successThreeTime = [UIColor.systemGreen, UIColor.systemGreen, UIColor.systemGreen]
 }
 
 extension SecondViewController: FSCalendarDelegate, FSCalendarDataSource, FSCalendarDelegateAppearance {
@@ -86,10 +86,11 @@ extension SecondViewController: FSCalendarDelegate, FSCalendarDataSource, FSCale
         return cell
     }
     
-    // 선택시 날짜 테두리 색상
-    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, borderSelectionColorFor date: Date) -> UIColor? {
-        return UIColor.black
-    }
+
+    
+//    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, fillSelectionColorFor date: Date) -> UIColor? {
+//        <#code#>
+//    }
     
     // 오늘날짜 -> "오늘"
     func calendar(_ calendar: FSCalendar, titleFor date: Date) -> String? {

@@ -23,7 +23,8 @@ class SecondTableViewCell: BaseTableViewCell {
     
     public var checkButton: UIButton = {
         let view = UIButton()
-        view.backgroundColor = .systemGray6
+        view.backgroundColor = .systemBackground
+        view.tintColor = .mainBlue
         return view
     }()
     
@@ -40,7 +41,7 @@ class SecondTableViewCell: BaseTableViewCell {
         }
         
         scheduleTime.snp.makeConstraints {
-            $0.centerX.equalTo(UIScreen.main.bounds.width * 0.5)
+            $0.centerX.equalTo(UIScreen.main.bounds.width * 0.54)
             $0.centerY.equalTo(self)
             $0.width.equalTo(125)
         }

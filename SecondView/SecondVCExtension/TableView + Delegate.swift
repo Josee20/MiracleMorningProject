@@ -26,7 +26,7 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource {
         cell.selectionStyle = .none
         cell.scheduleTitle.text = dayTasks[indexPath.row].schedule
         cell.scheduleTime.text = "\(dayTasks[indexPath.row].startTime)~\(dayTasks[indexPath.row].endTime)"
-        dayTasks[indexPath.row].scheduleSuccess == true ? cell.checkButton.setImage(UIImage(systemName: "checkmark.square") , for: .normal) : cell.checkButton.setImage(UIImage(systemName: "x.square"), for: .normal)
+        dayTasks[indexPath.row].scheduleSuccess == true ? cell.checkButton.setImage(UIImage(systemName: "checkmark.square", withConfiguration: buttonSizeConfiguration) , for: .normal) : cell.checkButton.setImage(UIImage(systemName: "x.square", withConfiguration: buttonSizeConfiguration), for: .normal)
 
         return cell
     }
@@ -34,18 +34,22 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource {
     // 스와이프 삭제
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         
-        let components = calendar.dateComponents([.year, .month], from: date)
-        let startOfMonth = calendar.date(from: components)!
-        
-        if dayTasks[indexPath.row].scheduleDate < now {
-            showAlertOnlyOk(title: "지나간 일정은 삭제할 수 없습니다.")
+//        let components = calendar.dateComponents([.year, .month], from: date)
+//        let startOfMonth = calendar.date(from: components)!
+         
+        if dayTasks[indexPath.row].scheduleSuccess == true {
+            showAlertOnlyOk(title: "완료한 스케쥴은 삭제할 수 없습니다")
         } else {
-            if editingStyle == .delete {
-                repository.delete(item: dayTasks?[indexPath.row])
+            if dayTasks[indexPath.row].scheduleDate < calendar.startOfDay(for: now) + 86400 {
+                showAlertOnlyOk(title: "지나간 일정이나 오늘 일정은 삭제할 수 없습니다.")
+            } else {
+                if editingStyle == .delete {
+                    repository.delete(item: dayTasks?[indexPath.row])
+                }
+                
+                mainView.calendar.reloadData()
+                self.fetchRealm()
             }
-            
-            mainView.calendar.reloadData()
-            self.fetchRealm()
         }
     }
     
@@ -60,17 +64,28 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource {
         vc.objectID = dayTasks[indexPath.row].objectID
         vc.receivedDate = dayTasks[indexPath.row].scheduleDate
         
-        if dayTasks[indexPath.row].scheduleDate < now {
-            showAlertOnlyOk(title: "지나간 일정은 수정할 수 없습니다.")
+        // 지나간 날짜 + 현재 시간 기준 오전9시가 넘으면 수정 불가
+        // 1. scheduleDate와 오늘 날짜가 같음
+        // 2. 오전 9시 ~ 24시까지 사이엔 수정 불가
+        
+        if dayTasks[indexPath.row].scheduleSuccess == true {
+            showAlertOnlyOk(title: "완료한 스케쥴은 수정할 수 없습니다")
         } else {
-            
-            // 2. 클로저 함수 정의
-            vc.okButtonActionHandler = {
-                self.mainView.tableView.reloadData()
+            if dayTasks[indexPath.row].scheduleDate < calendar.startOfDay(for: now) ||
+                DateFormatChange.shared.dateOfYearMonthDay.string(from: dayTasks[indexPath.row].scheduleDate) == DateFormatChange.shared.dateOfYearMonthDay.string(from: now) &&
+                (now > calendar.startOfDay(for: now) + 32400 && now < calendar.startOfDay(for: now) + 86400 ) {
+                
+                showAlertOnlyOk(title: "지나간 일정은 수정할 수 없습니다")
+            } else {
+                
+                // 2. 클로저 함수 정의
+                vc.okButtonActionHandler = {
+                    self.mainView.tableView.reloadData()
+                }
+                
+                let nav = UINavigationController(rootViewController: vc)
+                present(nav, animated: true)
             }
-            
-            let nav = UINavigationController(rootViewController: vc)
-            present(nav, animated: true)
         }
     }
 }

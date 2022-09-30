@@ -12,7 +12,7 @@ class FirstTableViewCell: BaseTableViewCell {
     
     let tableBackgroundView: UIView = {
         let view = UIView()
-        view.layer.cornerRadius = 28
+        view.layer.cornerRadius = 20
         view.backgroundColor = .mainOrange
         return view
     }()
@@ -35,7 +35,13 @@ class FirstTableViewCell: BaseTableViewCell {
     
     let checkButton: UIButton = {
         let view = UIButton()
-        view.backgroundColor = .systemGray6
+        let buttonSizeConfiguration = UIImage.SymbolConfiguration(pointSize: 20, weight: .bold, scale: .large)
+        
+        
+        view.backgroundColor = .systemBackground
+        view.tintColor = .mainBlue
+        view.layer.cornerRadius = 5
+        
         return view
     }()
     

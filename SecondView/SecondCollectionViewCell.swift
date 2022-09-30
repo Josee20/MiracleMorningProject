@@ -13,8 +13,9 @@ class SecondCollectionViewCell: BaseCollectionViewCell {
         let view = UILabel()
         view.textAlignment = .center
         view.text = "운동"
+        view.textColor = .collectionViewTextColor
         view.font = .systemFont(ofSize: 12)
-        view.numberOfLines = 3
+        view.numberOfLines = 2
         return view
     }()
     
@@ -22,6 +23,7 @@ class SecondCollectionViewCell: BaseCollectionViewCell {
         let view = UILabel()
         view.textAlignment = .center
         view.text = "10"
+        view.textColor = .collectionViewTextColor
         view.font = .systemFont(ofSize: 10)
         return view
     }()
@@ -34,7 +36,7 @@ class SecondCollectionViewCell: BaseCollectionViewCell {
     override func setConstraints() {
         
         scheduleLabel.snp.makeConstraints {
-            $0.height.equalTo(12)
+            $0.height.equalTo(self)
             $0.width.equalTo(self)
             $0.center.equalTo(self)
         }

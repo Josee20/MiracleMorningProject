@@ -33,6 +33,8 @@ class SecondViewController: BaseViewController {
     
     var successCount = 0
     
+    let buttonSizeConfiguration = UIImage.SymbolConfiguration(pointSize: 16, weight: .bold, scale: .large)
+    
     var tasks: Results<UserSchedule>! {
         didSet {
             dayTasks = repository.filterDayTasks(date: selectedDate).sorted(byKeyPath: "startTime", ascending: true)
