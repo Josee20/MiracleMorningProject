@@ -35,7 +35,7 @@ class SecondViewController: BaseViewController {
     
     var tasks: Results<UserSchedule>! {
         didSet {
-            dayTasks = repository.filterDayTasks(date: selectedDate)
+            dayTasks = repository.filterDayTasks(date: selectedDate).sorted(byKeyPath: "startTime", ascending: true)
             dayTasksAndSuccess = repository.filterDayTasksAndSuccess(date: selectedDate)
             mainView.tableView.reloadData()
             mainView.collectionView.reloadData()
@@ -62,7 +62,7 @@ class SecondViewController: BaseViewController {
         mainView.tableViewHeaderLabel.text = DateFormatChange.shared.dateOfMonth.string(from: now)
         
         // 현재시간 기준으로 tasks 필터링
-        dayTasks = repository.filterDayTasks(date: now)
+        dayTasks = repository.filterDayTasks(date: now).sorted(byKeyPath: "startTime", ascending: true)
         dayTasksAndSuccess = repository.filterDayTasksAndSuccess(date: now)
         
     }
@@ -86,8 +86,6 @@ class SecondViewController: BaseViewController {
         for i in 0..<repository.successScheduleInMonth(currentDate: startOfMonth).count {
             scheduleCountDic.updateValue(repository.successScheduleNumber(key: repository.successScheduleInMonth(currentDate: startOfMonth)[i].schedule).count, forKey: repository.successScheduleInMonth(currentDate: startOfMonth)[i].schedule)
         }
-        
-        
     }
     
     override func configure() {
@@ -117,7 +115,3 @@ class SecondViewController: BaseViewController {
         }
     }
 }
-
-
-
-

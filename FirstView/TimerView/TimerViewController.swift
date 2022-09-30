@@ -15,6 +15,8 @@ class TimerViewController: BaseViewController {
     
     let notificationCenter = UNUserNotificationCenter.current()
     
+    let repository = UserScheduleRepository()
+    
     var timer: Timer?
     var progress: Double = 0.0
     
@@ -23,6 +25,7 @@ class TimerViewController: BaseViewController {
     var missionLabelTitle = ""
     var leftTime: Double = 0.0
     var fixedLeftTime: Double = 0.0
+    let now = Date()
     
     private let missionLabel: UILabel = {
         let view = UILabel()
@@ -90,7 +93,6 @@ class TimerViewController: BaseViewController {
     
     override func configure() {
         
-        
         self.view.addSubview(stackView)
         self.view.addSubview(missionLabel)
         self.view.addSubview(timeLabel)
@@ -103,7 +105,7 @@ class TimerViewController: BaseViewController {
         // MARK: 타이머
         timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true, block: { (t) in
             
-            self.leftTime -= 0.01
+            self.leftTime -= 0.01 * 1000
             
             print(self.leftTime)
             
@@ -145,6 +147,11 @@ class TimerViewController: BaseViewController {
     }
     
     @objc func okButtonClicked() {
+        
+        let successSchedule = repository.filterDayTasks(date: now).sorted(byKeyPath: "startTime", ascending: true).filter("schedule == '\(missionLabelTitle)'")
+        
+        repository.updateSuccess(item: successSchedule[0])
+        
         dismiss(animated: true)
     }
     
@@ -167,7 +174,7 @@ class TimerViewController: BaseViewController {
                 if self.leftTime > 0 {
                     self.timeLabel.text = String(format: "%02d:%02d", minute, second)
                     self.progress = Double(self.leftTime) / Double(self.fixedLeftTime)
-                    self.timerView.start(duration: 0.0001 , value: 1.0 - self.progress)
+                    self.timerView.start(duration: 0.0001, value: 1.0 - self.progress)
 
                 } else {
                     // 완료시 노티주기

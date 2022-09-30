@@ -9,18 +9,11 @@ import UIKit
 
 import FSCalendar
 
-//enum ColorSet {
-//    firstColor = R: 253 G: 242 B: 235
-//    secondColor = R: 242 G: 188 B: 153
-//    thirdColor = R: 240 G: 145 B: 89
-//    forthColor = R: 238 G: 123 B: 63
-//}
-
 enum EventDotColor {
     static let successZeroTime = [UIColor.systemGray3, UIColor.systemGray3, UIColor.systemGray3]
-    static let successOneTime = [UIColor.systemOrange, UIColor.systemGray3, UIColor.systemGray3]
-    static let successTwoTime = [UIColor.systemOrange, UIColor.systemOrange, UIColor.systemGray3]
-    static let successThreeTime = [UIColor.systemOrange, UIColor.systemOrange, UIColor.systemOrange]
+    static let successOneTime = [UIColor.systemCyan, UIColor.systemGray3, UIColor.systemGray3]
+    static let successTwoTime = [UIColor.systemCyan, UIColor.systemCyan, UIColor.systemGray3]
+    static let successThreeTime = [UIColor.systemCyan, UIColor.systemCyan, UIColor.systemCyan]
 }
 
 extension SecondViewController: FSCalendarDelegate, FSCalendarDataSource, FSCalendarDelegateAppearance {
@@ -115,7 +108,6 @@ extension SecondViewController: FSCalendarDelegate, FSCalendarDataSource, FSCale
         selectedDate = date
         scheduleInfo = []
         
-//        dayTasks = repository.filterDayTasks(date: date)
         self.fetchRealm()
 
         mainView.tableViewHeaderLabel.text = DateFormatChange.shared.dateOfMonth.string(from: date)

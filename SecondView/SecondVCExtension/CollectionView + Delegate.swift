@@ -36,7 +36,7 @@ extension SecondViewController: UICollectionViewDelegate, UICollectionViewDataSo
         cell.numberOfScheduleLabel.text = "\(sortedScheduleCountDic[indexPath.item].value)"
         
         cell.layer.cornerRadius = width / 6 / 2
-        cell.backgroundColor = .lightGray
+        cell.backgroundColor = .collectionViewColor
         
         return cell
     }

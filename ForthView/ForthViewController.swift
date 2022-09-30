@@ -52,12 +52,8 @@ class ForthViewController: BaseViewController {
         
         notificationCenter.getPendingNotificationRequests { requests in
             if requests.isEmpty == true {
-                let storedSelectTime = UserDefaults.standard.string(forKey: "needTime")
-                
                 DispatchQueue.main.async {
-                    
                     self.mainView.alarmToggle.setOn(false, animated: false)
-//                    self.mainView.setTimeButton.setTitle(storedSelectTime, for: .normal)
                     self.mainView.setTimeButton.setTitle("시간설정", for: .normal)
                 }
                 
@@ -65,7 +61,6 @@ class ForthViewController: BaseViewController {
      
             } else {
                 let storedTime = UserDefaults.standard.string(forKey: "settingTime")
-                
                 DispatchQueue.main.async {
                     self.mainView.alarmToggle.setOn(true, animated: false)
                     self.mainView.setTimeButton.setTitle(storedTime, for: .normal)
@@ -74,20 +69,6 @@ class ForthViewController: BaseViewController {
                 print("노티피케이션이 있습니다")
             }
         }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        print("#####\(mainView.alarmToggle.isOn)")
-        
-        
-
-        print(notificationCenter.getPendingNotificationRequests(completionHandler: {requests in
-            for request in requests {
-                print(request)
-            }
-        }))
     }
         
     override func configure() {
@@ -111,27 +92,10 @@ class ForthViewController: BaseViewController {
             if UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url)
             }
-            
-            print(notificationCenter.getPendingNotificationRequests(completionHandler: {requests in
-                for request in requests {
-                    print(request)
-                }
-            }))
-            
-            print("true")
         } else {
             
             notificationCenter.removeAllPendingNotificationRequests()
             mainView.setTimeButton.setTitle("시간설정", for: .normal)
-                    
-            UserDefaults.standard.set("시간설정", forKey: "needTime")
-            
-            print(notificationCenter.getPendingNotificationRequests(completionHandler: {requests in
-                for request in requests {
-                    print(request)
-                }
-            }))
-            print("false")
         }
     }
     
@@ -171,11 +135,6 @@ class ForthViewController: BaseViewController {
                    self.sendNotification(alarmHour: componentsHour, alarmMinute: componentsMinute)
                    
                    UserDefaults.standard.set(dateString, forKey: "settingTime")
-                   
-
-                   print("datePickerValue: \(datePicker.date)")
-                   print("hour : \(componentsHour)")
-                   print("minute : \(componentsMinute)")
                    
                 } else {
                     self.showAlertOnlyOk(title: "오전 4시부터 오전9시까지만 시간설정이 가능합니다")

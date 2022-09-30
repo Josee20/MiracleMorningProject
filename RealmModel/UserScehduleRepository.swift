@@ -132,4 +132,15 @@ class UserScheduleRepository: UserScheduleRepositoryType {
         }
     }
     
+    func updateSuccess(item: UserSchedule) {
+        do {
+            try localRealm.write {
+                item.scheduleSuccess = !item.scheduleSuccess
+            }
+        } catch {
+            print("success update error")
+        }
+        
+    }
+    
 }

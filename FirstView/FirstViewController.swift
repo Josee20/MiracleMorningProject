@@ -41,7 +41,6 @@ class FirstViewController: BaseViewController {
         
         requestNotificationAuthorization()
         
-        
         // 해당일 정보 scheduleInfoModel에 값 넣어주기
         for i in 0..<repository.filterDayTasks(date: now).count {
             scheduleInfo.append(scheduleInfoModel(schedule: repository.filterDayTasks(date: now)[i].schedule, startTime: repository.filterDayTasks(date: now)[i].startTime, endTime: repository.filterDayTasks(date: now)[i].endTime, success: repository.filterDayTasks(date: now)[i].scheduleSuccess))
@@ -57,7 +56,7 @@ class FirstViewController: BaseViewController {
         
         mainView.tableView.reloadData()
         
-        dayTasks = repository.filterDayTasks(date: now)
+        dayTasks = repository.filterDayTasks(date: now).sorted(byKeyPath: "startTime", ascending: true)
 
     }
     
@@ -88,16 +87,7 @@ class FirstViewController: BaseViewController {
     }
     
     func requestNotificationAuthorization() {
-        
-        
         notificationCenter.requestAuthorization(options: [.alert, .sound]) { success, error in
-            if success == true {
-                print("권한설정O")
-
-            } else {
-                print("권한설정X")
-            }
-            
             if let error = error {
                 print(error)
             }
@@ -119,9 +109,24 @@ extension FirstViewController: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
         
-        cell.scheduleTitle.text = dayTasks[indexPath.row].schedule
-        cell.scheduleTime.text = "\(dayTasks[indexPath.row].startTime)~\(dayTasks[indexPath.row].endTime)"
-        dayTasks[indexPath.row].scheduleSuccess == true ? cell.checkButton.setImage(UIImage(systemName: "checkmark.square") , for: .normal) : cell.checkButton.setImage(UIImage(systemName: "x.square"), for: .normal)
+        if dayTasks[indexPath.row].scheduleSuccess == true {
+            cell.scheduleTitle.text = dayTasks[indexPath.row].schedule
+            cell.scheduleTime.text = "\(dayTasks[indexPath.row].startTime)~\(dayTasks[indexPath.row].endTime)"
+//            dayTasks[indexPath.row].scheduleSuccess == true ? cell.checkButton.setImage(UIImage(systemName: "checkmark.square") , for: .normal) : cell.checkButton.setImage(UIImage(systemName: "x.square"), for: .normal)
+            cell.checkButton.setImage(UIImage(systemName: "checkmark.square") , for: .normal)
+//            cell.isUserInteractionEnabled = false
+            cell.tableBackgroundView.backgroundColor = .lightGray
+        } else {
+            cell.scheduleTitle.text = dayTasks[indexPath.row].schedule
+            cell.scheduleTime.text = "\(dayTasks[indexPath.row].startTime)~\(dayTasks[indexPath.row].endTime)"
+            cell.checkButton.setImage(UIImage(systemName: "x.square"), for: .normal)
+            cell.tableBackgroundView.backgroundColor = .mainOrange
+        }
+        
+        
+        
+        
+        print("tableView Drawing")
         
         return cell
     }
