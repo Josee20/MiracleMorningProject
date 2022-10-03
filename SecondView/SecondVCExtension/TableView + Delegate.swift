@@ -41,7 +41,7 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource {
             showAlertOnlyOk(title: "완료한 스케쥴은 삭제할 수 없습니다")
         } else {
             if dayTasks[indexPath.row].scheduleDate < calendar.startOfDay(for: now) + 86400 {
-                showAlertOnlyOk(title: "지나간 일정이나 오늘 일정은 삭제할 수 없습니다.")
+                showAlertOnlyOk(title: "지난 일정이나 당일 일정은 삭제할 수 없습니다.")
             } else {
                 if editingStyle == .delete {
                     repository.delete(item: dayTasks?[indexPath.row])
@@ -75,7 +75,7 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource {
                 DateFormatChange.shared.dateOfYearMonthDay.string(from: dayTasks[indexPath.row].scheduleDate) == DateFormatChange.shared.dateOfYearMonthDay.string(from: now) &&
                 (now > calendar.startOfDay(for: now) + 32400 && now < calendar.startOfDay(for: now) + 86400 ) {
                 
-                showAlertOnlyOk(title: "지나간 일정은 수정할 수 없습니다")
+                showAlertOnlyOk(title: "지난 일정은 수정할 수 없습니다")
             } else {
                 
                 // 2. 클로저 함수 정의

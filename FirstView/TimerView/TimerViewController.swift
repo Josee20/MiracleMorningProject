@@ -105,7 +105,7 @@ class TimerViewController: BaseViewController {
         // MARK: 타이머
         timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true, block: { (t) in
             
-            self.leftTime -= 0.01 * 1000
+            self.leftTime -= 0.01
             
             print(self.leftTime)
             

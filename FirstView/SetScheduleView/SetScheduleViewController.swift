@@ -14,9 +14,7 @@ class SetScheduleViewController: BaseViewController {
     
     let repository = UserScheduleRepository()
     
-//    var now = Date() + 86400
-    
-    var now = Date() - 86400 * 20
+    var now = Date() + 86400
     
     let calendar = Calendar.current
 

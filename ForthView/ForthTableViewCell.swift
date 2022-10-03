@@ -17,12 +17,12 @@ class ForthTableViewCell: BaseTableViewCell {
     
     var alarmToggleDelegate: toggleDelegate?
     
-    let tableBackgroundView: UIView = {
-        let view = UIView()
-        view.layer.cornerRadius = 20
-        view.backgroundColor = .systemGray6
-        return view
-    }()
+//    let tableBackgroundView: UIView = {
+//        let view = UIView()
+//        view.layer.cornerRadius = 20
+//        view.backgroundColor = .systemGray6
+//        return view
+//    }()
     
     let cellTitle: UILabel = {
         let view = UILabel()
@@ -55,15 +55,15 @@ class ForthTableViewCell: BaseTableViewCell {
     }
     
     override func configureUI() {
-        [tableBackgroundView, cellTitle, moreButtonImage].forEach { self.addSubview($0) }
+        [cellTitle, moreButtonImage].forEach { self.addSubview($0) }
     }
     
     override func setConstraints() {
        
-        tableBackgroundView.snp.makeConstraints {
-            $0.edges.equalToSuperview().inset(4)
-        }
-        
+//        tableBackgroundView.snp.makeConstraints {
+//            $0.edges.equalToSuperview().inset(4)
+//        }
+//
         cellTitle.snp.makeConstraints {
             $0.leadingMargin.equalTo(8)
             $0.width.equalTo(200)

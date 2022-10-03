@@ -26,7 +26,7 @@ class ThirdView: BaseView {
         view.tintColor = .black
         view.contentMode = .scaleToFill
         view.backgroundColor = .systemGray6
-        view.layer.cornerRadius = 15
+        view.layer.cornerRadius = 10
         view.semanticContentAttribute = UIApplication.shared
             .userInterfaceLayoutDirection == .rightToLeft ? .forceLeftToRight : .forceRightToLeft
         return view
@@ -34,11 +34,45 @@ class ThirdView: BaseView {
     
     let currentMonthSuccessChart: PieChartView = {
         let view = PieChartView()
+        
+        view.entryLabelColor = .black
+        
+        let text = "달성률"
+        let textFont = UIFont.boldSystemFont(ofSize: 15)
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: textFont,
+        ]
+        view.centerAttributedText = NSAttributedString(string: text, attributes: attributes)
+        
+        // 원 안쪽 크기 조절
+        view.usePercentValuesEnabled = true
+        view.drawSlicesUnderHoleEnabled = false
+        view.holeRadiusPercent = 0.30
+        view.transparentCircleRadiusPercent = 0.33
         return view
     }()
     
     let currentMonthSchedulePercentageChart: PieChartView = {
         let view = PieChartView()
+        
+        // 카테고리 텍스트 컬러
+        view.entryLabelColor = .black
+        
+        // centerText속성
+        let text = "성공 스케쥴\n   TOP8"
+        let textFont = UIFont.boldSystemFont(ofSize: 13)
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: textFont,
+        ]
+        view.centerAttributedText = NSAttributedString(string: text, attributes: attributes)
+        
+        // 원 안쪽 크기 조절
+        view.usePercentValuesEnabled = true
+        view.drawSlicesUnderHoleEnabled = false
+        view.holeRadiusPercent = 0.35
+        view.transparentCircleRadiusPercent = 0.38
+        
+        
         return view
     }()
     
@@ -56,21 +90,24 @@ class ThirdView: BaseView {
     override func setConstraints() {
         
         monthPickerButton.snp.makeConstraints {
-            $0.width.equalTo(150)
-            $0.height.equalTo(60)
-            $0.centerX.equalTo(self)
+            $0.leadingMargin.equalTo(36)
             $0.topMargin.equalTo(20)
         }
         
         currentMonthSuccessChart.snp.makeConstraints {
-            $0.topMargin.equalTo(monthPickerButton.snp.bottom).offset(20)
-            $0.width.height.equalTo(280)
+            $0.topMargin.equalTo(monthPickerButton.snp.bottom).offset(28)
+            $0.leadingMargin.equalTo(40)
+            $0.trailingMargin.equalTo(-40)
+            $0.height.equalTo(currentMonthSchedulePercentageChart.snp.height)
+            $0.bottomMargin.equalTo(currentMonthSchedulePercentageChart.snp.top).offset(-20)
+            
             $0.centerX.equalTo(self)
         }
         
         currentMonthSchedulePercentageChart.snp.makeConstraints {
-            $0.width.height.equalTo(280)
-            $0.topMargin.equalTo(currentMonthSuccessChart.snp.bottom).offset(12)
+            $0.leadingMargin.equalTo(40)
+            $0.trailingMargin.equalTo(-40)
+            $0.bottomMargin.equalTo(-40)
             $0.centerX.equalTo(self)
         }
         

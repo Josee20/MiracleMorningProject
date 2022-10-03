@@ -38,7 +38,7 @@ class ForthView: BaseView {
     
     let profileImageBackgroundView: UIView = {
         let view = UIView()
-        view.backgroundColor = .systemGray6
+        view.backgroundColor = .systemBackground
         return view
     }()
     
@@ -59,14 +59,14 @@ class ForthView: BaseView {
     
     let profileImage: UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(systemName: "sun.max")
-        view.contentMode = .scaleToFill
+        view.image = UIImage(named: "SunflowerSeed")
+        
         return view
     }()
     
     let profileTableView: UITableView = {
         let view = UITableView()
-        view.rowHeight = 60
+        view.rowHeight = 52
         view.isScrollEnabled = false
         return view
     }()
@@ -82,7 +82,7 @@ class ForthView: BaseView {
     
     private let settingView: UIView = {
         let view = UIView()
-        view.backgroundColor = .systemGray6
+        view.backgroundColor = .systemBackground
         view.layer.cornerRadius = 20
         return view
     }()
@@ -98,7 +98,7 @@ class ForthView: BaseView {
         let view = UIButton()
         view.titleLabel?.font = .systemFont(ofSize: 12)
         view.setTitle("시간설정", for: .normal)
-        view.setTitleColor(UIColor.black, for: .normal)
+        view.setTitleColor(UIColor.mainBlue, for: .normal)
         return view
     }()
     
@@ -128,7 +128,7 @@ class ForthView: BaseView {
     
     let tableView: UITableView = {
         let view = UITableView()
-        view.rowHeight = 60
+        view.rowHeight = 52
         view.isScrollEnabled = false
         return view
     }()
@@ -142,7 +142,7 @@ class ForthView: BaseView {
     
     
     override func configureUI() {
-        [profileTitle, profileImageBackgroundView, profileImage,profileImageLabel, profileImageMoreInfoButton, profileTableView, settingTitle, settingView, settingAlarmLabel, setTimeButton, alarmToggle, borderWithEtc, etcTitle, tableView, borderWithTabBar].forEach { contentsView.addSubview($0) }
+        [profileTitle, profileImageBackgroundView, profileImage,profileImageLabel, profileTableView, settingTitle, settingView, settingAlarmLabel, setTimeButton, alarmToggle, borderWithEtc, etcTitle, tableView, borderWithTabBar].forEach { contentsView.addSubview($0) }
         
         scrollView.addSubview(contentsView)
         self.addSubview(scrollView)
@@ -173,21 +173,22 @@ class ForthView: BaseView {
         }
         
         profileImage.snp.makeConstraints {
-            $0.width.height.equalTo(UIScreen.main.bounds.width / 7)
+            $0.height.equalTo(UIScreen.main.bounds.width / 6)
+            $0.width.equalTo(UIScreen.main.bounds.width / 9)
             $0.centerX.centerY.equalTo(self.profileImageBackgroundView)
         }
         
         profileImageLabel.snp.makeConstraints {
-            $0.topMargin.equalTo(profileImage.snp.bottom).offset(12)
+            $0.topMargin.equalTo(profileImage.snp.bottom).offset(16)
             $0.height.equalTo(20)
             $0.centerX.equalTo(self.profileImageBackgroundView)
         }
         
-        profileImageMoreInfoButton.snp.makeConstraints {
-            $0.width.height.equalTo(20)
-            $0.leadingMargin.equalTo(profileImageLabel.snp.trailing).offset(8)
-            $0.centerY.equalTo(self.profileImageLabel)
-        }
+//        profileImageMoreInfoButton.snp.makeConstraints {
+//            $0.width.height.equalTo(20)
+//            $0.leadingMargin.equalTo(profileImageLabel.snp.trailing).offset(8)
+//            $0.centerY.equalTo(self.profileImageLabel)
+//        }
         
         profileTableView.snp.makeConstraints {
             $0.leadingMargin.equalTo(20)
@@ -207,7 +208,7 @@ class ForthView: BaseView {
         
         settingView.snp.makeConstraints {
             $0.topMargin.equalTo(settingTitle.snp.bottom).offset(12)
-            $0.height.equalTo(52)
+            $0.height.equalTo(48)
             $0.leadingMargin.equalTo(12)
             $0.trailingMargin.equalTo(-12)
             $0.bottomMargin.equalTo(-12)
@@ -221,7 +222,7 @@ class ForthView: BaseView {
         
         setTimeButton.snp.makeConstraints {
             $0.centerY.equalTo(self.settingView)
-            $0.trailingMargin.equalTo(alarmToggle.snp.leading).offset(-24)
+            $0.trailingMargin.equalTo(alarmToggle.snp.leading).offset(-32)
         }
         
         alarmToggle.snp.makeConstraints {
@@ -266,7 +267,7 @@ class ForthView: BaseView {
         contentsView.snp.makeConstraints {
             $0.edges.equalTo(scrollView.contentLayoutGuide)
             $0.width.equalTo(scrollView.snp.width)
-            $0.height.equalTo(1000)
+            $0.height.equalTo(UIScreen.main.bounds.height)
         }
     }
 }

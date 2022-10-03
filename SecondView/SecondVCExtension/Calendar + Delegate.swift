@@ -10,10 +10,10 @@ import UIKit
 import FSCalendar
 
 enum EventDotColor {
-    static let successZeroTime = [UIColor.systemGray3, UIColor.systemGray3, UIColor.systemGray3]
-    static let successOneTime = [UIColor.systemGreen, UIColor.systemGray3, UIColor.systemGray3]
-    static let successTwoTime = [UIColor.systemGreen, UIColor.systemGreen, UIColor.systemGray3]
-    static let successThreeTime = [UIColor.systemGreen, UIColor.systemGreen, UIColor.systemGreen]
+    static let successZeroTime = [UIColor.systemGray4, UIColor.systemGray4, UIColor.systemGray4]
+    static let successOneTime = [UIColor.successColor, UIColor.systemGray4, UIColor.systemGray4]
+    static let successTwoTime = [UIColor.successColor, UIColor.successColor, UIColor.systemGray4]
+    static let successThreeTime = [UIColor.successColor, UIColor.successColor, UIColor.successColor]
 }
 
 extension SecondViewController: FSCalendarDelegate, FSCalendarDataSource, FSCalendarDelegateAppearance {

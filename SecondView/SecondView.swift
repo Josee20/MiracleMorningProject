@@ -19,10 +19,10 @@ class SecondView: BaseView {
         view.appearance.headerMinimumDissolvedAlpha = 0.3
         view.appearance.calendar.headerHeight = 60
         view.appearance.weekdayTextColor = .black
-        view.appearance.headerTitleColor = .mainGreen
+        view.appearance.headerTitleColor = .black
         view.appearance.headerTitleFont = .boldSystemFont(ofSize: 20)
         view.appearance.titleDefaultColor = .systemGray
-        view.appearance.selectionColor = .mainGreen
+        view.appearance.selectionColor = .successColor
         view.appearance.todayColor = .mainBlue
         
         return view
@@ -44,7 +44,7 @@ class SecondView: BaseView {
     
     public let collectionViewHeaderLabel: UILabel = {
         let view = UILabel()
-        view.text = "9월 미션 현황"
+        view.text = "9월 성공 현황"
         view.font = .boldSystemFont(ofSize: 18)
         return view
     }()
@@ -116,7 +116,7 @@ class SecondView: BaseView {
         }
         
         collectionView.snp.makeConstraints {
-            $0.topMargin.equalTo(collectionViewHeaderLabel.snp.bottom).offset(12)
+            $0.topMargin.equalTo(collectionViewHeaderLabel.snp.bottom).offset(20)
             $0.leadingMargin.equalTo(40)
             $0.trailingMargin.equalTo(-12)
             $0.height.equalTo(UIScreen.main.bounds.height / 10)

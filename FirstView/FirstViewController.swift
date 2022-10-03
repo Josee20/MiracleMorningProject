@@ -10,7 +10,7 @@ import UIKit
 import UserNotifications
 
 import RealmSwift
-
+import Toast
 
 class FirstViewController: BaseViewController {
 
@@ -111,8 +111,6 @@ extension FirstViewController: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
         
-        
-        
         cell.selectionStyle = .none
         
         if dayTasks[indexPath.row].scheduleSuccess == true {
@@ -122,12 +120,12 @@ extension FirstViewController: UITableViewDelegate, UITableViewDataSource {
             cell.checkButton.setImage(UIImage(systemName: "checkmark.square",withConfiguration: buttonSizeConfiguration), for: .normal)
             
 //            cell.isUserInteractionEnabled = false
-            cell.tableBackgroundView.backgroundColor = .mainGreen
+            cell.tableBackgroundView.backgroundColor = .successColor
         } else {
             cell.scheduleTitle.text = dayTasks[indexPath.row].schedule
             cell.scheduleTime.text = "\(dayTasks[indexPath.row].startTime)~\(dayTasks[indexPath.row].endTime)"
             cell.checkButton.setImage(UIImage(systemName: "x.square",withConfiguration: buttonSizeConfiguration), for: .normal)
-            cell.tableBackgroundView.backgroundColor = .mainRed
+            cell.tableBackgroundView.backgroundColor = .failColor
         }
 
         return cell
@@ -139,11 +137,12 @@ extension FirstViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-       
         if now < calendar.startOfDay(for: now) + 14400 {
             showAlertOnlyOk(title: "최소 오전 4시부터 수행이 가능합니다")
         } else if now > calendar.startOfDay(for: now) + 32400 && now < calendar.startOfDay(for: now) + 86400 {
             showAlertOnlyOk(title: "오전 9시가 넘어 수행이 불가합니다")
+        } else if dayTasks[indexPath.row].scheduleSuccess == true {
+            showAlertOnlyOk(title: "이미 수행한 스케쥴입니다")
         } else {
             let dateOfStartTime = DateFormatChange.shared.dateOfHourAndPM.date(from: dayTasks[indexPath.row].startTime)!.timeIntervalSince1970
             let dateOfEndTime = DateFormatChange.shared.dateOfHourAndPM.date(from: dayTasks[indexPath.row].endTime)!.timeIntervalSince1970
@@ -158,7 +157,5 @@ extension FirstViewController: UITableViewDelegate, UITableViewDataSource {
             nav.modalPresentationStyle = .fullScreen
             present(nav, animated: true)
         }
-        
-        
     }
 }

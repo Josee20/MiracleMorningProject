@@ -106,6 +106,16 @@ class UserScheduleRepository: UserScheduleRepositoryType {
         }
     }
     
+    func failScheduleInMonth(currentDate: Date) -> Results<UserSchedule> {
+
+        let nextMonth = calendar.date(byAdding: .month, value: +1, to: currentDate)
+
+        return localRealm.objects(UserSchedule.self).where {
+            $0.scheduleSuccess == false && $0.scheduleDate >= currentDate && $0.scheduleDate < nextMonth!
+        }
+    }
+    
+    
     func successScheduleNumber(key: String) -> Results<UserSchedule> {
         return localRealm.objects(UserSchedule.self).filter("scheduleSuccess == true AND schedule == '\(key)'")
     }
@@ -135,7 +145,7 @@ class UserScheduleRepository: UserScheduleRepositoryType {
     func updateSuccess(item: UserSchedule) {
         do {
             try localRealm.write {
-                item.scheduleSuccess = !item.scheduleSuccess
+                item.scheduleSuccess = true
             }
         } catch {
             print("success update error")

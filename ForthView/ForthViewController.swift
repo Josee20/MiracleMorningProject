@@ -10,7 +10,7 @@ import UIKit
 import UserNotifications
 
 enum EtcCell {
-    static let contentsList = ["공지사항", "개인정보 보호 및 약관"]
+    static let contentsList = ["공지사항", "자주 묻는 질문"]
 }
 
 class ForthViewController: BaseViewController {
@@ -27,28 +27,9 @@ class ForthViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.isNavigationBarHidden = true
+        self.navigationItem.title = "설정"
         
         mainView.backgroundColor = .systemBackground
-        
-//        notificationCenter.getNotificationSettings { (settings) in
-//            if settings.authorizationStatus == .denied {
-//
-//                // 비동기처리로 alarmToggle을 메인쓰레드에서 바꾸게 해주어야함.
-//                DispatchQueue.main.async {
-//                    self.mainView.alarmToggle.setOn(false, animated: false)
-//                }
-//
-//                print("authorized")
-//
-//            } else {
-//                print("Push not authorized")
-//            }
-//        }
-        
-//        let storedToggleValue = UserDefaults.standard.bool(forKey: "toggle")
-//
-//        self.mainView.alarmToggle.setOn(storedToggleValue, animated: false)
         
         notificationCenter.getPendingNotificationRequests { requests in
             if requests.isEmpty == true {
@@ -70,6 +51,13 @@ class ForthViewController: BaseViewController {
             }
         }
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        mainView.profileImageLabel.text = "\(UserDefaults.standard.string(forKey: "nickname") ?? "햇")님의 해바라기"
+        self.navigationController?.isNavigationBarHidden = true
+        self.tabBarController?.tabBar.isHidden = false
+    }
+    
         
     override func configure() {
         mainView.profileTableView.delegate = self
@@ -206,7 +194,7 @@ extension ForthViewController: UITableViewDelegate, UITableViewDataSource {
             return cell
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ForthTableViewCell.reuseIdentifier, for: indexPath) as? ForthTableViewCell else { return UITableViewCell() }
-    
+            
             cell.cellTitle.text = EtcCell.contentsList[indexPath.row]
             
             cell.selectionStyle = .none
@@ -217,6 +205,26 @@ extension ForthViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        if tableView == mainView.profileTableView {
+            if indexPath.row == 0 {
+                let vc = ProfileViewController()
+                navigationController?.pushViewController(vc, animated: true)
+            } else {
+                showAlertOnlyOk(title: "준비중입니다")
+            }
+        } else {
+            if indexPath.row == 0 {
+                let vc = NoticeViewController()
+                navigationController?.pushViewController(vc, animated: true)
+            } else {
+                let vc = QnAViewController()
+                navigationController?.pushViewController(vc, animated: true)
+            }
+        }
     }
 }
 

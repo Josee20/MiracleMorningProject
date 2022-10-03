@@ -10,13 +10,6 @@ import UIKit
 import Charts
 import RealmSwift
 
-//enum chartColor {
-//    static let successColor = UIColor(red: 101/255, green: 166/255, blue: 114/255, alpha: 1)
-//    static let failColor = UIColor(red: 227/255, green: 103/255, blue: 81/255, alpha: 1)
-//    static let futureScheduleColor = UIColor(red: 209/255, green: 209/255, blue: 209/255, alpha: 1)
-//}
-
-
 class ThirdViewController: BaseViewController {
     
     let mainView = ThirdView()
@@ -40,8 +33,8 @@ class ThirdViewController: BaseViewController {
     var failScheduleCountFromToday = 0
     
     // 스케쥴 진행률
-    var currentMonthSuccess = ["성공", "실패", "미진행"]
-    var currentMonthSuccessValues = [0, 0, 0]
+    var currentMonthSuccess: [String] = []
+    var currentMonthSuccessValues: [Int] = []
     
     // 스케쥴 성공 시간
     var successScheduleDic = [String:Int]()
@@ -60,70 +53,24 @@ class ThirdViewController: BaseViewController {
         
         self.navigationController?.isNavigationBarHidden = true
         mainView.backgroundColor = .systemBackground
-        
-//        let components = calendar.dateComponents([.year, .month], from: now)
-//        let startOfMonth = calendar.date(from: components)!
-//
-//        totalScheduleCountInMonth = repository.scheduleInMonth(currentDate: startOfMonth).count
-//        successScheduleCountFromToday = repository.successScheduleInMonthFromToday(startOfMonth: startOfMonth).count
-//        failScheduleCountFromToday = repository.failScheduleInMonthFromToday(startOfMonth: startOfMonth).count
-//
-//        mainView.monthPickerButton.setTitle("\(todayYear)년 \(todayMonth)월", for: .normal)
-        
+
         makeAvailableDate()
-
-        print("todayYear:\(todayYear)")
-        print("todayMonth:\(todayMonth)")
-        
-        // 차트 가운데 퍼센트
-//        mainView.currentMonthSuccessChart.centerText = "50%"
-        
-        
-
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
-//        let components = calendar.dateComponents([.year, .month], from: now)
-//        let startOfMonth = calendar.date(from: components)!
-       
-//        totalScheduleCountInMonth = repository.scheduleInMonth(currentDate: startOfMonth).count
-//        successScheduleCountFromToday = repository.successScheduleInMonthFromToday(startOfMonth: startOfMonth).count
-//        failScheduleCountFromToday = repository.failScheduleInMonthFromToday(startOfMonth: startOfMonth).count
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         
-                mainView.currentMonthSchedulePercentageChart.noDataText = "데이터가 없습니다."
-                mainView.currentMonthSchedulePercentageChart.noDataFont = .systemFont(ofSize: 20)
-                mainView.currentMonthSchedulePercentageChart.noDataTextColor = .black
-        
-        // 스케쥴 진행률 차트
-        currentMonthSuccessValues[0] = successScheduleCountFromToday
-        currentMonthSuccessValues[1] = failScheduleCountFromToday
-        currentMonthSuccessValues[2] = totalScheduleCountInMonth - (successScheduleCountFromToday + failScheduleCountFromToday)
-
         customizeChart(dataPoints: currentMonthSuccess, values: currentMonthSuccessValues.map { Double($0) })
         customizeChart2(dataPoints: currentMonthSuccessScheduleArr, values: currentMonthSuccessScheduleValueArr.map { Double($0) })
-        
-        mainView.currentMonthSchedulePercentageChart.noDataText = "데이터가 없습니다."
-        mainView.currentMonthSchedulePercentageChart.noDataFont = .systemFont(ofSize: 20)
-        mainView.currentMonthSchedulePercentageChart.noDataTextColor = .black
 
         mainView.currentMonthSuccessChart.animate(xAxisDuration: 1.0)
         mainView.currentMonthSchedulePercentageChart.animate(xAxisDuration: 1.0)
-        
-//        mainView.monthPickerButton.setTitle("\(todayYear)년 \(todayMonth)월", for: .normal)
     }
     
+
     override func configure() {
         
         let components = calendar.dateComponents([.year, .month], from: now)
-        let nowYear = calendar.dateComponents([.year], from: now)
-        let nowMonth = calendar.dateComponents([.month], from: now)
-        
         let startOfMonth = calendar.date(from: components)!
         let currentMonthSuccessScheduleCount = repository.successScheduleInMonth(currentDate: startOfMonth).count
         var sameScheduleIndex = 0
@@ -139,8 +86,8 @@ class ThirdViewController: BaseViewController {
                 let startTimeStr = repository.successScheduleNumber(key: scheduleKey)[sameScheduleIndex].startTime
                 let endTimeStr = repository.successScheduleNumber(key: scheduleKey)[sameScheduleIndex].endTime
 
-                let startTime = DateFormatChange.shared.dateOfHourAndPM.date(from: startTimeStr)!.timeIntervalSince1970 / 3600
-                let endTime = DateFormatChange.shared.dateOfHourAndPM.date(from: endTimeStr)!.timeIntervalSince1970 / 3600
+                let startTime = DateFormatChange.shared.dateOfHourAndPM.date(from: startTimeStr)!.timeIntervalSince1970
+                let endTime = DateFormatChange.shared.dateOfHourAndPM.date(from: endTimeStr)!.timeIntervalSince1970
 
                 successScheduleDic.updateValue((successScheduleDic[scheduleKey] ?? 0)+Int(endTime - startTime),
                                                forKey: repository.successScheduleInMonth(currentDate: startOfMonth)[i].schedule)
@@ -152,28 +99,39 @@ class ThirdViewController: BaseViewController {
                 let startTimeStr = repository.successScheduleNumber(key: scheduleKey)[sameScheduleIndex].startTime
                 let endTimeStr = repository.successScheduleNumber(key: scheduleKey)[sameScheduleIndex].endTime
 
-                let startTime = DateFormatChange.shared.dateOfHourAndPM.date(from: startTimeStr)!.timeIntervalSince1970 / 60
-                let endTime = DateFormatChange.shared.dateOfHourAndPM.date(from: endTimeStr)!.timeIntervalSince1970 / 60
+                let startTime = DateFormatChange.shared.dateOfHourAndPM.date(from: startTimeStr)!.timeIntervalSince1970
+                let endTime = DateFormatChange.shared.dateOfHourAndPM.date(from: endTimeStr)!.timeIntervalSince1970
 
                 successScheduleDic.updateValue((successScheduleDic[scheduleKey] ?? 0)+Int(endTime - startTime),
                                                forKey: repository.successScheduleInMonth(currentDate: startOfMonth)[i].schedule)
             }
         }
         
-        for (key, value) in successScheduleDic {
-            currentMonthSuccessScheduleArr.append(key)
-            currentMonthSuccessScheduleValueArr.append(value)
+        let sortedSuccessScheduleDic = successScheduleDic.sorted { (first, second) in
+            return first.value < second.value
+        }
+        
+        for (key, value) in sortedSuccessScheduleDic {
+            if currentMonthSuccessScheduleArr.count < 8 {
+                currentMonthSuccessScheduleArr.append(key)
+                currentMonthSuccessScheduleValueArr.append(value)
+            }
+            
+            continue
         }
         
         totalScheduleCountInMonth = repository.scheduleInMonth(currentDate: startOfMonth).count
         successScheduleCountFromToday = repository.successScheduleInMonthFromToday(startOfMonth: startOfMonth).count
         failScheduleCountFromToday = repository.failScheduleInMonthFromToday(startOfMonth: startOfMonth).count
         
-        mainView.monthPickerButton.setTitle("\(components.year!)년 \(components.month!)월", for: .normal)
+        self.currentMonthSuccess.append(contentsOf: ["성공", "실패", "미진행"])
+        self.currentMonthSuccessValues.append(contentsOf: [self.successScheduleCountFromToday, self.failScheduleCountFromToday, self.totalScheduleCountInMonth - (self.successScheduleCountFromToday + self.failScheduleCountFromToday)])
         
-        print(nowYear)
-        print(nowMonth)
         
+        
+        
+        
+        mainView.monthPickerButton.setTitle("\(components.year!)년 \(components.month!)월 ", for: .normal)
         mainView.monthPickerButton.addTarget(self, action: #selector(datePickerButtonClicked), for: .touchUpInside)
     }
     
@@ -209,6 +167,7 @@ class ThirdViewController: BaseViewController {
         let ok = UIAlertAction(title: "확인", style: .default) { [self] (action) in
             
             // 딕셔너리 비워주기(월 바꿀때마다)
+            
             self.successScheduleDic.removeAll()
             self.currentMonthSuccessScheduleArr = []
             self.currentMonthSuccessScheduleValueArr = []
@@ -231,63 +190,56 @@ class ThirdViewController: BaseViewController {
             self.currentMonthSuccessValues[1] = self.failScheduleCountFromToday
             self.currentMonthSuccessValues[2] = self.totalScheduleCountInMonth - (self.successScheduleCountFromToday + self.failScheduleCountFromToday)
             
+          
             for i in 0..<currentMonthSuccessScheduleCount {
-
+                
                 let scheduleKey = repository.successScheduleInMonth(currentDate: startOfMonth)[i].schedule
                 let sameScheduleCount = repository.successScheduleNumber(key: scheduleKey).count
-                
-                print("scheduleKey: \(scheduleKey)")
-                
+
                 // 각각의 스케쥴(키)마다 인덱스를 부여하고 같은스케쥴의 개수를 파악한다.
                 // 그 다음 인덱스가 개수보다 많으면 다음 스케쥴로 넘어가기 때문에 인덱스를 다시 0으로 바꿔줘서 맞춰줌
                 if sameScheduleIndex < sameScheduleCount {
                     let startTimeStr = repository.successScheduleNumber(key: scheduleKey)[sameScheduleIndex].startTime
                     let endTimeStr = repository.successScheduleNumber(key: scheduleKey)[sameScheduleIndex].endTime
-                    
-                    print("startTimeStr :\(startTimeStr)")
-                    print("endTimeStr : \(endTimeStr)")
-                    
+
                     let startTime = DateFormatChange.shared.dateOfHourAndPM.date(from: startTimeStr)!.timeIntervalSince1970
                     let endTime = DateFormatChange.shared.dateOfHourAndPM.date(from: endTimeStr)!.timeIntervalSince1970
 
                     successScheduleDic.updateValue((successScheduleDic[scheduleKey] ?? 0)+Int(endTime - startTime),
                                                    forKey: repository.successScheduleInMonth(currentDate: startOfMonth)[i].schedule)
-                    
+
                     sameScheduleIndex += 1
-                    
+
                 } else {
                     sameScheduleIndex = 0
-                    
+
                     let startTimeStr = repository.successScheduleNumber(key: scheduleKey)[sameScheduleIndex].startTime
                     let endTimeStr = repository.successScheduleNumber(key: scheduleKey)[sameScheduleIndex].endTime
-                    
-                    print("startTimeStr :\(startTimeStr)")
-                    print("endTimeStr : \(endTimeStr)")
-                    
+
                     let startTime = DateFormatChange.shared.dateOfHourAndPM.date(from: startTimeStr)!.timeIntervalSince1970
                     let endTime = DateFormatChange.shared.dateOfHourAndPM.date(from: endTimeStr)!.timeIntervalSince1970
 
-                    
-                    
                     successScheduleDic.updateValue((successScheduleDic[scheduleKey] ?? 0)+Int(endTime - startTime),
                                                    forKey: repository.successScheduleInMonth(currentDate: startOfMonth)[i].schedule)
-
-                    
                 }
             }
             
-            for (key, value) in successScheduleDic {
-                currentMonthSuccessScheduleArr.append(key)
-                currentMonthSuccessScheduleValueArr.append(value)
+            let sortedSuccessScheduleDic = successScheduleDic.sorted { (first, second) in
+                return first.value < second.value
+            }
+            
+            for (key, value) in sortedSuccessScheduleDic {
+                if currentMonthSuccessScheduleArr.count < 8 {
+                    currentMonthSuccessScheduleArr.append(key)
+                    currentMonthSuccessScheduleValueArr.append(value)
+                }
+                
+                continue
             }
             
             self.customizeChart(dataPoints: self.currentMonthSuccess, values: self.currentMonthSuccessValues.map { Double($0) })
             self.customizeChart2(dataPoints: self.currentMonthSuccessScheduleArr, values: self.currentMonthSuccessScheduleValueArr.map { Double($0) })
-            
-
-            
-            
-            self.mainView.monthPickerButton.setTitle(monthPickerTitle, for: .normal)
+            self.mainView.monthPickerButton.setTitle(monthPickerTitle + " ", for: .normal)
         }
         
         let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
@@ -302,21 +254,38 @@ class ThirdViewController: BaseViewController {
         
         // 1. Set ChartDateEntry
         var dataEntries: [ChartDataEntry] = []
+        var legendEntries: [LegendEntry] = []
+        let legendColors: [UIColor] = [.successColor, .failColor, .notDoColor]
         
         for i in 0..<dataPoints.count {
-            let dataEntry = PieChartDataEntry(value: values[i], label: dataPoints[i], data: dataPoints[i] as AnyObject)
+            let dataEntry = PieChartDataEntry(value: values[i], label: nil, data: dataPoints[i] as AnyObject)
             dataEntries.append(dataEntry)
+            
+            // legendEntry 배열에 담아주기
+            let legendEntry = LegendEntry.init(label: "\(dataPoints[i]): \(Int(values[i]))회", form: .default, formSize: CGFloat.nan, formLineWidth: CGFloat.nan, formLineDashPhase: CGFloat.nan, formLineDashLengths: nil, formColor: legendColors[i])
+            legendEntries.append(legendEntry)
         }
+        
+        // legendEntires 배열 커스텀으로 등록
+        mainView.currentMonthSuccessChart.legend.setCustom(entries: legendEntries)
+    
         
         //2. Set ChartDataSet
         let pieChartDataSet = PieChartDataSet(entries: dataEntries, label: nil)
         pieChartDataSet.highlightEnabled = false
-        pieChartDataSet.colors = [.mainGreen, .mainRed, .mainGray]
+        pieChartDataSet.colors = legendColors
+        pieChartDataSet.sliceSpace = 2.0
+        pieChartDataSet.valueTextColor = .black
+        pieChartDataSet.valueLinePart1Length = 0.4
+        pieChartDataSet.valueLinePart2Length = 0.8
         
         // 3. Set ChartData
         let pieChartData = PieChartData(dataSet: pieChartDataSet)
         let format = NumberFormatter()
-        format.numberStyle = .none
+        format.numberStyle = .percent
+        format.maximumFractionDigits = 1
+        format.multiplier = 1
+        format.percentSymbol = "%"
         let formatter = DefaultValueFormatter(formatter: format)
         pieChartData.setValueFormatter(formatter)
         
@@ -327,50 +296,39 @@ class ThirdViewController: BaseViewController {
         
         // 1. Set ChartDateEntry
         var dataEntries: [ChartDataEntry] = []
+        var legendEntries: [LegendEntry] = []
+        let legendColors: [UIColor] = [.vividGreen, .dustyGreen, .vividBlue, .vividPurple, .vividYellow, .dustyYellow, .vividPink, .dustyPink]
         
         for i in 0..<dataPoints.count {
-            let dataEntry = PieChartDataEntry(value: values[i], label: dataPoints[i], data: dataPoints[i] as AnyObject)
+            let dataEntry = PieChartDataEntry(value: values[i], label: nil, data: dataPoints[i] as AnyObject)
             dataEntries.append(dataEntry)
+            
+            let legendEntry = LegendEntry.init(label: "\(dataPoints[dataPoints.count-i-1]): \(Int(values[dataPoints.count-i-1])/60)분", form: .default, formSize: CGFloat.nan, formLineWidth: CGFloat.nan, formLineDashPhase: CGFloat.nan, formLineDashLengths: nil, formColor: legendColors[dataPoints.count-i-1])
+            legendEntries.append(legendEntry)
         }
+        
+        mainView.currentMonthSchedulePercentageChart.legend.setCustom(entries: legendEntries)
         
         //2. Set ChartDataSet
         let pieChartDataSet = PieChartDataSet(entries: dataEntries, label: nil)
         pieChartDataSet.highlightEnabled = false
-        pieChartDataSet.colors = colorsOfCharts(numberOfColors: dataPoints.count) // 여기입니다
-        
+        pieChartDataSet.colors = legendColors
+        pieChartDataSet.sliceSpace = 2.0
+        pieChartDataSet.yValuePosition = .outsideSlice
+        pieChartDataSet.valueLinePart1Length = 0.4
+        pieChartDataSet.valueTextColor = .black
+
         // 3. Set ChartData
         let pieChartData = PieChartData(dataSet: pieChartDataSet)
         let format = NumberFormatter()
-        format.numberStyle = .none
+        format.numberStyle = .percent
+        format.maximumFractionDigits = 1
+        format.multiplier = 1
+        format.percentSymbol = "%"
         let formatter = DefaultValueFormatter(formatter: format)
         pieChartData.setValueFormatter(formatter)
         
         mainView.currentMonthSchedulePercentageChart.data = pieChartData
-    }
-    
-    private func colorsOfCharts(numberOfColors: Int) -> [UIColor] {
-        var colors: [UIColor] = []
-        
-        var firstAlpha = 0.2
-        let space = 0.8 / Double(numberOfColors)
-        
-        for _ in 0..<numberOfColors {
-//            let red = Double(arc4random_uniform(256))
-//            let green = Double(arc4random_uniform(256))
-//            let blue = Double (arc4random_uniform(256))
-//            let color = UIColor(red: CGFloat(red/255),
-//                                green: CGFloat(green/255),
-//                                blue: CGFloat(blue/255),
-//                                alpha: 0.8)
-            
-            let color = UIColor.mainNavy.withAlphaComponent(firstAlpha)
-            
-            firstAlpha += space
-            
-            colors.append(color)
-               
-        }
-        return colors
     }
 }
 
