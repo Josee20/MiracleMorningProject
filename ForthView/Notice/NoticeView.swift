@@ -13,6 +13,7 @@ class NoticeView: BaseView {
         let view = UITextView()
         view.text = "버전 1.0.0"
         view.textColor = .black
+        view.isEditable = false
         return view
     }()
     

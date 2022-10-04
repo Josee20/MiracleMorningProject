@@ -51,7 +51,6 @@ final class ChangeScheduleViewController: BaseViewController {
         self.mainView.backgroundColor = .systemBackground
         
         dayTasks = repository.filterDayTasks(date: receivedDate)
-        print(dayTasks)
     }
     
     override func configure() {
@@ -70,7 +69,7 @@ final class ChangeScheduleViewController: BaseViewController {
         
         datePicker.datePickerMode = .time
         datePicker.preferredDatePickerStyle = .wheels
-        datePicker.locale = NSLocale(localeIdentifier: "ko-KR") as Locale
+        datePicker.locale = NSLocale.current
         
         let alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n", message: nil, preferredStyle: .actionSheet)
         
@@ -109,7 +108,7 @@ final class ChangeScheduleViewController: BaseViewController {
         
         datePicker.datePickerMode = .time
         datePicker.preferredDatePickerStyle = .wheels
-        datePicker.locale = NSLocale(localeIdentifier: "ko-KR") as Locale
+        datePicker.locale = NSLocale.current
         
         let alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n", message: nil, preferredStyle: .actionSheet)
         
@@ -165,7 +164,6 @@ final class ChangeScheduleViewController: BaseViewController {
             // 3. 클로저실행
             okButtonActionHandler?()
 
-            print("okayButtonClicked")
             dismiss(animated: true)
         }
     }

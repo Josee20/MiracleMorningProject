@@ -49,6 +49,10 @@ class ThirdView: BaseView {
         view.drawSlicesUnderHoleEnabled = false
         view.holeRadiusPercent = 0.30
         view.transparentCircleRadiusPercent = 0.33
+        
+        view.noDataText = "등록된 스케쥴이 없습니다."
+        view.noDataTextColor = .failColor
+        view.noDataFont = .boldSystemFont(ofSize: 15)
         return view
     }()
     
@@ -71,7 +75,9 @@ class ThirdView: BaseView {
         view.drawSlicesUnderHoleEnabled = false
         view.holeRadiusPercent = 0.35
         view.transparentCircleRadiusPercent = 0.38
-        
+        view.noDataText = "성공한 스케쥴이 없습니다."
+        view.noDataTextColor = .failColor
+        view.noDataFont = .boldSystemFont(ofSize: 15)
         
         return view
     }()

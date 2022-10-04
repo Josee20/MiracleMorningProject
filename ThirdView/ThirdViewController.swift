@@ -41,6 +41,9 @@ class ThirdViewController: BaseViewController {
     var currentMonthSuccessScheduleArr: [String] = []
     var currentMonthSuccessScheduleValueArr: [Int] = []
     
+//    var currentMonthSuccessScheduleArr = Set<String>()
+//    var currentMonthSuccessScheduleValueArr: Set<Int>()
+    
     // Realm
     var successTasksInMonth: Results<UserSchedule>!
     
@@ -60,21 +63,21 @@ class ThirdViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        customizeChart(dataPoints: currentMonthSuccess, values: currentMonthSuccessValues.map { Double($0) })
-        customizeChart2(dataPoints: currentMonthSuccessScheduleArr, values: currentMonthSuccessScheduleValueArr.map { Double($0) })
-
-        mainView.currentMonthSuccessChart.animate(xAxisDuration: 1.0)
-        mainView.currentMonthSchedulePercentageChart.animate(xAxisDuration: 1.0)
-    }
-    
-
-    override func configure() {
-        
         let components = calendar.dateComponents([.year, .month], from: now)
         let startOfMonth = calendar.date(from: components)!
         let currentMonthSuccessScheduleCount = repository.successScheduleInMonth(currentDate: startOfMonth).count
         var sameScheduleIndex = 0
 
+        self.currentMonthSuccess = []
+        self.currentMonthSuccessValues = []
+        
+        // 값이 계속 쌓이는 것을 막기위해 딕셔너리 비워줌
+        successScheduleDic.removeAll()
+        
+        // viewWillAppear 할 때마다 배열을 비워줘야 값이 계속 안 쌓임
+        currentMonthSuccessScheduleArr = []
+        currentMonthSuccessScheduleValueArr = []
+        
         for i in 0..<currentMonthSuccessScheduleCount {
 
             let scheduleKey = repository.successScheduleInMonth(currentDate: startOfMonth)[i].schedule
@@ -106,32 +109,48 @@ class ThirdViewController: BaseViewController {
                                                forKey: repository.successScheduleInMonth(currentDate: startOfMonth)[i].schedule)
             }
         }
-        
+
         let sortedSuccessScheduleDic = successScheduleDic.sorted { (first, second) in
             return first.value < second.value
         }
-        
+
         for (key, value) in sortedSuccessScheduleDic {
             if currentMonthSuccessScheduleArr.count < 8 {
                 currentMonthSuccessScheduleArr.append(key)
                 currentMonthSuccessScheduleValueArr.append(value)
             }
-            
+
             continue
         }
-        
+
         totalScheduleCountInMonth = repository.scheduleInMonth(currentDate: startOfMonth).count
         successScheduleCountFromToday = repository.successScheduleInMonthFromToday(startOfMonth: startOfMonth).count
         failScheduleCountFromToday = repository.failScheduleInMonthFromToday(startOfMonth: startOfMonth).count
+
+//        self.currentMonthSuccess = []
+//        self.currentMonthSuccessValues = []
         
         self.currentMonthSuccess.append(contentsOf: ["성공", "실패", "미진행"])
         self.currentMonthSuccessValues.append(contentsOf: [self.successScheduleCountFromToday, self.failScheduleCountFromToday, self.totalScheduleCountInMonth - (self.successScheduleCountFromToday + self.failScheduleCountFromToday)])
-        
-        
-        
-        
-        
+
         mainView.monthPickerButton.setTitle("\(components.year!)년 \(components.month!)월 ", for: .normal)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        customizeChart(dataPoints: currentMonthSuccess, values: currentMonthSuccessValues.map { Double($0) })
+        customizeChart2(dataPoints: currentMonthSuccessScheduleArr, values: currentMonthSuccessScheduleValueArr.map { Double($0) })
+
+        mainView.currentMonthSuccessChart.animate(xAxisDuration: 1.0)
+        mainView.currentMonthSchedulePercentageChart.animate(xAxisDuration: 1.0)
+        
+        
+    }
+    
+
+    override func configure() {
+
         mainView.monthPickerButton.addTarget(self, action: #selector(datePickerButtonClicked), for: .touchUpInside)
     }
     
@@ -168,6 +187,10 @@ class ThirdViewController: BaseViewController {
             
             // 딕셔너리 비워주기(월 바꿀때마다)
             
+            var totalSchedulesInMonth = 0
+            var successSchedulesInMonth = 0
+            var failSchedulesInMonth = 0
+            
             self.successScheduleDic.removeAll()
             self.currentMonthSuccessScheduleArr = []
             self.currentMonthSuccessScheduleValueArr = []
@@ -182,13 +205,18 @@ class ThirdViewController: BaseViewController {
             let currentMonthSuccessScheduleCount = repository.successScheduleInMonth(currentDate: startOfMonth).count
             var sameScheduleIndex = 0
               
-            self.totalScheduleCountInMonth = self.repository.scheduleInMonth(currentDate: startOfMonth).count
-            self.successScheduleCountFromToday = self.repository.successScheduleInMonthFromToday(startOfMonth: startOfMonth).count
-            self.failScheduleCountFromToday = self.repository.failScheduleInMonthFromToday(startOfMonth: startOfMonth).count
+            totalSchedulesInMonth = self.repository.scheduleInMonth(currentDate: startOfMonth).count
+            successSchedulesInMonth = self.repository.successScheduleInMonth(currentDate: startOfMonth).count
+            failSchedulesInMonth = self.repository.failScheduleInMonth(currentDate: startOfMonth).count
             
-            self.currentMonthSuccessValues[0] = self.successScheduleCountFromToday
-            self.currentMonthSuccessValues[1] = self.failScheduleCountFromToday
-            self.currentMonthSuccessValues[2] = self.totalScheduleCountInMonth - (self.successScheduleCountFromToday + self.failScheduleCountFromToday)
+            guard totalSchedulesInMonth != 0 else {
+                showAlertOnlyOk(title: "선택하신 월의 데이터가 없습니다")
+                return
+            }
+            
+            self.currentMonthSuccessValues[0] = successSchedulesInMonth
+            self.currentMonthSuccessValues[1] = failSchedulesInMonth
+            self.currentMonthSuccessValues[2] = totalSchedulesInMonth - (successSchedulesInMonth + failSchedulesInMonth)
             
           
             for i in 0..<currentMonthSuccessScheduleCount {
@@ -258,12 +286,17 @@ class ThirdViewController: BaseViewController {
         let legendColors: [UIColor] = [.successColor, .failColor, .notDoColor]
         
         for i in 0..<dataPoints.count {
-            let dataEntry = PieChartDataEntry(value: values[i], label: nil, data: dataPoints[i] as AnyObject)
-            dataEntries.append(dataEntry)
             
-            // legendEntry 배열에 담아주기
-            let legendEntry = LegendEntry.init(label: "\(dataPoints[i]): \(Int(values[i]))회", form: .default, formSize: CGFloat.nan, formLineWidth: CGFloat.nan, formLineDashPhase: CGFloat.nan, formLineDashLengths: nil, formColor: legendColors[i])
-            legendEntries.append(legendEntry)
+            if values[2] == 0 {
+                return
+            } else {
+                let dataEntry = PieChartDataEntry(value: values[i], label: nil, data: dataPoints[i] as AnyObject)
+                dataEntries.append(dataEntry)
+                
+                // legendEntry 배열에 담아주기
+                let legendEntry = LegendEntry.init(label: "\(dataPoints[i]): \(Int(values[i]))회", form: .default, formSize: CGFloat.nan, formLineWidth: CGFloat.nan, formLineDashPhase: CGFloat.nan, formLineDashLengths: nil, formColor: legendColors[i])
+                legendEntries.append(legendEntry)
+            }
         }
         
         // legendEntires 배열 커스텀으로 등록
@@ -290,6 +323,7 @@ class ThirdViewController: BaseViewController {
         pieChartData.setValueFormatter(formatter)
         
         mainView.currentMonthSuccessChart.data = pieChartData
+        
     }
     
     func customizeChart2(dataPoints: [String], values: [Double]) {
@@ -298,6 +332,10 @@ class ThirdViewController: BaseViewController {
         var dataEntries: [ChartDataEntry] = []
         var legendEntries: [LegendEntry] = []
         let legendColors: [UIColor] = [.vividGreen, .dustyGreen, .vividBlue, .vividPurple, .vividYellow, .dustyYellow, .vividPink, .dustyPink]
+        
+        if dataPoints.isEmpty {
+            return
+        }
         
         for i in 0..<dataPoints.count {
             let dataEntry = PieChartDataEntry(value: values[i], label: nil, data: dataPoints[i] as AnyObject)
@@ -329,6 +367,7 @@ class ThirdViewController: BaseViewController {
         pieChartData.setValueFormatter(formatter)
         
         mainView.currentMonthSchedulePercentageChart.data = pieChartData
+        
     }
 }
 

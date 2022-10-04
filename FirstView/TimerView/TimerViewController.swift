@@ -128,7 +128,7 @@ class TimerViewController: BaseViewController {
                 self.timerView.start(duration: 0.0001 , value: 1.0 - self.progress)
             } else {
                 // 완료시 노티주기
-                self.callNotification(time: 1, title: "미션 완료!!!", body: "다음 미션도 완수해주세요~~\n다 마치셨다면 당신은 멋쟁이!!!")
+                self.callNotification(time: 1, title: "수행 완료!!!", body: "다음 스케쥴이 있다면 시작해주세요~~!!!")
                 
                 self.timeLabel.text = "끝!"
                 self.okButton.layer.borderColor = UIColor.mainGreen.cgColor

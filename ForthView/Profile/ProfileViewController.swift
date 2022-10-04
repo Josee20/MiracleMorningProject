@@ -31,8 +31,8 @@ class ProfileViewController: BaseViewController {
     
     @objc func saveButtonClicked() {
         
-        if mainView.nicknameTextFiled.text!.count > 10 {
-            self.view.makeToast("10자 이하의 닉네임만 가능합니다", duration: 3.0, position: .center)
+        if mainView.nicknameTextFiled.text!.count > 15 {
+            self.view.makeToast("15자 이하의 닉네임만 가능합니다", duration: 3.0, position: .center)
             mainView.nicknameTextFiled.text = ""
         } else {
             UserDefaults.standard.set("\(mainView.nicknameTextFiled.text!)", forKey: "nickname")

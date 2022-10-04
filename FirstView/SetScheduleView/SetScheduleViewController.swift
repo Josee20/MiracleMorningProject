@@ -90,7 +90,7 @@ class SetScheduleViewController: BaseViewController {
         
         datePicker.datePickerMode = .time
         datePicker.preferredDatePickerStyle = .wheels
-        datePicker.locale = NSLocale(localeIdentifier: "ko-KR") as Locale
+        datePicker.locale = NSLocale.current
         
         let alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n", message: nil, preferredStyle: .actionSheet)
         
@@ -129,7 +129,7 @@ class SetScheduleViewController: BaseViewController {
         
         datePicker.datePickerMode = .time
         datePicker.preferredDatePickerStyle = .wheels
-        datePicker.locale = NSLocale(localeIdentifier: "ko-KR") as Locale
+        datePicker.locale = NSLocale.current
         
         let alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n", message: nil, preferredStyle: .actionSheet)
         

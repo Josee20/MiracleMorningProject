@@ -189,33 +189,33 @@ class SetScheduleView: BaseView {
         }
         
         sundayButton.snp.makeConstraints {
-            $0.width.height.equalTo(48)
+            $0.width.height.equalTo(44)
         }
         mondayButton.snp.makeConstraints {
-            $0.height.width.equalTo(48)
+            $0.height.width.equalTo(44)
         }
         tuesdayButton.snp.makeConstraints {
-            $0.height.width.equalTo(48)
+            $0.height.width.equalTo(44)
         }
         wedensdayButton.snp.makeConstraints {
-            $0.height.width.equalTo(48)
+            $0.height.width.equalTo(44)
             $0.center.equalTo(self.stackView)
         }
         thursdayButton.snp.makeConstraints {
-            $0.height.width.equalTo(48)
+            $0.height.width.equalTo(44)
         }
         fridayButton.snp.makeConstraints {
-            $0.height.width.equalTo(48)
+            $0.height.width.equalTo(44)
         }
         saturdayButton.snp.makeConstraints {
-            $0.height.width.equalTo(48)
+            $0.height.width.equalTo(44)
         }
         
         stackView.snp.makeConstraints {
             $0.leadingMargin.equalTo(12)
             $0.trailingMargin.equalTo(-12)
             $0.topMargin.equalTo(textFieldBorder.snp.bottom).offset(48)
-            $0.height.equalTo(48)
+            $0.height.equalTo(44)
         }
         
         headerView.snp.makeConstraints {

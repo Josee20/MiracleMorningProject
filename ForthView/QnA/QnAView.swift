@@ -25,6 +25,7 @@ class QnAView: BaseView {
         A. 네 앱의 특성상 불가합니다.
         """
         view.textColor = .black
+        view.isEditable = false
         return view
     }()
     

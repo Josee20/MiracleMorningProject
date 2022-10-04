@@ -95,7 +95,7 @@ class ForthViewController: BaseViewController {
             
             datePicker.datePickerMode = .time
             datePicker.preferredDatePickerStyle = .wheels
-            datePicker.locale = NSLocale(localeIdentifier: "ko-KR") as Locale
+            datePicker.locale = NSLocale.current
             
             let alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n", message: nil, preferredStyle: .actionSheet)
             
@@ -143,8 +143,8 @@ class ForthViewController: BaseViewController {
             if settings.authorizationStatus == UNAuthorizationStatus.authorized {
 
                 let notiContent = UNMutableNotificationContent()
-                notiContent.title = "Title"
-                notiContent.subtitle = "Subtitle"
+                notiContent.title = "시간이 됐어요!"
+                notiContent.subtitle = "일어나 스케쥴을 수행해주세요~~"
                 notiContent.sound = .defaultCritical
 
                 var date = DateComponents()

@@ -14,7 +14,7 @@ class SecondView: BaseView {
     public let calendar: FSCalendar = {
         let view = FSCalendar()
         view.placeholderType = .none
-        view.locale = Locale(identifier: "ko-KR")
+        view.locale = Locale.current
         view.appearance.headerDateFormat = "YYYY년 MM월"
         view.appearance.headerMinimumDissolvedAlpha = 0.3
         view.appearance.calendar.headerHeight = 60
