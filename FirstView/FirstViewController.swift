@@ -137,10 +137,11 @@ extension FirstViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if now < calendar.startOfDay(for: now) + 14400 {
-            showAlertOnlyOk(title: "최소 오전 4시부터 수행이 가능합니다")
-        } else if now > calendar.startOfDay(for: now) + 32400 && now < calendar.startOfDay(for: now) + 86400 {
+  
+        if now > calendar.startOfDay(for: now) + 32400 && now < calendar.startOfDay(for: now) + 86400 {
             showAlertOnlyOk(title: "오전 9시가 넘어 수행이 불가합니다")
+        } else if now < calendar.startOfDay(for: now) + 14400 {
+            showAlertOnlyOk(title: "최소 오전 4시부터 수행이 가능합니다")
         } else if dayTasks[indexPath.row].scheduleSuccess == true {
             showAlertOnlyOk(title: "이미 수행한 스케쥴입니다")
         } else {

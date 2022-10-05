@@ -35,10 +35,6 @@ class ForthProfileTableViewCell: BaseTableViewCell {
     }
     
     override func setConstraints() {
-       
-//        tableBackgroundView.snp.makeConstraints {
-//            $0.edges.equalToSuperview().inset(4)
-//        }
         
         cellTitle.snp.makeConstraints {
             $0.leadingMargin.equalTo(8)

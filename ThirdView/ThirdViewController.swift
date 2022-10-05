@@ -126,14 +126,13 @@ class ThirdViewController: BaseViewController {
         totalScheduleCountInMonth = repository.scheduleInMonth(currentDate: startOfMonth).count
         successScheduleCountFromToday = repository.successScheduleInMonthFromToday(startOfMonth: startOfMonth).count
         failScheduleCountFromToday = repository.failScheduleInMonthFromToday(startOfMonth: startOfMonth).count
-
-//        self.currentMonthSuccess = []
-//        self.currentMonthSuccessValues = []
         
         self.currentMonthSuccess.append(contentsOf: ["성공", "실패", "미진행"])
         self.currentMonthSuccessValues.append(contentsOf: [self.successScheduleCountFromToday, self.failScheduleCountFromToday, self.totalScheduleCountInMonth - (self.successScheduleCountFromToday + self.failScheduleCountFromToday)])
 
         mainView.monthPickerButton.setTitle("\(components.year!)년 \(components.month!)월 ", for: .normal)
+        
+        print(#function)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -144,8 +143,6 @@ class ThirdViewController: BaseViewController {
 
         mainView.currentMonthSuccessChart.animate(xAxisDuration: 1.0)
         mainView.currentMonthSchedulePercentageChart.animate(xAxisDuration: 1.0)
-        
-        
     }
     
 
@@ -214,11 +211,9 @@ class ThirdViewController: BaseViewController {
                 return
             }
             
-            self.currentMonthSuccessValues[0] = successSchedulesInMonth
-            self.currentMonthSuccessValues[1] = failSchedulesInMonth
-            self.currentMonthSuccessValues[2] = totalSchedulesInMonth - (successSchedulesInMonth + failSchedulesInMonth)
+//            self.currentMonthSuccess.append(contentsOf: ["성공", "실패", "미진행"])
             
-          
+            
             for i in 0..<currentMonthSuccessScheduleCount {
                 
                 let scheduleKey = repository.successScheduleInMonth(currentDate: startOfMonth)[i].schedule
@@ -265,6 +260,10 @@ class ThirdViewController: BaseViewController {
                 continue
             }
             
+            self.currentMonthSuccessValues[0] = successSchedulesInMonth
+            self.currentMonthSuccessValues[1] = failSchedulesInMonth
+            self.currentMonthSuccessValues[2] = totalSchedulesInMonth - (successSchedulesInMonth + failSchedulesInMonth)
+
             self.customizeChart(dataPoints: self.currentMonthSuccess, values: self.currentMonthSuccessValues.map { Double($0) })
             self.customizeChart2(dataPoints: self.currentMonthSuccessScheduleArr, values: self.currentMonthSuccessScheduleValueArr.map { Double($0) })
             self.mainView.monthPickerButton.setTitle(monthPickerTitle + " ", for: .normal)
@@ -287,7 +286,7 @@ class ThirdViewController: BaseViewController {
         
         for i in 0..<dataPoints.count {
             
-            if values[2] == 0 {
+            if values[0] == 0 && values[1] == 0 && values[2] == 0 {
                 return
             } else {
                 let dataEntry = PieChartDataEntry(value: values[i], label: nil, data: dataPoints[i] as AnyObject)
