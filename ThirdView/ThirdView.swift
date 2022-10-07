@@ -70,6 +70,7 @@ class ThirdView: BaseView {
         ]
         view.centerAttributedText = NSAttributedString(string: text, attributes: attributes)
         
+        
         // 원 안쪽 크기 조절
         view.usePercentValuesEnabled = true
         view.drawSlicesUnderHoleEnabled = false
@@ -82,6 +83,16 @@ class ThirdView: BaseView {
         return view
     }()
     
+    let noDataSecondChartLabel: UILabel = {
+        let view = UILabel()
+        view.text = "성공한 스케쥴이 없습니다."
+        view.textAlignment = .center
+        view.textColor = .failColor
+        view.font = .boldSystemFont(ofSize: 15)
+        return view
+    }()
+    
+    
     let borderWithTabBar: UIView = {
         let view = UIView()
         view.layer.borderWidth = 1
@@ -90,7 +101,7 @@ class ThirdView: BaseView {
     }()
     
     override func configureUI() {
-        [monthPickerButton, currentMonthSuccessChart, currentMonthSchedulePercentageChart, borderWithTabBar].forEach { self.addSubview($0) }
+        [monthPickerButton, currentMonthSuccessChart, currentMonthSchedulePercentageChart, noDataSecondChartLabel, borderWithTabBar].forEach { self.addSubview($0) }
     }
     
     override func setConstraints() {
@@ -116,6 +127,12 @@ class ThirdView: BaseView {
             $0.bottomMargin.equalTo(-40)
             $0.centerX.equalTo(self)
         }
+        
+        noDataSecondChartLabel.snp.makeConstraints {
+            $0.center.equalTo(currentMonthSchedulePercentageChart)
+        }
+        
+        
         
         borderWithTabBar.snp.makeConstraints {
             $0.width.equalTo(UIScreen.main.bounds.width)

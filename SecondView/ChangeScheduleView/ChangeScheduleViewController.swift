@@ -15,8 +15,6 @@ enum setTimeButtonColor {
     static let changedColor = UIColor.systemBlue
 }
 
-
-
 final class ChangeScheduleViewController: BaseViewController {
     
     let repository = UserScheduleRepository()

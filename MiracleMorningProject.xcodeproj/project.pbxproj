@@ -296,8 +296,8 @@
 				49F0FB5328D1A32C004AD670 /* SecondTableViewCell.swift */,
 				499C654728DE26EA0005D659 /* SecondFSCalendarCell.swift */,
 				49314F3628D72B7F00D6156B /* ScheduleInfoModel.swift */,
-				4969B68428DC80D700914A23 /* ChangeScheduleView */,
 				4949B32E28DF4B5900BB96F0 /* SecondVCExtension */,
+				4969B68428DC80D700914A23 /* ChangeScheduleView */,
 			);
 			path = SecondView;
 			sourceTree = "<group>";

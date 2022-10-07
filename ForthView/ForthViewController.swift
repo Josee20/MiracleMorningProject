@@ -37,17 +37,12 @@ class ForthViewController: BaseViewController {
                     self.mainView.alarmToggle.setOn(false, animated: false)
                     self.mainView.setTimeButton.setTitle("시간설정", for: .normal)
                 }
-                
-                print("등록된 노티피케이션이 없습니다.")
-     
             } else {
                 let storedTime = UserDefaults.standard.string(forKey: "settingTime")
                 DispatchQueue.main.async {
                     self.mainView.alarmToggle.setOn(true, animated: false)
                     self.mainView.setTimeButton.setTitle(storedTime, for: .normal)
                 }
-                
-                print("노티피케이션이 있습니다")
             }
         }
     }
@@ -164,10 +159,6 @@ class ForthViewController: BaseViewController {
     
     func getPendingNotificationRequests(completionHandler: ([UNNotificationRequest]) -> Void) { }
     
-    
-    @objc func toggleSwitchClicked() {
-        print("toggleSwitchClick")
-    }
 }
 
 extension ForthViewController: UITableViewDelegate, UITableViewDataSource {

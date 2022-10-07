@@ -77,21 +77,6 @@ extension SecondViewController: FSCalendarDelegate, FSCalendarDataSource, FSCale
         }
     }
     
-    func calendar(_ calendar: FSCalendar, cellFor date: Date, at position: FSCalendarMonthPosition) -> FSCalendarCell {
-
-        let cell = calendar.dequeueReusableCell(withIdentifier: "CELL", for: date, at: position)
-
-
-        
-        return cell
-    }
-    
-
-    
-//    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, fillSelectionColorFor date: Date) -> UIColor? {
-//        <#code#>
-//    }
-    
     // 오늘날짜 -> "오늘"
     func calendar(_ calendar: FSCalendar, titleFor date: Date) -> String? {
         switch DateFormatChange.shared.dateOfYearMonthDay.string(from: date) {

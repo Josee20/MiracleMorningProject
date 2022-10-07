@@ -13,6 +13,18 @@ protocol UserScheduleRepositoryType {
     func fetch() -> Results<UserSchedule>
     func addSchedule(startTime: String, endTime: String, date: Date, schedule: String, success: Bool)
     func filterDayTasks(date: Date) -> Results<UserSchedule>
+    func delete(item: UserSchedule?)
+    func filterDayTasksAndSuccess(date: Date) -> Results<UserSchedule>
+    func scheduleInMonth(currentDate: Date) -> Results<UserSchedule>
+    func successScheduleInMonth(currentDate: Date) -> Results<UserSchedule>
+    func failScheduleInMonth(currentDate: Date) -> Results<UserSchedule>
+    func successScheduleInMonthFromToday(startOfMonth: Date) -> Results<UserSchedule>
+    func failScheduleInMonthFromToday(startOfMonth: Date) -> Results<UserSchedule>
+    func numberOfScheduleFromToday(startOfMonth: Date) -> Results<UserSchedule>
+    func successScheduleNumber(key: String) -> Results<UserSchedule>
+    func updateSchedule(objectID: ObjectId, startTime: String, endTime: String, schedule: String)
+    func changeSchedule(objectID: ObjectId, startTime: String, endTime: String, schedule: String, scheduleDate: Date, scheduleSuccess: Bool)
+    func updateSuccess(item: UserSchedule)
 }
 
 class UserScheduleRepository: UserScheduleRepositoryType {

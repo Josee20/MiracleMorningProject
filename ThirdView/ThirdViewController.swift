@@ -41,9 +41,6 @@ class ThirdViewController: BaseViewController {
     var currentMonthSuccessScheduleArr: [String] = []
     var currentMonthSuccessScheduleValueArr: [Int] = []
     
-//    var currentMonthSuccessScheduleArr = Set<String>()
-//    var currentMonthSuccessScheduleValueArr: Set<Int>()
-    
     // Realm
     var successTasksInMonth: Results<UserSchedule>!
     
@@ -192,12 +189,20 @@ class ThirdViewController: BaseViewController {
             self.currentMonthSuccessScheduleArr = []
             self.currentMonthSuccessScheduleValueArr = []
             
+            let components = calendar.dateComponents([.year, .month], from: now)
+            let startOfMonthFromNow = calendar.date(from: components)!
+            
             let startOfMonthStr = "\(self.selectedYear)-\(self.selectedMonth)"
             let monthPickerTitle = "\(self.selectedYear)년 \(self.selectedMonth)월"
             
             guard let startOfMonth = DateFormatChange.shared.dateOfYearMonth.date(from: startOfMonthStr) else {
                 return
             }
+            
+            print("startOfMonth: \(startOfMonth)")
+            print("now: \(startOfMonthFromNow)")
+            
+ 
             
             let currentMonthSuccessScheduleCount = repository.successScheduleInMonth(currentDate: startOfMonth).count
             var sameScheduleIndex = 0
@@ -210,9 +215,6 @@ class ThirdViewController: BaseViewController {
                 showAlertOnlyOk(title: "선택하신 월의 데이터가 없습니다")
                 return
             }
-            
-//            self.currentMonthSuccess.append(contentsOf: ["성공", "실패", "미진행"])
-            
             
             for i in 0..<currentMonthSuccessScheduleCount {
                 
@@ -260,12 +262,25 @@ class ThirdViewController: BaseViewController {
                 continue
             }
             
-            self.currentMonthSuccessValues[0] = successSchedulesInMonth
-            self.currentMonthSuccessValues[1] = failSchedulesInMonth
-            self.currentMonthSuccessValues[2] = totalSchedulesInMonth - (successSchedulesInMonth + failSchedulesInMonth)
+            // monthPicker에서 선택해서 볼 때 미진행이 실패로 나타나는 현상 방지
+            if startOfMonth == startOfMonthFromNow {
+                totalScheduleCountInMonth = repository.scheduleInMonth(currentDate: startOfMonth).count
+                successScheduleCountFromToday = repository.successScheduleInMonthFromToday(startOfMonth: startOfMonth).count
+                failScheduleCountFromToday = repository.failScheduleInMonthFromToday(startOfMonth: startOfMonth).count
 
+                self.currentMonthSuccessValues[0] = successScheduleCountFromToday
+                self.currentMonthSuccessValues[1] = failScheduleCountFromToday
+                self.currentMonthSuccessValues[2] = totalScheduleCountInMonth - (successScheduleCountFromToday + failScheduleCountFromToday)
+                
+            } else {
+                self.currentMonthSuccessValues[0] = successSchedulesInMonth
+                self.currentMonthSuccessValues[1] = failSchedulesInMonth
+                self.currentMonthSuccessValues[2] = totalSchedulesInMonth - (successSchedulesInMonth + failSchedulesInMonth)
+            }
+            
             self.customizeChart(dataPoints: self.currentMonthSuccess, values: self.currentMonthSuccessValues.map { Double($0) })
             self.customizeChart2(dataPoints: self.currentMonthSuccessScheduleArr, values: self.currentMonthSuccessScheduleValueArr.map { Double($0) })
+            
             self.mainView.monthPickerButton.setTitle(monthPickerTitle + " ", for: .normal)
         }
         
@@ -333,7 +348,12 @@ class ThirdViewController: BaseViewController {
         let legendColors: [UIColor] = [.vividGreen, .dustyGreen, .vividBlue, .vividPurple, .vividYellow, .dustyYellow, .vividPink, .dustyPink]
         
         if dataPoints.isEmpty {
+            mainView.currentMonthSchedulePercentageChart.isHidden = true
+            mainView.noDataSecondChartLabel.isHidden = false
             return
+        } else {
+            mainView.currentMonthSchedulePercentageChart.isHidden = false
+            mainView.noDataSecondChartLabel.isHidden = true
         }
         
         for i in 0..<dataPoints.count {
