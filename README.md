@@ -1,4 +1,7 @@
+
+
 # 개발 공수
+
 
 ## 📅 이터레이션 1 (9/8 ~ 9/11)
 | 9/8(목) | 9/9(금) | 9/10(토) | 9/11(일) | 
@@ -57,6 +60,9 @@ ___
 2. SnapKit
 3. RealmSwift
 
+
+# DB구조
+![[스크린샷 2022-09-23 오전 10.05.33.png]]
 ___
 
 # 220911
@@ -509,7 +515,8 @@ public let collectionView: UICollectionView = {
 아직은 UI만 된 상태....
 
 
-![Simulator Screen Shot - iPhone 11 - 2022-09-14 at 22 51 39 | 200](https://user-images.githubusercontent.com/92367484/190173335-bc13ec8a-a65e-4b56-9cb8-77e5362b153c.png)
+<img width="250" alt="image" src= "https://user-images.githubusercontent.com/92367484/190173335-bc13ec8a-a65e-4b56-9cb8-77e5362b153c.png">
+
 
 ___
 
@@ -1362,3 +1369,725 @@ timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true, block: { (t)
 ```
 
 https://user-images.githubusercontent.com/92367484/191554436-4f154f62-85a1-4f95-8314-56b9bf9880b7.mp4
+
+
+___
+
+# 220922
+
+## 1. CollectionView 달에 따라 현황 보여주기
+
+기존 컬렉션 뷰는 ScheduleSuccess여부가 true인 값만 필터링을 해와서 달에 상관없이 성공한 스케쥴이라면 모두 나타나게 되어있었다.(9월인데도 10월 11월 스케쥴 나타남)
+
+```swift
+// In UserScheduleRepository
+func successSchedule() -> Results<UserSchedule> {
+	return localRealm.objects(UserSchedule.self).filter("scheduleSuccess == true")
+}
+```
+
+
+### 1-1. 달의시작, 다음 달 구하기
+
+```swift
+let calendar = Calendar.current
+print("calendar : \(calendar)") // calendar : gregorian (current)
+
+let date = Date()
+print("date : \(date)") // date : 2022-09-22 08:16:25 +0000
+
+let components = calendar.dateComponents([.year, .month], from: date)
+print("components : \(components)") // components : year: 2022 month: 9 isLeapMonth: false
+
+// components에 day를 기입하지 않았기 때문에 components를 date로 바꿔주면 달의 첫번째 날이 나옴
+let startOfMonth = calendar.date(from: components)
+print("startOfMonth : \(startOfMonth!)") // startOfMonth : 2022-08-31 15:00:00 +0000
+
+// value의 값에 따라 1달, 2달이 늘어나게됨
+let nextMonth = calendar.date(byAdding: .month, value: +0, to: startOfMonth!)
+print("nextMonth : \(nextMonth!)") // nextMonth : nextMonth : 2022-08-31 15:00:00 +0000
+
+let nextMonth2 = calendar.date(byAdding: .month, value: +1, to: startOfMonth!)
+print("nextMonth2 : \(nextMonth2!)") // nextMonth2 : 2022-09-30 15:00:00 +0000
+```
+
+
+### 1-2. 딕셔너리에 담아주기
+
+```swift
+// In UserScheduleRepository
+func successScheduleInMonth(currentDate: Date) -> Results<UserSchedule> {
+
+	let nextMonth = calendar.date(byAdding: .month, value: +1, to: currentDate)
+
+	return localRealm.objects(UserSchedule.self).where {
+		$0.scheduleSuccess == true && $0.scheduleDate >= currentDate && $0.scheduleDate < nextMonth!
+	}
+}
+
+func successScheduleNumber(key: String) -> Results<UserSchedule> {
+	return localRealm.objects(UserSchedule.self).filter("scheduleSuccess == true AND schedule == '\(key)'")
+}
+
+// In SecondViewController
+var scheduleInfo = [scheduleInfoModel]()
+var date = Date()
+
+override func viewWillAppear(_ animated: Bool) {
+	super.viewWillAppear(animated)
+	
+	let components = calendar.dateComponents([.year, .month], from: date)
+	let startOfMonth = calendar.date(from: components)!
+	
+	
+	// 컬렉션뷰 업데이트
+	for i in 0..<repository.successScheduleInMonth(currentDate: startOfMonth).count {
+		scheduleCountDic.updateValue(repository.successScheduleNumber(key: repository.successScheduleInMonth(currentDate: startOfMonth)[i].schedule).count, forKey: repository.successScheduleInMonth(currentDate: startOfMonth)[i].schedule)
+	}
+}
+
+```
+
+제가 해줘야하는 것은 컬렉션뷰에 이번 달 성공한 스케쥴 + 성공횟수 였습니다.
+
+때문에 이번 달 성공한 스케쥴과 성공횟수를 DB에서 가져와 주는 것이 주요쟁점 이었습니다.
+
+먼저 오늘날짜인 date를 기준으로 startOfMonth(월의 가장 첫날)을 가져와주고 첫 날을 기준으로 `successScheduleInMonth(currentDate: Date) -> Results<UserSchedule>` 메소드를 통해 nextMonth(다음 달 첫 날)을 특정해 그 값을 반환시켜줍니다.
+
+그러면 성공한 스케쥴을 모두 가져올 수 있게 되는 것이죠.
+
+그리고 나면 성공한 스케쥴이 각각 몇 번씩 인지를 가져와줘야겠죠?
+
+이 때 저는 `successShceduleNumber(key: String) -> Results<UserSchedule>` 메소드를 통해 성공한 스케쥴 + 스케쥴 이름을 키값으로 받아와서 각각의 스케쥴이 몇 번 성공했는지 가져왔습니다.
+
+그리고 for문을 통해 성공한 스케쥴의 개수만큼 반복해서 성공한스케쥴의 개수를 value에 성공한 스케쥴을 key값으로 담아 주었습니다.
+
+
+### 1-3. 캘린더 스와이프시 값 변경
+
+스와이프 시(달이 변경될 때) 각각의 달의 성공 횟수를 컬렉션뷰로 보여주어야 했습니다.
+
+이 때 FSCalendar의 delegate패턴의 `calendarCurrentPageDidChange(_ calendar: FSCalendar)` 메소드를 활용했습니다.
+
+```swift
+func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
+
+
+	// 현재 달력 페이지의 첫 날 값을 가져옴
+	let currentPageDate = calendar.currentPage
+	let month = Calendar.current.component(.month, from: currentPageDate)
+	
+	scheduleCountDic = [:]
+	successCount = 0
+	
+	// 스와이프시 date값을 변경시켜야 다른 페이지를 갔다와도 해당 월의 스케쥴 성공여부가 컬렉션뷰에 잘 나옴
+	date = currentPageDate
+	
+	for i in 0..<repository.successScheduleInMonth(currentDate: currentPageDate).count {
+		scheduleCountDic.updateValue(repository.successScheduleNumber(key: repository.successScheduleInMonth(currentDate: currentPageDate)[i].schedule).count, forKey: repository.successScheduleInMonth(currentDate: currentPageDate)[i].schedule)
+	}
+	
+	mainView.collectionViewHeaderLabel.text = "\(month)월 미션 현황"
+			
+	// 캘린더 스와이프시에 테이블뷰 숨기기
+	mainView.tableView.isHidden = true
+
+	mainView.collectionView.reloadData()
+}
+```
+
+스와이프 할 때마다 scheduleCountDic을 비워주고 다시 해당 월의 값을 받아 값을 채워주어 컬렉션뷰에 나타내 줍니다.
+
+https://user-images.githubusercontent.com/92367484/194487347-25a117d5-a30e-4c16-9dea-49d48c2dc40f.MP4
+
+
+# 220923
+
+## 1. 셀 수정
+
+셀 수정에서 제가 고려한 부분은 이미 지나간 스케쥴의 경우 수정이 불가하게 막는 것이었습니다. 
+
+한 달간 계획을 챌린지하게 세우는데 성공했던 스케쥴이나 실패했던 스케쥴을 수정가능하게 두면 안 되기 때문입니다.
+
+### ❎ 주의사항 ❎
+
+모달은 ViewWillAppear시점이 통하지 않기 때문에 클로져로 값 전달 후 값을 수정한다.
+
+클로저, 노티피케이션, 프로토콜을 이용해 값 전달을 할 때에는  모달, 푸시앤팝 등으로 다음화면과 전 화면을 특정할 수 있어야 값 전달이 제대로 이루어진다.
+
+
+### 1-1. 클로저를 이용한 값 전달
+
+#### 1) 값 전달받을 뷰컨트롤러에서 클로저 선언
+```swift
+// In ChangeScheduleViewController
+final class ChangeScheduleViewController: BaseViewController {
+	// 1. 실행될 빈 클로저 선언
+	var okButtonActionHandler: ( () -> Void )?
+}
+```
+
+#### 2) 클로저 함수 정의
+```swift
+// In SecondViewController
+func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		
+	let vc = ChangeScheduleViewController()
+	
+	// 지나간 날짜 + 현재 시간 기준 오전9시가 넘으면 수정 불가
+	// 1. scheduleDate와 오늘 날짜가 같음
+	// 2. 오전 9시 ~ 24시까지 사이엔 수정 불가
+	
+	if dayTasks[indexPath.row].scheduleSuccess == true {
+		showAlertOnlyOk(title: "완료한 스케쥴은 수정할 수 없습니다")
+	} else {
+		if dayTasks[indexPath.row].scheduleDate < calendar.startOfDay(for: now) ||
+			DateFormatChange.shared.dateOfYearMonthDay.string(from: dayTasks[indexPath.row].scheduleDate) == DateFormatChange.shared.dateOfYearMonthDay.string(from: now) &&
+			(now > calendar.startOfDay(for: now) + 32400 && now < calendar.startOfDay(for: now) + 86400 ) {
+			
+			showAlertOnlyOk(title: "지난 일정은 수정할 수 없습니다")
+		} else {
+			
+			// 2. 클로저 함수 정의
+			vc.okButtonActionHandler = {
+				self.mainView.tableView.reloadData()
+			}
+			
+			let nav = UINavigationController(rootViewController: vc)
+			present(nav, animated: true)
+		}
+	}
+}
+```
+
+
+#### 3) 전달받은 클로저 실행
+
+```swift
+// In ChageScheduleViewController
+@objc func okButtonClicked() {
+	
+	guard let setStartTimeButtonDate = DateFormatChange.shared.dateOfHourAndPM.date(from: mainView.setStartTimeButton.titleLabel?.text ?? "") else { return }
+	
+	guard let setEndTimeButtonDate = DateFormatChange.shared.dateOfHourAndPM.date(from: mainView.setEndTimeButton.titleLabel?.text ?? "") else { return }
+	
+	if mainView.setScheduleTextField.text?.count == 0 {
+		showAlertOnlyOk(title: "미션을 입력해주세요")
+	} else if mainView.setStartTimeButton.titleLabel?.text == mainView.setEndTimeButton.titleLabel?.text {
+		showAlertOnlyOk(title: "시작시간과 종료시간은\n같을 수 없습니다\n다른 시간을 선택해주세요")
+	} else if setStartTimeButtonDate > setEndTimeButtonDate {
+		self.showAlertOnlyOk(title: "시작시간은 종료시간보다 빨라야합니다\n종료시간을 다시 선택해주세요")
+	} else {
+		
+		// 렘 수정
+		repository.updateSchedule(objectID: objectID!, startTime: self.mainView.setStartTimeButton.titleLabel?.text ?? "", endTime: self.mainView.setEndTimeButton.titleLabel?.text ?? "", schedule: self.mainView.setScheduleTextField.text!)
+
+		// 3. 클로저실행
+		okButtonActionHandler?()
+
+		dismiss(animated: true)
+	}
+}
+```
+
+
+## 2. 셀 삭제
+
+셀 삭제에서 제가 고려한 부분은 이미 날짜가 지나간 셀은 삭제가 불가능하게 하는 것이었습니다.
+
+왜냐하면 이미 지나간 스케쥴을 삭제하게 만들면 후에 통계를 낼 때 조작이 될 수 있기 때문입니다.
+
+그래서 이와같이 예외처리를해서 코드를 짰습니다.
+
+```swift
+func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+	 
+	if dayTasks[indexPath.row].scheduleSuccess == true {
+		showAlertOnlyOk(title: "완료한 스케쥴은 삭제할 수 없습니다")
+	} else {
+		if dayTasks[indexPath.row].scheduleDate < calendar.startOfDay(for: now) + 86400 {
+			showAlertOnlyOk(title: "지난 일정이나 당일 일정은 삭제할 수 없습니다.")
+		} else {
+			if editingStyle == .delete {
+				repository.delete(item: dayTasks?[indexPath.row])
+			}
+			
+			mainView.calendar.reloadData()
+			self.fetchRealm()
+		}
+	}
+}
+```
+
+
+# 220924
+
+## 1. 캘린더에 스케쥴 & 수행여부 dot으로 표현
+
+캘린더에 유저가 스케쥴을 몇 개 등록했고 몇 개 수행했는지를 달력에 표시해주기 위해 FSCalendar에서 제공하는 event를 사용하기로 했습니다.
+
+FSCalendar는 날짜를 선택하면 eventSelectionColor로 바뀌기 때문에 선택시에도 eventColor를 일치시켜 주어야 합니다.
+
+```swift
+enum EventDotColor {
+    static let successZeroTime = [UIColor.systemGray4, UIColor.systemGray4, UIColor.systemGray4]
+    static let successOneTime = [UIColor.successColor, UIColor.systemGray4, UIColor.systemGray4]
+    static let successTwoTime = [UIColor.successColor, UIColor.successColor, UIColor.systemGray4]
+    static let successThreeTime = [UIColor.successColor, UIColor.successColor, UIColor.successColor]
+}
+
+extension SecondViewController: FSCalendarDelegate, FSCalendarDataSource, FSCalendarDelegateAppearance {
+    
+    // ... 개수
+    func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
+
+        let eventStringArr = eventArr.map { DateFormatChange.shared.dateOfYearMonthDay.string(from: $0) }
+        let eventDateArr = eventStringArr.map { DateFormatChange.shared.dateOfYearMonthDay.date(from: $0) }
+                
+        if eventDateArr.contains(date) {
+            switch repository.filterDayTasks(date: date).count {
+            case 0:
+                return 0
+            case 1:
+                return 1
+            case 2:
+                return 2
+            case 3:
+                return 3
+            default:
+                return 3
+            }
+        } else {
+            return 0
+        }
+    }
+    
+    // ... 색
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, eventDefaultColorsFor date: Date) -> [UIColor]? {
+        
+        dayTasksAndSuccess = repository.filterDayTasksAndSuccess(date: date)
+        
+        switch dayTasksAndSuccess.count {
+        case 0:
+            return EventDotColor.successZeroTime
+        case 1:
+            return EventDotColor.successOneTime
+        case 2:
+            return EventDotColor.successTwoTime
+        case 3:
+            return EventDotColor.successThreeTime
+        default:
+            return EventDotColor.successThreeTime
+        }
+    }
+
+	// 선택시 ... 색
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, eventSelectionColorsFor date: Date) -> [UIColor]? {
+
+        switch dayTasksAndSuccess.count {
+        case 0:
+            return EventDotColor.successZeroTime
+        case 1:
+            return EventDotColor.successOneTime
+        case 2:
+            return EventDotColor.successTwoTime
+        case 3:
+            return EventDotColor.successThreeTime
+        default:
+            return EventDotColor.successThreeTime
+        }
+    }
+}
+```
+
+
+## 2. 오류수정
+
+시간선택시 텍스트 기준("시간선택" 텍스트를 조건문으로 처리)으로 처리해서 수정시에 "시간선택"이 아니라 기존의 시간이 등록되어 있어 오류가 발생했습니다.
+
+```swift
+// 기존 코드
+
+// In ChangeScheduleViewController
+
+// 시작시간 선택버튼
+@objc func setStartTimeButtonClicked(sender: UIDatePicker) {
+        
+	let ok = UIAlertAction(title: "확인", style: .default) { (action) in
+		
+		let dateString = DateFormatChange.shared.dateOfHourAndPM.string(from: datePicker.date)
+		self.setStartTimeDatePickerDate = datePicker.date
+		
+		if self.mainView.setEndTimeButton.titleLabel?.text == dateString {
+			self.showAlertOnlyOk(title: "시작시간과 종료시간은\n같을 수 없습니다\n다른 시간을 선택해주세요")
+		} else if self.setEndTimeDatePickerDate! > self.setEndTimeDatePickerDate! {
+			self.showAlertOnlyOk(title: "시작시간은 종료시간보다 빨라야합니다\n종료시간을 다시 선택해주세요")
+		} else if self.calendar.component(.hour, from: datePicker.date) > 3 && self.calendar.component(.hour, from: datePicker.date) < 9 {
+			self.mainView.setStartTimeButton.setTitle(dateString, for: .normal)
+			self.mainView.setStartTimeButton.setTitleColor(.systemBlue, for: .normal)
+		} else {
+			self.showAlertOnlyOk(title: "오전 4시부터 오전9시까지만 시간설정이 가능합니다")
+		}
+	}
+}
+
+
+// 종료시간 선택버튼
+@objc func setEndTimeButtonClicked() {
+	
+	let ok = UIAlertAction(title: "확인", style: .default) { (action) in
+	
+		let dateString = DateFormatChange.shared.dateOfHourAndPM.string(from: datePicker.date)
+		self.setEndTimeDatePickerDate = datePicker.date
+		
+		if self.mainView.setStartTimeButton.titleLabel?.text == "시간선택" {
+			self.showAlertOnlyOk(title: "시작시간을 먼저 선택해주세요")
+		} else if self.mainView.setStartTimeButton.titleLabel?.text == dateString {
+			self.showAlertOnlyOk(title: "시작시간과 종료시간은\n같을 수 없습니다\n다른 시간을 선택해주세요")
+		} else if self.setStartTimeDatePickerDate! > self.setEndTimeDatePickerDate! {
+			self.showAlertOnlyOk(title: "시작시간은 종료시간보다 빨라야합니다\n종료시간을 다시 선택해주세요")
+		} else {
+			if self.calendar.component(.hour, from: datePicker.date) > 3 && self.calendar.component(.hour, from: datePicker.date) < 9 {
+				self.mainView.setEndTimeButton.setTitle(dateString, for: .normal)
+				self.mainView.setEndTimeButton.setTitleColor(.systemBlue, for: .normal)
+			} else {
+				self.showAlertOnlyOk(title: "오전 4시부터 오전9시까지만 시간설정이 가능합니다")
+			}
+		}
+	}
+}
+```
+
+
+```swift
+// 수정된코드
+@objc func setStartTimeButtonClicked(sender: UIDatePicker) {
+	
+	let ok = UIAlertAction(title: "확인", style: .default) { (action) in
+		
+		let dateString = DateFormatChange.shared.dateOfHourAndPM.string(from: datePicker.date)
+		self.setStartTimeDatePickerDate = datePicker.date
+		
+		if self.calendar.component(.hour, from: datePicker.date) > 3 && self.calendar.component(.hour, from: datePicker.date) < 9 {
+			self.mainView.setStartTimeButton.setTitle(dateString, for: .normal)
+			self.mainView.setStartTimeButton.setTitleColor(.systemBlue, for: .normal)
+		} else {
+			self.showAlertOnlyOk(title: "오전 4시부터 오전9시까지만 시간설정이 가능합니다")
+		}
+	}
+}
+
+@objc func setEndTimeButtonClicked() {
+	
+	let ok = UIAlertAction(title: "확인", style: .default) { (action) in
+	
+		let dateString = DateFormatChange.shared.dateOfHourAndPM.string(from: datePicker.date)
+		self.setEndTimeDatePickerDate = datePicker.date
+		
+		if self.mainView.setStartTimeButton.titleLabel?.text == self.mainView.setEndTimeButton.titleLabel?.text {
+			self.showAlertOnlyOk(title: "시작시간과 종료시간은\n같을 수 없습니다\n다른 시간을 선택해주세요")
+		} else {
+			if self.calendar.component(.hour, from: datePicker.date) > 3 && self.calendar.component(.hour, from: datePicker.date) < 9 {
+				self.mainView.setEndTimeButton.setTitle(dateString, for: .normal)
+				self.mainView.setEndTimeButton.setTitleColor(.systemBlue, for: .normal)
+			} else {
+				self.showAlertOnlyOk(title: "오전 4시부터 오전9시까지만 시간설정이 가능합니다")
+			}
+		}
+	}
+}
+```
+
+
+# 220926
+
+## 1. 날짜를 누르고 스와이프를 계속하면 오류발생
+
+<img width="669" alt="스크린샷 2022-09-25 오전 11 50 13" src="https://user-images.githubusercontent.com/92367484/194553850-5c031e10-e674-490f-a1e7-6dbca667a9d1.png">
+
+
+```swift
+func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, eventSelectionColorsFor date: Date) -> [UIColor]? {
+
+	var successCount = 0
+
+	dayTasks = repository.filterDayTasks(date: date)
+
+	for i in 0..<dayTasks.count {
+		if dayTasks[i].scheduleSuccess == true {
+			successCount += 1
+		}
+	}
+
+	
+	switch successCount {
+	case 0:
+		return EventDotColor.successZeroTime
+	case 1:
+		return EventDotColor.successOneTime
+	case 2:
+		return EventDotColor.successTwoTime
+	case 3:
+		return EventDotColor.successThreeTime
+	default:
+		return EventDotColor.successThreeTime
+	}
+}
+```
+
+찾아보니 캘린더에 점을 찍는 지점에서 인덱스 오류가 나고있었다. 
+
+로직은 분명 맞는데 왜 인덱싱이 계속 랜덤으로 바뀌어 오류가 발생하는걸까...
+
+답은 여기에있었다.
+
+```swift
+// 캘린더 날짜 선택
+func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+	
+	selectedDate = date
+	scheduleInfo = []
+
+// 날짜 선택시 dayTasks 현재 날짜에 있는 거만 필터링 시켜주기(테이블뷰에 나타내주기 위해)
+//   dayTasks = repository.filterDayTasks(date: date)
+	self.fetchRealm()
+
+	mainView.tableViewHeaderLabel.text = DateFormatChange.shared.dateOfMonth.string(from: date)
+	
+	// 캘린더 스와이프시에 테이블뷰 나타내기
+	mainView.tableView.isHidden = false
+}
+```
+
+날짜를 선택하면 그 날짜에 속한 데이터를 테이블뷰로 보여주기위해 다음과 같은 코드를 작성했다.
+
+하지만 이렇게 되면 캘린더를 선택할 때도 dayTasks가 초기화되고 처음에 ...에 색을 부여하기 위해 dayTasks를 초기화 시키게 된다.
+
+즉 뷰를 띄우면 처음 `eventSelectionColorsFor`가 실행되어 dayTasks가 초기화되고 셀을 선택하면 `didSelect`가 실행되어 dayTasks가 실행되기 때문에 충돌이 발생하게 됐다.(어쩐지 날짜선택안하고 스와이프 하면 오류가 안 발생했었다...)
+
+그래서 `didSelect`시에 dayTasks를 초기화 시켜주는 부분은 삭제하고 제일 처음 뷰를 띄울 때 `eventSelectionColorsFor`에만 dayTasks를 초기화 시켜주도록 했다.
+
+### 다시 오류 발생...
+
+ 잘 되다가 또 안된다... 이유가 뭘까??
+
+스와이프시에 dayTasks를 안맞춰 주어서 그런가???
+
+print를 찍어봤는데 매 번 successCount가 스와이프시마다 바뀌는 걸 확인할 수 있었다...
+
+이게 중요한게 성공횟수를 나타내주고 그에 따라 점에 색을 채워주는 건데... 그러면 이게 문제인걸까?
+
+
+### ✅ 해결 ✅
+
+successCount를 반복문으로 가져오는 것은 생각해보니... 그렇게 좋은 방법은 아닌거같다.
+
+그래서 Realm을 통해 해당일의 스케쥴 성공한 값을 필터링해서 가져와서 나타내고자 시도했다.
+
+```swift
+// In UserScheduleRepository
+func filterDayTasksAndSuccess(date: Date) -> Results<UserSchedule> {
+	return localRealm.objects(UserSchedule.self).where {
+		$0.scheduleDate >= calendar.startOfDay(for: date) && $0.scheduleDate < calendar.startOfDay(for: date)  + 86400 && $0.scheduleSuccess == true
+	}
+}
+
+// In SecondViewController
+var dayTasksAndSuccess: Results<UserSchedule>!
+
+// In Calendar + Delegate
+func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, eventDefaultColorsFor date: Date) -> [UIColor]? {
+	
+	dayTasksAndSuccess = repository.filterDayTasksAndSuccess(date: date)
+	
+	switch dayTasksAndSuccess.count {
+	case 0:
+		return EventDotColor.successZeroTime
+	case 1:
+		return EventDotColor.successOneTime
+	case 2:
+		return EventDotColor.successTwoTime
+	case 3:
+		return EventDotColor.successThreeTime
+	default:
+		return EventDotColor.successThreeTime
+	}
+}
+```
+
+dayTasks가 아니라 Realm을 통해 필터링을 해주니 오류가 해결되었다.
+
+진작 Realm에서 가져와 나타내줄 걸 그랬다. 반복문을 사용해 successCount를 높이는 거보다 훨씬 더 깔끔한 코드가 되었다.
+
+최대한 Realm을 활용하고자 노력해야겠습니다...
+
+
+# 220927
+
+## 1. 특정시간대에 노티피케이션 설정(feat. 로컬 노티는 64개까지!!!)
+
+전에 배웠지만... 기억력 이슈로 인해 로컬 노티피케이션은 64개 까지인걸 인지 못한 저는 사용자가 스케쥴 등록할 때 마다 매 번 노티피케이션을 설정해주게하면 좋겠다... 라고 생각했습니다.
+
+<img width="200" alt="image" src="https://user-images.githubusercontent.com/92367484/194526329-8b3c8923-abe5-4879-bd34-5349a10ba618.png">
+
+그래서 뷰를 이렇게 만들었죠... 
+
+그리고 피드백을 받은 후에 일정 시간대에 알람을 설정할 수 있도록 바꾸어 주었습니다...
+
+https://user-images.githubusercontent.com/92367484/194529182-674fcd16-ecac-4fe5-993a-d9019ff0d5b5.mp4
+
+이 파트에서 저는 사용자가 권한을 허용해주거나 or 안 해주거나 두 가지에 매몰되어 간단한 부분을 놓쳤습니다.
+
+
+### 1-1. 권한설정 여부에만 신경썼어요...
+
+처음 노티피케이션 설정을 해줄 때 저는 당연하게 __권한 설정이 되어있을 때__ or __권한설정이 되어있지 않을 때__ 이 두가지를 가지고 모든걸 판단하려했습니다.
+
+그러다보니 권한설정이 되어있는지 안 되어있는지를 확인할 수 있는 메소드를 가지고 권한설정이 true이면 시간설정이 가능하게 아니면 권한설정 창으로 바로 이동하게 해주는 식으로 하려 했습니다.
+
+```swift
+let center = UNUserNotificationCenter.current()
+
+cetner.getNotificationCenter.current()
+center.getNotificationSettings { settings in 
+    switch settings.alertSetting {
+        case .enabled:
+            // 허용한 상태일 경우
+        default:
+            // 허용하지 않은 상태 + 나머지 모든 경우
+    }
+}
+```
+
+그러면 킬 때는 사용자가 권한설정으로 이동이 가능하게 해줬는데 끌 때는 어떻게 될까요?
+
+앱 내에서 시스템설정의 권한설정여부를 조정해줄 수 있을까요?
+
+네... 이걸 몰랐죠 전 ㅠㅠ...
+
+<span style="color:red">앱 내 설정으로 시스템설정을 컨트롤 하는 것은 불가능 합니다.</span>
+
+권한설정창 쪽으로 사용자가 이동되게 할 수는 있지만요.
+
+처음 제가 생각했던 "앱내에서 알림권한 설정여부를 확인하고 사용자가 스위치를 끄면 시스템 설정에서의 알림 권한을 꺼질 수 있게 하도록 하자!"는 불가능한 것이였죠.
+
+
+### 1-2. 그냥 삭제하면 되죠!!!
+
+이를 어떻게 해결했냐면 바로 노티피케이션을 끄면 등록되어있는 노티피케이션이 모두 삭제 되도록 했습니다.
+
+그러면 어찌됐던 알림은 사용자에게 가지 않습니다. 시간이 등록되어 있지 않으니까요.
+
+"그러면 알림권한은 켜져있는 상태가 아닌가요?" 라는 생각을 할 수 있겠죠. 저도 그랬듯...
+
+네 알림 권한은 사실 켜져있는 상태인거죠. 하지만 알림은 다 삭제됐으니까 크게 상관 없겠죠?
+
+그리고 사용자가 알림을 설정하고 싶으면 스위치를 키고 다시 권한설정 창으로 유도되는데 권한설정이 켜져있다하더라도 다시 권한을 끌가요?
+
+아니죠. '켜져있구나' 확인만하고 다시 앱으로 와서 알림 시간을 설정해주면됩니다.
+
+사실 권한설정이 켜져있든 꺼져있든 유저 입장에선 크게 상관이 없고 알림이 오냐 안오냐 설정이 잘 되있냐 이 것이 유저가 신경쓰는 포인트일 것입니다.
+
+그래서 이와같이 코드를 구성했습니다.
+
+```swift
+override func viewDidLoad() {
+	super.viewDidLoad()
+	
+	self.navigationItem.title = "설정"
+	
+	mainView.backgroundColor = .systemBackground
+
+	// 왜 비동기로해야할까?
+	notificationCenter.getPendingNotificationRequests { requests in
+		if requests.isEmpty == true {
+			DispatchQueue.main.async {
+				self.mainView.alarmToggle.setOn(false, animated: false)
+				self.mainView.setTimeButton.setTitle("시간설정", for: .normal)
+			}
+		} else {
+			let storedTime = UserDefaults.standard.string(forKey: "settingTime")
+			DispatchQueue.main.async {
+				self.mainView.alarmToggle.setOn(true, animated: false)
+				self.mainView.setTimeButton.setTitle(storedTime, for: .normal)
+			}
+		}
+	}
+}
+
+// 알람스위치 클릭액션
+@objc func alarmToggleClicked() {
+	if mainView.alarmToggle.isOn == true {
+		guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+		
+		if UIApplication.shared.canOpenURL(url) {
+			UIApplication.shared.open(url)
+		}
+	} else {
+		
+		notificationCenter.removeAllPendingNotificationRequests()
+		mainView.setTimeButton.setTitle("시간설정", for: .normal)
+	}
+}
+
+// 
+func sendNotification(alarmHour: Int, alarmMinute: Int) {
+	UNUserNotificationCenter.current().getNotificationSettings { settings in
+		if settings.authorizationStatus == UNAuthorizationStatus.authorized {
+
+			let notiContent = UNMutableNotificationContent()
+			notiContent.title = "시간이 됐어요!"
+			notiContent.subtitle = "일어나 스케쥴을 수행해주세요~~"
+			notiContent.sound = .defaultCritical
+
+			var date = DateComponents()
+			date.hour = alarmHour
+			date.minute = alarmMinute
+
+			let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: true)
+			let request = UNNotificationRequest(identifier: "wakeup", content: notiContent, trigger: trigger)
+
+			UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+
+		} else {
+			print("User not agree")
+		}
+	}
+}
+
+func getPendingNotificationRequests(completionHandler: ([UNNotificationRequest]) -> Void) { }
+```
+
+
+### 1-3. notification 설정은 왜 비동기로 해야할까?
+<img width="650" alt="스크린샷 2022-10-07 오후 8 03 19" src="https://user-images.githubusercontent.com/92367484/194539372-9ba684f2-ae81-46ce-b541-5d23d70d92ca.png">
+`getPendingNotificationRequests` 는 노티피케이션 요청이 있는지 없는지를 판단해주는 메소드 입니다.
+
+이 메소드를 사용해서 노티피케이션이 있는지 없는지 판단하고 없는 경우 "시간설정"으로 아닌 경우 설정시간을 UserDefaults로 저장해서 유저의 시간설정을 저장해주었습니다.
+
+그런데 이 메소드를 사용하려면 Async로 처리해줘야합니다. 그렇지 않으면 위와 같이 보라색 오류가 발생하게 됩니다.
+
+그렇다면 대체 왜 비동기로 처리해주어야 할까요?
+
+<img width="650" alt="스크린샷 2022-10-07 오후 9 07 37" src="https://user-images.githubusercontent.com/92367484/194554086-b9081547-12a7-4460-bda5-741d7d3871d0.png">
+
+
+네  사용한 `getPendingNotificationRequests` 메소드가 async(비동기)로 처리되기 때문입니다.
+
+이와 관련된 내용은 추후 블로그에서 자세하게 다루겠습니다.
+
+# 220928
+
+# 220929
+
+# 220930
+
+# 221001
+
+# 221002
+
+# 221003
+
+# 221004
+
+
