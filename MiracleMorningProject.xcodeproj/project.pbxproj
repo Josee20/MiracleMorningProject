@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		49061DCD28F51EB900E4B4A6 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 49061DCC28F51EB900E4B4A6 /* FirebaseAnalyticsWithoutAdIdSupport */; };
+		49061DCF28F51EB900E4B4A6 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 49061DCE28F51EB900E4B4A6 /* FirebaseCrashlytics */; };
+		49061DD128F51EB900E4B4A6 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 49061DD028F51EB900E4B4A6 /* FirebaseMessaging */; };
+		49061DD728F5439400E4B4A6 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 49061DD628F5439400E4B4A6 /* FirebaseAnalyticsWithoutAdIdSupport */; };
+		49061DD928F5439400E4B4A6 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 49061DD828F5439400E4B4A6 /* FirebaseCrashlytics */; };
+		49061DDB28F5439400E4B4A6 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 49061DDA28F5439400E4B4A6 /* FirebaseMessaging */; };
+		49061DDF28F5832800E4B4A6 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49061DDE28F5832800E4B4A6 /* OnboardingViewController.swift */; };
+		49061DE128F587C700E4B4A6 /* OnBoardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49061DE028F587C700E4B4A6 /* OnBoardingView.swift */; };
+		49128CBE296006850050A340 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 49128CBD296006850050A340 /* .gitignore */; };
+		49128CC22960077A0050A340 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 49128CC12960077A0050A340 /* GoogleService-Info.plist */; };
 		49314F3728D72B7F00D6156B /* ScheduleInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49314F3628D72B7F00D6156B /* ScheduleInfoModel.swift */; };
 		4949B33028DF4B7D00BB96F0 /* Calendar + Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4949B32F28DF4B7D00BB96F0 /* Calendar + Delegate.swift */; };
 		4949B33228DF64BE00BB96F0 /* TableView + Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4949B33128DF64BE00BB96F0 /* TableView + Delegate.swift */; };
@@ -27,21 +37,22 @@
 		49B012A428EA0B9200B3B773 /* QnAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B012A328EA0B9200B3B773 /* QnAViewController.swift */; };
 		49B012A628EA170F00B3B773 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B012A528EA170F00B3B773 /* ProfileView.swift */; };
 		49B012A928EA172300B3B773 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B012A828EA172300B3B773 /* ProfileViewController.swift */; };
-		49B012AC28EA190800B3B773 /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 49B012AB28EA190800B3B773 /* Toast */; };
-		49BB120828E19ED100948C91 /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = 49BB120728E19ED100948C91 /* Charts */; };
-		49BB121328E3DC2500948C91 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 49BB121228E3DC2500948C91 /* RealmSwift */; };
+		49B73CBF294DD63A004C5089 /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = 49B73CBE294DD63A004C5089 /* Charts */; };
+		49B73CC2294DD6C8004C5089 /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 49B73CC1294DD6C8004C5089 /* Toast */; };
+		49B73CC5294DD73E004C5089 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 49B73CC4294DD73E004C5089 /* SnapKit */; };
+		49B73CC8294DD9A7004C5089 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 49B73CC7294DD9A7004C5089 /* RealmSwift */; };
 		49BB121628E4813700948C91 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BB121528E4813700948C91 /* UIColor+Extension.swift */; };
 		49C3270E28DB7E4F000AF418 /* DateFormatChanger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C3270D28DB7E4F000AF418 /* DateFormatChanger.swift */; };
-		49F0FB5228D19AFF004AD670 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 49F0FB5128D19AFF004AD670 /* FSCalendar */; };
 		49F0FB5428D1A32C004AD670 /* SecondTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F0FB5328D1A32C004AD670 /* SecondTableViewCell.swift */; };
 		49F0FB5628D1A4B6004AD670 /* BaseCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F0FB5528D1A4B6004AD670 /* BaseCollectionViewCell.swift */; };
 		49F0FB5828D1A566004AD670 /* SecondCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F0FB5728D1A566004AD670 /* SecondCollectionViewCell.swift */; };
 		49F0FB5B28D2E7A2004AD670 /* RealmModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F0FB5A28D2E7A2004AD670 /* RealmModel.swift */; };
 		49F0FB5D28D2E7BF004AD670 /* UserScehduleRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F0FB5C28D2E7BF004AD670 /* UserScehduleRepository.swift */; };
+		49F4C5E3294D97970089DFF6 /* NumberFormatChanger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F4C5E2294D97970089DFF6 /* NumberFormatChanger.swift */; };
+		49F4C5E9294DB6410089DFF6 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 49F4C5E8294DB6410089DFF6 /* FSCalendar */; };
 		49F6D8C628CDAD10005AA757 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F6D8C528CDAD10005AA757 /* AppDelegate.swift */; };
 		49F6D8C828CDAD10005AA757 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F6D8C728CDAD10005AA757 /* SceneDelegate.swift */; };
 		49F6D8CA28CDAD10005AA757 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F6D8C928CDAD10005AA757 /* ViewController.swift */; };
-		49F6D8CD28CDAD10005AA757 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 49F6D8CB28CDAD10005AA757 /* Main.storyboard */; };
 		49F6D8CF28CDAD12005AA757 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49F6D8CE28CDAD12005AA757 /* Assets.xcassets */; };
 		49F6D8D228CDAD12005AA757 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 49F6D8D028CDAD12005AA757 /* LaunchScreen.storyboard */; };
 		49F6D8DB28CDAED7005AA757 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F6D8DA28CDAED7005AA757 /* BaseViewController.swift */; };
@@ -55,7 +66,6 @@
 		49F6D8F028CDB84B005AA757 /* ThirdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F6D8EF28CDB84B005AA757 /* ThirdView.swift */; };
 		49F6D8F228CDB854005AA757 /* ForthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F6D8F128CDB854005AA757 /* ForthViewController.swift */; };
 		49F6D8F428CDB861005AA757 /* ForthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F6D8F328CDB861005AA757 /* ForthView.swift */; };
-		49F6D8F728CDBFB9005AA757 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 49F6D8F628CDBFB9005AA757 /* SnapKit */; };
 		49F6D8FC28CDD5B1005AA757 /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F6D8FB28CDD5B1005AA757 /* BaseTableViewCell.swift */; };
 		49F6D8FE28CDD8F5005AA757 /* FirstTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F6D8FD28CDD8F5005AA757 /* FirstTableViewCell.swift */; };
 		49F6D90028CDEA32005AA757 /* ReusableProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F6D8FF28CDEA32005AA757 /* ReusableProtocol.swift */; };
@@ -65,6 +75,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		49061DDC28F548AE00E4B4A6 /* MiracleMorningProject.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MiracleMorningProject.entitlements; sourceTree = "<group>"; };
+		49061DDE28F5832800E4B4A6 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
+		49061DE028F587C700E4B4A6 /* OnBoardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnBoardingView.swift; sourceTree = "<group>"; };
+		49128CBD296006850050A340 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		49128CC12960077A0050A340 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../../Library/Mobile Documents/com~apple~CloudDocs/.Trash/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		49314F3628D72B7F00D6156B /* ScheduleInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleInfoModel.swift; sourceTree = "<group>"; };
 		4949B32F28DF4B7D00BB96F0 /* Calendar + Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Calendar + Delegate.swift"; sourceTree = "<group>"; };
 		4949B33128DF64BE00BB96F0 /* TableView + Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TableView + Delegate.swift"; sourceTree = "<group>"; };
@@ -92,11 +107,12 @@
 		49F0FB5728D1A566004AD670 /* SecondCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondCollectionViewCell.swift; sourceTree = "<group>"; };
 		49F0FB5A28D2E7A2004AD670 /* RealmModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmModel.swift; sourceTree = "<group>"; };
 		49F0FB5C28D2E7BF004AD670 /* UserScehduleRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserScehduleRepository.swift; sourceTree = "<group>"; };
+		49F4C5E0294D87600089DFF6 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		49F4C5E2294D97970089DFF6 /* NumberFormatChanger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFormatChanger.swift; sourceTree = "<group>"; };
 		49F6D8C228CDAD10005AA757 /* MiracleMorningProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MiracleMorningProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		49F6D8C528CDAD10005AA757 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		49F6D8C728CDAD10005AA757 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		49F6D8C928CDAD10005AA757 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		49F6D8CC28CDAD10005AA757 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		49F6D8CE28CDAD12005AA757 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		49F6D8D128CDAD12005AA757 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		49F6D8D328CDAD12005AA757 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -124,17 +140,32 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				49BB121328E3DC2500948C91 /* RealmSwift in Frameworks */,
-				49F6D8F728CDBFB9005AA757 /* SnapKit in Frameworks */,
-				49F0FB5228D19AFF004AD670 /* FSCalendar in Frameworks */,
-				49B012AC28EA190800B3B773 /* Toast in Frameworks */,
-				49BB120828E19ED100948C91 /* Charts in Frameworks */,
+				49B73CC2294DD6C8004C5089 /* Toast in Frameworks */,
+				49061DD128F51EB900E4B4A6 /* FirebaseMessaging in Frameworks */,
+				49061DCD28F51EB900E4B4A6 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
+				49061DCF28F51EB900E4B4A6 /* FirebaseCrashlytics in Frameworks */,
+				49B73CBF294DD63A004C5089 /* Charts in Frameworks */,
+				49061DD928F5439400E4B4A6 /* FirebaseCrashlytics in Frameworks */,
+				49061DD728F5439400E4B4A6 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
+				49061DDB28F5439400E4B4A6 /* FirebaseMessaging in Frameworks */,
+				49B73CC8294DD9A7004C5089 /* RealmSwift in Frameworks */,
+				49F4C5E9294DB6410089DFF6 /* FSCalendar in Frameworks */,
+				49B73CC5294DD73E004C5089 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		49061DDD28F57D8200E4B4A6 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				49061DDE28F5832800E4B4A6 /* OnboardingViewController.swift */,
+				49061DE028F587C700E4B4A6 /* OnBoardingView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
 		4949B32E28DF4B5900BB96F0 /* SecondVCExtension */ = {
 			isa = PBXGroup;
 			children = (
@@ -198,12 +229,12 @@
 			path = Extension;
 			sourceTree = "<group>";
 		};
-		49C3270C28DB7E31000AF418 /* DateFormatChanger */ = {
+		49C3270C28DB7E31000AF418 /* DateFormat */ = {
 			isa = PBXGroup;
 			children = (
 				49C3270D28DB7E4F000AF418 /* DateFormatChanger.swift */,
 			);
-			path = DateFormatChanger;
+			path = DateFormat;
 			sourceTree = "<group>";
 		};
 		49F0FB5928D2E78D004AD670 /* RealmModel */ = {
@@ -215,12 +246,23 @@
 			path = RealmModel;
 			sourceTree = "<group>";
 		};
+		49F4C5E1294D97700089DFF6 /* NumberFormat */ = {
+			isa = PBXGroup;
+			children = (
+				49F4C5E2294D97970089DFF6 /* NumberFormatChanger.swift */,
+			);
+			path = NumberFormat;
+			sourceTree = "<group>";
+		};
 		49F6D8B928CDAD10005AA757 = {
 			isa = PBXGroup;
 			children = (
+				49128CBD296006850050A340 /* .gitignore */,
 				49F6D8FF28CDEA32005AA757 /* ReusableProtocol.swift */,
+				49061DDD28F57D8200E4B4A6 /* Onboarding */,
 				49BB121428E4811400948C91 /* Extension */,
-				49C3270C28DB7E31000AF418 /* DateFormatChanger */,
+				49F4C5E1294D97700089DFF6 /* NumberFormat */,
+				49C3270C28DB7E31000AF418 /* DateFormat */,
 				49F0FB5928D2E78D004AD670 /* RealmModel */,
 				49F6D8EC28CDB832005AA757 /* ForthView */,
 				49F6D8EB28CDB82B005AA757 /* ThirdView */,
@@ -244,13 +286,14 @@
 		49F6D8C428CDAD10005AA757 /* MiracleMorningProject */ = {
 			isa = PBXGroup;
 			children = (
+				49061DDC28F548AE00E4B4A6 /* MiracleMorningProject.entitlements */,
 				49F6D8C528CDAD10005AA757 /* AppDelegate.swift */,
 				49F6D8C728CDAD10005AA757 /* SceneDelegate.swift */,
 				49F6D8C928CDAD10005AA757 /* ViewController.swift */,
-				49F6D8CB28CDAD10005AA757 /* Main.storyboard */,
 				49F6D8CE28CDAD12005AA757 /* Assets.xcassets */,
 				49F6D8D028CDAD12005AA757 /* LaunchScreen.storyboard */,
 				49F6D8D328CDAD12005AA757 /* Info.plist */,
+				49128CC12960077A0050A340 /* GoogleService-Info.plist */,
 			);
 			path = MiracleMorningProject;
 			sourceTree = "<group>";
@@ -347,6 +390,7 @@
 				49F6D8BE28CDAD10005AA757 /* Sources */,
 				49F6D8BF28CDAD10005AA757 /* Frameworks */,
 				49F6D8C028CDAD10005AA757 /* Resources */,
+				49061DD428F5225300E4B4A6 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -354,11 +398,17 @@
 			);
 			name = MiracleMorningProject;
 			packageProductDependencies = (
-				49F6D8F628CDBFB9005AA757 /* SnapKit */,
-				49F0FB5128D19AFF004AD670 /* FSCalendar */,
-				49BB120728E19ED100948C91 /* Charts */,
-				49BB121228E3DC2500948C91 /* RealmSwift */,
-				49B012AB28EA190800B3B773 /* Toast */,
+				49061DCC28F51EB900E4B4A6 /* FirebaseAnalyticsWithoutAdIdSupport */,
+				49061DCE28F51EB900E4B4A6 /* FirebaseCrashlytics */,
+				49061DD028F51EB900E4B4A6 /* FirebaseMessaging */,
+				49061DD628F5439400E4B4A6 /* FirebaseAnalyticsWithoutAdIdSupport */,
+				49061DD828F5439400E4B4A6 /* FirebaseCrashlytics */,
+				49061DDA28F5439400E4B4A6 /* FirebaseMessaging */,
+				49F4C5E8294DB6410089DFF6 /* FSCalendar */,
+				49B73CBE294DD63A004C5089 /* Charts */,
+				49B73CC1294DD6C8004C5089 /* Toast */,
+				49B73CC4294DD73E004C5089 /* SnapKit */,
+				49B73CC7294DD9A7004C5089 /* RealmSwift */,
 			);
 			productName = MiracleMorningProject;
 			productReference = 49F6D8C228CDAD10005AA757 /* MiracleMorningProject.app */;
@@ -386,14 +436,16 @@
 			knownRegions = (
 				en,
 				Base,
+				ko,
 			);
 			mainGroup = 49F6D8B928CDAD10005AA757;
 			packageReferences = (
-				49F6D8F528CDBFB8005AA757 /* XCRemoteSwiftPackageReference "SnapKit" */,
-				49F0FB5028D19AFF004AD670 /* XCRemoteSwiftPackageReference "FSCalendar" */,
-				49BB120628E19ED100948C91 /* XCRemoteSwiftPackageReference "Charts" */,
-				49BB121128E3DC2500948C91 /* XCRemoteSwiftPackageReference "realm-swift" */,
-				49B012AA28EA190800B3B773 /* XCRemoteSwiftPackageReference "Toast-Swift" */,
+				49061DCB28F51EB900E4B4A6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				49F4C5E7294DB6410089DFF6 /* XCRemoteSwiftPackageReference "FSCalendar" */,
+				49B73CBD294DD63A004C5089 /* XCRemoteSwiftPackageReference "Charts" */,
+				49B73CC0294DD6C8004C5089 /* XCRemoteSwiftPackageReference "Toast-Swift" */,
+				49B73CC3294DD73E004C5089 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				49B73CC6294DD9A7004C5089 /* XCRemoteSwiftPackageReference "realm-swift" */,
 			);
 			productRefGroup = 49F6D8C328CDAD10005AA757 /* Products */;
 			projectDirPath = "";
@@ -409,13 +461,36 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49128CBE296006850050A340 /* .gitignore in Resources */,
+				49128CC22960077A0050A340 /* GoogleService-Info.plist in Resources */,
 				49F6D8D228CDAD12005AA757 /* LaunchScreen.storyboard in Resources */,
 				49F6D8CF28CDAD12005AA757 /* Assets.xcassets in Resources */,
-				49F6D8CD28CDAD10005AA757 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		49061DD428F5225300E4B4A6 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		49F6D8BE28CDAD10005AA757 /* Sources */ = {
@@ -424,10 +499,13 @@
 			files = (
 				499C654828DE26EA0005D659 /* SecondFSCalendarCell.swift in Sources */,
 				49F0FB5828D1A566004AD670 /* SecondCollectionViewCell.swift in Sources */,
+				49061DE128F587C700E4B4A6 /* OnBoardingView.swift in Sources */,
 				4969B68628DC810400914A23 /* ChangeScheduleView.swift in Sources */,
 				4949B33428DF64D400BB96F0 /* CollectionView + Delegate.swift in Sources */,
 				49B012A428EA0B9200B3B773 /* QnAViewController.swift in Sources */,
+				49F4C5E3294D97970089DFF6 /* NumberFormatChanger.swift in Sources */,
 				49F0FB5D28D2E7BF004AD670 /* UserScehduleRepository.swift in Sources */,
+				49061DDF28F5832800E4B4A6 /* OnboardingViewController.swift in Sources */,
 				49C3270E28DB7E4F000AF418 /* DateFormatChanger.swift in Sources */,
 				49B0129E28EA06C600B3B773 /* NoticeView.swift in Sources */,
 				49B012A928EA172300B3B773 /* ProfileViewController.swift in Sources */,
@@ -475,18 +553,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		49F6D8CB28CDAD10005AA757 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				49F6D8CC28CDAD10005AA757 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		49F6D8D028CDAD12005AA757 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				49F6D8D128CDAD12005AA757 /* Base */,
+				49F4C5E0294D87600089DFF6 /* ko */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -498,6 +569,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -544,7 +616,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -558,6 +630,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -598,7 +671,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -613,15 +686,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MiracleMorningProject/MiracleMorningProject.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = AW5HC5SGGG;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MiracleMorningProject/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = MIMO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "\"위치정보를 받으려면 권한을 수정해주시기 바랍니다\"";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIMainStoryboardFile = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -631,7 +708,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.21;
 				PRODUCT_BUNDLE_IDENTIFIER = com.dlee.MiracleMorningProject;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -645,15 +722,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MiracleMorningProject/MiracleMorningProject.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = AW5HC5SGGG;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MiracleMorningProject/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = MIMO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "\"위치정보를 받으려면 권한을 수정해주시기 바랍니다\"";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIMainStoryboardFile = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -663,7 +744,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.21;
 				PRODUCT_BUNDLE_IDENTIFIER = com.dlee.MiracleMorningProject;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -696,39 +777,31 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		49B012AA28EA190800B3B773 /* XCRemoteSwiftPackageReference "Toast-Swift" */ = {
+		49061DCB28F51EB900E4B4A6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/scalessec/Toast-Swift";
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
 			requirement = {
-				branch = master;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
 			};
 		};
-		49BB120628E19ED100948C91 /* XCRemoteSwiftPackageReference "Charts" */ = {
+		49B73CBD294DD63A004C5089 /* XCRemoteSwiftPackageReference "Charts" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/danielgindi/Charts.git";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.0;
-			};
-		};
-		49BB121128E3DC2500948C91 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/realm/realm-swift.git";
-			requirement = {
 				kind = exactVersion;
-				version = 10.30.0;
+				version = 4.1.0;
 			};
 		};
-		49F0FB5028D19AFF004AD670 /* XCRemoteSwiftPackageReference "FSCalendar" */ = {
+		49B73CC0294DD6C8004C5089 /* XCRemoteSwiftPackageReference "Toast-Swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/WenchaoD/FSCalendar.git";
+			repositoryURL = "https://github.com/scalessec/Toast-Swift.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.0;
+				minimumVersion = 5.0.0;
 			};
 		};
-		49F6D8F528CDBFB8005AA757 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+		49B73CC3294DD73E004C5089 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
 			requirement = {
@@ -736,33 +809,79 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		49B73CC6294DD9A7004C5089 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				kind = exactVersion;
+				version = 10.30.0;
+			};
+		};
+		49F4C5E7294DB6410089DFF6 /* XCRemoteSwiftPackageReference "FSCalendar" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/WenchaoD/FSCalendar.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		49B012AB28EA190800B3B773 /* Toast */ = {
+		49061DCC28F51EB900E4B4A6 /* FirebaseAnalyticsWithoutAdIdSupport */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 49B012AA28EA190800B3B773 /* XCRemoteSwiftPackageReference "Toast-Swift" */;
-			productName = Toast;
+			package = 49061DCB28F51EB900E4B4A6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsWithoutAdIdSupport;
 		};
-		49BB120728E19ED100948C91 /* Charts */ = {
+		49061DCE28F51EB900E4B4A6 /* FirebaseCrashlytics */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 49BB120628E19ED100948C91 /* XCRemoteSwiftPackageReference "Charts" */;
+			package = 49061DCB28F51EB900E4B4A6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+		49061DD028F51EB900E4B4A6 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 49061DCB28F51EB900E4B4A6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
+		49061DD628F5439400E4B4A6 /* FirebaseAnalyticsWithoutAdIdSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 49061DCB28F51EB900E4B4A6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsWithoutAdIdSupport;
+		};
+		49061DD828F5439400E4B4A6 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 49061DCB28F51EB900E4B4A6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+		49061DDA28F5439400E4B4A6 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 49061DCB28F51EB900E4B4A6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
+		49B73CBE294DD63A004C5089 /* Charts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 49B73CBD294DD63A004C5089 /* XCRemoteSwiftPackageReference "Charts" */;
 			productName = Charts;
 		};
-		49BB121228E3DC2500948C91 /* RealmSwift */ = {
+		49B73CC1294DD6C8004C5089 /* Toast */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 49BB121128E3DC2500948C91 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			package = 49B73CC0294DD6C8004C5089 /* XCRemoteSwiftPackageReference "Toast-Swift" */;
+			productName = Toast;
+		};
+		49B73CC4294DD73E004C5089 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 49B73CC3294DD73E004C5089 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		49B73CC7294DD9A7004C5089 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 49B73CC6294DD9A7004C5089 /* XCRemoteSwiftPackageReference "realm-swift" */;
 			productName = RealmSwift;
 		};
-		49F0FB5128D19AFF004AD670 /* FSCalendar */ = {
+		49F4C5E8294DB6410089DFF6 /* FSCalendar */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 49F0FB5028D19AFF004AD670 /* XCRemoteSwiftPackageReference "FSCalendar" */;
+			package = 49F4C5E7294DB6410089DFF6 /* XCRemoteSwiftPackageReference "FSCalendar" */;
 			productName = FSCalendar;
-		};
-		49F6D8F628CDBFB9005AA757 /* SnapKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 49F6D8F528CDBFB8005AA757 /* XCRemoteSwiftPackageReference "SnapKit" */;
-			productName = SnapKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

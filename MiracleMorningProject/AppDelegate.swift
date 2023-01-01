@@ -7,14 +7,28 @@
 
 import UIKit
 
+import FirebaseCore
+import FirebaseMessaging
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        UNUserNotificationCenter.current().delegate = self
+        FirebaseApp.configure()
+        
+        application.registerForRemoteNotifications()
+        
+        Messaging.messaging().delegate = self
+        
+        Messaging.messaging().token { token, error in
+            if let error = error {
+                print("Error fetching FCM registration token: \(error)")
+            } else if let token = token {
+                print("FCM registration token: \(token)")
+            }
+        }
+                
         return true
     }
 
@@ -35,8 +49,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
     
+    func application(application: UIApplication,
+                     didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+      Messaging.messaging().apnsToken = deviceToken
+    }
+    
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.list, .banner, .sound])
     }
+    
+    // 푸시클릭시 앱이 아니라 세부화면으로 이동
+    // 유저가 클릭해야만 사용가능
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        
+        print(response.notification.request.content.body)
+        print(response.notification.request.content.userInfo)
+        
+        let userInfo = response.notification.request.content.userInfo
+        
+        if userInfo[AnyHashable("josee")] as? String == "project" {
+            print("Josee Project")
+        } else {
+            print("NOTHING")
+        }
+    }
 }
 
+extension AppDelegate: MessagingDelegate {
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+        print("Firebase registration token: \(String(describing: fcmToken))")
+        
+        let dataDict: [String: String] = ["token": fcmToken ?? ""]
+        NotificationCenter.default.post(
+            name: Notification.Name("FCMToken"),
+            object: nil,
+            userInfo: dataDict
+        )
+        // TODO: If necessary send token to application server.
+        // Note: This callback is fired at each app startup and whenever a new token is generated.
+    }
+}

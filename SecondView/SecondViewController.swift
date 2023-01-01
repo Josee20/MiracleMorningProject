@@ -5,9 +5,7 @@
 //  Created by 이동기 on 2022/09/11.
 //
 
-import Foundation
 import UIKit
-
 import FSCalendar
 import RealmSwift
 
@@ -62,6 +60,7 @@ class SecondViewController: BaseViewController {
         
         // 처음 캘린더에 선택된 날짜의 데이터 나타내기
         mainView.tableViewHeaderLabel.text = DateFormatChange.shared.dateOfMonth.string(from: now)
+        mainView.collectionViewHeaderLabel.text = "\(DateFormatChange.shared.dateOfOnlyMonth.string(from: now))월 성공 현황"
         
         // 현재시간 기준으로 tasks 필터링
         dayTasks = repository.filterDayTasks(date: now).sorted(byKeyPath: "startTime", ascending: true)
@@ -71,6 +70,8 @@ class SecondViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        mainView.calendar.today = now
         
         let components = calendar.dateComponents([.year, .month], from: date)
         let startOfMonth = calendar.date(from: components)!
@@ -83,11 +84,21 @@ class SecondViewController: BaseViewController {
         mainView.tableView.reloadData()
         mainView.calendar.reloadData()
         mainView.collectionView.reloadData()
+
+        repository.successScheduleInMonth(currentDate: startOfMonth).forEach {
+            let successSchedule = $0.schedule
+            scheduleCountDic.updateValue(repository.successScheduleNumber(key: successSchedule).count,
+                                         forKey: successSchedule)
+        }
+       
+        
         
         // 컬렉션뷰 업데이트
-        for i in 0..<repository.successScheduleInMonth(currentDate: startOfMonth).count {
-            scheduleCountDic.updateValue(repository.successScheduleNumber(key: repository.successScheduleInMonth(currentDate: startOfMonth)[i].schedule).count, forKey: repository.successScheduleInMonth(currentDate: startOfMonth)[i].schedule)
-        }
+//        for i in 0..<repository.successScheduleInMonth(currentDate: startOfMonth).count {
+//            var successSchedule = repository.successScheduleInMonth(currentDate: startOfMonth)[i].schedule
+//
+//            scheduleCountDic.updateValue(repository.successScheduleNumber(key: repository.successScheduleInMonth(currentDate: startOfMonth)[i].schedule).count, forKey: repository.successScheduleInMonth(currentDate: startOfMonth)[i].schedule)
+//        }
     }
     
     override func configure() {
@@ -110,9 +121,8 @@ class SecondViewController: BaseViewController {
     
     // events배열에 스케쥴 날짜 추가
     func setEvents() {
-
-        for i in 0..<tasks.count {
-            let eventDate = tasks[i].scheduleDate
+        tasks.forEach {
+            let eventDate = $0.scheduleDate
             eventArr.insert(eventDate)
         }
     }

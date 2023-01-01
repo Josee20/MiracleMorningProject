@@ -38,10 +38,22 @@ class ForthViewController: BaseViewController {
                     self.mainView.setTimeButton.setTitle("시간설정", for: .normal)
                 }
             } else {
-                let storedTime = UserDefaults.standard.string(forKey: "settingTime")
-                DispatchQueue.main.async {
-                    self.mainView.alarmToggle.setOn(true, animated: false)
-                    self.mainView.setTimeButton.setTitle(storedTime, for: .normal)
+                self.notificationCenter.getNotificationSettings { settings in
+                    switch settings.alertSetting {
+                        
+                        case .enabled:
+                        DispatchQueue.main.async {
+                            let storedTime = UserDefaults.standard.string(forKey: "settingTime")
+                            self.mainView.alarmToggle.setOn(true, animated: false)
+                            self.mainView.setTimeButton.setTitle(storedTime, for: .normal)
+                        }
+       
+                        default:
+                        DispatchQueue.main.async {
+                            self.mainView.alarmToggle.setOn(false, animated: false)
+                            self.mainView.setTimeButton.setTitle("시간설정", for: .normal)
+                        }
+                    }
                 }
             }
         }
@@ -53,7 +65,6 @@ class ForthViewController: BaseViewController {
         self.tabBarController?.tabBar.isHidden = false
     }
     
-        
     override func configure() {
         mainView.profileTableView.delegate = self
         mainView.profileTableView.dataSource = self
@@ -65,20 +76,58 @@ class ForthViewController: BaseViewController {
         
         mainView.setTimeButton.addTarget(self, action: #selector(setTimeButtonClicked), for: .touchUpInside)
         mainView.alarmToggle.addTarget(self, action: #selector(alarmToggleClicked), for: .touchUpInside)
-        
     }
     
     @objc func alarmToggleClicked() {
         if mainView.alarmToggle.isOn == true {
-            guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
             
-            if UIApplication.shared.canOpenURL(url) {
-                UIApplication.shared.open(url)
+            notificationCenter.getNotificationSettings { settings in
+                switch settings.alertSetting {
+                    case .enabled:
+                    DispatchQueue.main.async {
+                        self.mainView.alarmToggle.setOn(true, animated: true)
+                    }
+                    
+                    default:
+                    DispatchQueue.main.sync {
+                        let alert = UIAlertController(title: "알림 권한 설정", message: "알림권한을 허용해주셔야합니다\n설정으로 이동하시겠습니까?", preferredStyle: .alert)
+                        
+                        let ok = UIAlertAction(title: "확인", style: .default, handler: ({ action in
+                            guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+                            
+                            if UIApplication.shared.canOpenURL(url) {
+                                UIApplication.shared.open(url)
+                            }
+                        }))
+                        
+                        let cancel = UIAlertAction(title: "취소", style: .default, handler: ({ action in
+                            self.mainView.alarmToggle.setOn(false, animated: true)
+                        }))
+                        
+                        alert.addAction(cancel)
+                        alert.addAction(ok)
+                        
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                }
             }
         } else {
+            let alert = UIAlertController(title: "알림해제", message: "알림을 해제하시겠습니까?", preferredStyle: .alert)
             
-            notificationCenter.removeAllPendingNotificationRequests()
-            mainView.setTimeButton.setTitle("시간설정", for: .normal)
+            let ok = UIAlertAction(title: "확인", style: .default, handler: ({ UIAlertAction in
+                self.mainView.alarmToggle.setOn(false, animated: true)
+                self.notificationCenter.removeAllPendingNotificationRequests()
+                self.mainView.setTimeButton.setTitle("시간설정", for: .normal)
+            }))
+            
+            let cancel = UIAlertAction(title: "취소", style: .default, handler: ({ UIAlertAction in
+                self.mainView.alarmToggle.setOn(true, animated: false)
+            }))
+            
+            alert.addAction(cancel)
+            alert.addAction(ok)
+            
+            present(alert, animated: true, completion: nil)
         }
     }
     
@@ -109,8 +158,6 @@ class ForthViewController: BaseViewController {
                if self.calendar.component(.hour, from: datePicker.date) > 3 && self.calendar.component(.hour, from: datePicker.date) < 9 {
                     self.mainView.setTimeButton.setTitle(dateString, for: .normal)
                     self.mainView.setTimeButton.setTitleColor(.systemBlue, for: .normal)
-                   
-                   print(datePicker.date)
                    
                    let componentsHour = self.calendar.component(.hour, from: datePicker.date)
                    let componentsMinute = self.calendar.component(.minute, from: datePicker.date)

@@ -108,8 +108,6 @@ class TimerViewController: BaseViewController {
             // test
             self.leftTime -= 0.01
             
-            print(self.leftTime)
-            
             let hour = Int(self.leftTime) / 3600
             let minute = Int(self.leftTime) % 3600 / 60
             let second = Int(self.leftTime) % 3600 % 60

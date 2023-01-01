@@ -53,6 +53,7 @@ class ThirdView: BaseView {
         view.noDataText = "등록된 스케쥴이 없습니다."
         view.noDataTextColor = .failColor
         view.noDataFont = .boldSystemFont(ofSize: 15)
+        
         return view
     }()
     
@@ -69,7 +70,6 @@ class ThirdView: BaseView {
             .font: textFont,
         ]
         view.centerAttributedText = NSAttributedString(string: text, attributes: attributes)
-        
         
         // 원 안쪽 크기 조절
         view.usePercentValuesEnabled = true
@@ -131,9 +131,7 @@ class ThirdView: BaseView {
         noDataSecondChartLabel.snp.makeConstraints {
             $0.center.equalTo(currentMonthSchedulePercentageChart)
         }
-        
-        
-        
+
         borderWithTabBar.snp.makeConstraints {
             $0.width.equalTo(UIScreen.main.bounds.width)
             $0.height.equalTo(1)

@@ -8,12 +8,6 @@
 import UIKit
 
 extension UIColor {
-//    static let mainOrange = UIColor (
-//        red: 239/255,
-//        green: 91/255,
-//        blue: 12/255,
-//        alpha: 0.8
-//    )
     
     static let mainOrange = UIColor (
         red: 151/255,

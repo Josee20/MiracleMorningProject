@@ -87,7 +87,6 @@ extension SecondViewController: FSCalendarDelegate, FSCalendarDataSource, FSCale
         }
     }
     
-    
     // 캘린더 날짜 선택
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         
@@ -118,7 +117,7 @@ extension SecondViewController: FSCalendarDelegate, FSCalendarDataSource, FSCale
             scheduleCountDic.updateValue(repository.successScheduleNumber(key: repository.successScheduleInMonth(currentDate: currentPageDate)[i].schedule).count, forKey: repository.successScheduleInMonth(currentDate: currentPageDate)[i].schedule)
         }
         
-        mainView.collectionViewHeaderLabel.text = "\(month)월 미션 현황"
+        mainView.collectionViewHeaderLabel.text = "\(month)월 성공 현황"
                 
         // 캘린더 스와이프시에 테이블뷰 숨기기
         mainView.tableView.isHidden = true

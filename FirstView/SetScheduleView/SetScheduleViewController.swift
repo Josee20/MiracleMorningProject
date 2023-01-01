@@ -5,8 +5,8 @@
 //  Created by 이동기 on 2022/09/11.
 //
 
-import Foundation
 import UIKit
+import Toast
 
 class SetScheduleViewController: BaseViewController {
     
@@ -52,9 +52,12 @@ class SetScheduleViewController: BaseViewController {
         // MARK: 버튼마다 dayButtonClicked 함수 넣어주기
         let dayButtonArr = [mainView.sundayButton, mainView.mondayButton, mainView.tuesdayButton, mainView.wedensdayButton, mainView.thursdayButton, mainView.fridayButton, mainView.saturdayButton]
         
-        for i in 0..<dayButtonArr.count {
-            dayButtonArr[i].addTarget(self, action: #selector(dayButtonClicked), for: .touchUpInside)
+        dayButtonArr.forEach {
+            $0.addTarget(self, action: #selector(dayButtonClicked), for: .touchUpInside)
         }
+//        for i in 0..<dayButtonArr.count {
+//            dayButtonArr[i].addTarget(self, action: #selector(dayButtonClicked), for: .touchUpInside)
+//        }
     }
     
     // X버튼
@@ -174,7 +177,7 @@ class SetScheduleViewController: BaseViewController {
         let currentMonth = self.calendar.component(.month, from: now)
         
         if mainView.setScheduleTextField.text?.count == 0 {
-            showAlertOnlyOk(title: "미션을 입력해주세요")
+            mainView.makeToast("미션을 입력해주세요 :)")
         } else if mainView.sundayButton.backgroundColor == UIColor.lightGray &&
                     mainView.mondayButton.backgroundColor == UIColor.lightGray &&
                     mainView.tuesdayButton.backgroundColor == UIColor.lightGray &&
@@ -182,18 +185,18 @@ class SetScheduleViewController: BaseViewController {
                     mainView.thursdayButton.backgroundColor == UIColor.lightGray &&
                     mainView.fridayButton.backgroundColor == UIColor.lightGray &&
                     mainView.saturdayButton.backgroundColor == UIColor.lightGray {
-    
-            showAlertOnlyOk(title: "요일을 하나 이상 선택해주세요")
+            mainView.makeToast("요일을 하나 이상 선택해주세요 :)")
+            
         } else if mainView.setStartTimeButton.titleLabel?.text == "시간선택" || mainView.setEndTimeButton.titleLabel?.text == "시간선택" {
-            showAlertOnlyOk(title: "시간을 둘 다 선택해주세요")
+            mainView.makeToast("시간을 둘 다 선택해주세요 :)")
         } else if self.setStartTimeDatePickerDate! > self.setEndTimeDatePickerDate! {
-            self.showAlertOnlyOk(title: "시작시간은 종료시간보다 빨라야합니다\n종료시간을 다시 선택해주세요")
+            mainView.makeToast("시작시간은 종료시간보다 빨라야합니다\n종료시간을 다시 선택해주세요")
         } else {
             while true {
                 let month = calendar.component(.month, from: now)
                 let day = calendar.component(.weekday, from: now) - 1
                 
-                if currentMonth < month {
+                if currentMonth < month || (currentMonth == 12 && month == 1) {
                     break
                 } else if weekDayArr[day] == mainView.sundayButton.titleLabel?.text && mainView.sundayButton.backgroundColor == .lightGray ||
                     weekDayArr[day] == mainView.mondayButton.titleLabel?.text && mainView.mondayButton.backgroundColor == .lightGray ||
@@ -210,7 +213,6 @@ class SetScheduleViewController: BaseViewController {
                                            date: calendar.startOfDay(for: now),
                                            schedule: mainView.setScheduleTextField.text!,
                                            success: false)
-            
                     now += 86400
                 }
             }

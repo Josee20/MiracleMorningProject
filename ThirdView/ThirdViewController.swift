@@ -32,11 +32,11 @@ class ThirdViewController: BaseViewController {
     var successScheduleCountFromToday = 0
     var failScheduleCountFromToday = 0
     
-    // 스케쥴 진행률
+    // 스케쥴 진행률 - 1번차트
     var currentMonthSuccess: [String] = []
     var currentMonthSuccessValues: [Int] = []
     
-    // 스케쥴 성공 시간
+    // 스케쥴 성공 시간 - 2번차트
     var successScheduleDic = [String:Int]()
     var currentMonthSuccessScheduleArr: [String] = []
     var currentMonthSuccessScheduleValueArr: [Int] = []
@@ -129,23 +129,34 @@ class ThirdViewController: BaseViewController {
 
         mainView.monthPickerButton.setTitle("\(components.year!)년 \(components.month!)월 ", for: .normal)
         
-        print(#function)
+//        customizeChart(dataPoints: currentMonthSuccess, values: currentMonthSuccessValues.map { Double($0) })
+//        customizeChart2(dataPoints: currentMonthSuccessScheduleArr, values: currentMonthSuccessScheduleValueArr.map { Double($0) })
+//
+//        mainView.currentMonthSuccessChart.animate(xAxisDuration: 1.0)
+//        mainView.currentMonthSchedulePercentageChart.animate(xAxisDuration: 1.0)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
+        
+       setCharts()
+    }
+    
+    override func configure() {
+        mainView.monthPickerButton.addTarget(self, action: #selector(monthPickerButtonClicked), for: .touchUpInside)
+    }
+    
+    func setCharts() {
         customizeChart(dataPoints: currentMonthSuccess, values: currentMonthSuccessValues.map { Double($0) })
         customizeChart2(dataPoints: currentMonthSuccessScheduleArr, values: currentMonthSuccessScheduleValueArr.map { Double($0) })
 
         mainView.currentMonthSuccessChart.animate(xAxisDuration: 1.0)
         mainView.currentMonthSchedulePercentageChart.animate(xAxisDuration: 1.0)
-    }
-    
-
-    override func configure() {
-
-        mainView.monthPickerButton.addTarget(self, action: #selector(datePickerButtonClicked), for: .touchUpInside)
+  
+        // % 포맷형태로 바꿔주기
+        let formatter = DefaultValueFormatter(formatter: NumberFormatChange.shared.percentFormat)
+        mainView.currentMonthSuccessChart.data?.setValueFormatter(formatter)
+        mainView.currentMonthSchedulePercentageChart.data?.setValueFormatter(formatter)
     }
     
     // MonthPicker Date설정
@@ -162,25 +173,40 @@ class ThirdViewController: BaseViewController {
         selectedMonth = Int(todayMonth)!
     }
     
-    @objc func datePickerButtonClicked() {
+    @objc func monthPickerButtonClicked() {
+        
         let monthPickerView = UIPickerView()
         
         monthPickerView.delegate = self
         monthPickerView.dataSource = self
         
-        let alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n", message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "월 선택", message: "\n\n\n\n\n\n\n\n", preferredStyle: .alert)
+        
+        
+        // 액션시트안에 다른 걸 넣을 수 있는 코드가 따로 있다...
+        
+        // 액션 시트뷰 안에
+        // observer Type, contentViewController, set Value, alert contentviewcontroller
+        
+        monthPickerView.frame = CGRect(x: 0, y: 50, width: 270, height: 130)
         
         alert.view.addSubview(monthPickerView)
         
-        monthPickerView.snp.makeConstraints {
-            $0.centerX.equalTo(alert.view)
-            $0.top.equalTo(alert.view).offset(8)
-        }
+//        alert.view.addSubview(datePicker)
+        
+//        monthPickerView.snp.makeConstraints {
+//            $0.centerX.equalTo(alert.view)
+//            $0.top.equalTo(alert.view).offset(8)
+//        }
+        
+//        datePicker.snp.makeConstraints {
+//            $0.centerX.equalTo(alert.view)
+//            $0.top.equalTo(alert.view).offset(8)
+//        }
         
         let ok = UIAlertAction(title: "확인", style: .default) { [self] (action) in
             
             // 딕셔너리 비워주기(월 바꿀때마다)
-            
             var totalSchedulesInMonth = 0
             var successSchedulesInMonth = 0
             var failSchedulesInMonth = 0
@@ -198,11 +224,6 @@ class ThirdViewController: BaseViewController {
             guard let startOfMonth = DateFormatChange.shared.dateOfYearMonth.date(from: startOfMonthStr) else {
                 return
             }
-            
-            print("startOfMonth: \(startOfMonth)")
-            print("now: \(startOfMonthFromNow)")
-            
- 
             
             let currentMonthSuccessScheduleCount = repository.successScheduleInMonth(currentDate: startOfMonth).count
             var sameScheduleIndex = 0
@@ -308,7 +329,11 @@ class ThirdViewController: BaseViewController {
                 dataEntries.append(dataEntry)
                 
                 // legendEntry 배열에 담아주기
-                let legendEntry = LegendEntry.init(label: "\(dataPoints[i]): \(Int(values[i]))회", form: .default, formSize: CGFloat.nan, formLineWidth: CGFloat.nan, formLineDashPhase: CGFloat.nan, formLineDashLengths: nil, formColor: legendColors[i])
+//                let legendEntry = LegendEntry.init(label: "\(dataPoints[i]): \(Int(values[i]))회", form: .default, formSize: CGFloat.nan, formLineWidth: CGFloat.nan, formLineDashPhase: CGFloat.nan, formLineDashLengths: nil, formColor: legendColors[i])
+                
+                let legendEntry = LegendEntry.init(label: "\(dataPoints[i]): \(Int(values[i]))회")
+                legendEntry.formColor = legendColors[i]
+                
                 legendEntries.append(legendEntry)
             }
         }
@@ -316,9 +341,8 @@ class ThirdViewController: BaseViewController {
         // legendEntires 배열 커스텀으로 등록
         mainView.currentMonthSuccessChart.legend.setCustom(entries: legendEntries)
     
-        
         //2. Set ChartDataSet
-        let pieChartDataSet = PieChartDataSet(entries: dataEntries, label: nil)
+        let pieChartDataSet = PieChartDataSet(entries: dataEntries, label: "")
         pieChartDataSet.highlightEnabled = false
         pieChartDataSet.colors = legendColors
         pieChartDataSet.sliceSpace = 2.0
@@ -328,16 +352,7 @@ class ThirdViewController: BaseViewController {
         
         // 3. Set ChartData
         let pieChartData = PieChartData(dataSet: pieChartDataSet)
-        let format = NumberFormatter()
-        format.numberStyle = .percent
-        format.maximumFractionDigits = 1
-        format.multiplier = 1
-        format.percentSymbol = "%"
-        let formatter = DefaultValueFormatter(formatter: format)
-        pieChartData.setValueFormatter(formatter)
-        
         mainView.currentMonthSuccessChart.data = pieChartData
-        
     }
     
     func customizeChart2(dataPoints: [String], values: [Double]) {
@@ -360,20 +375,25 @@ class ThirdViewController: BaseViewController {
             let dataEntry = PieChartDataEntry(value: values[i], label: nil, data: dataPoints[i] as AnyObject)
             dataEntries.append(dataEntry)
             
-            let legendEntry = LegendEntry.init(label: "\(dataPoints[dataPoints.count-i-1]): \(Int(values[dataPoints.count-i-1])/60)분", form: .default, formSize: CGFloat.nan, formLineWidth: CGFloat.nan, formLineDashPhase: CGFloat.nan, formLineDashLengths: nil, formColor: legendColors[dataPoints.count-i-1])
+//            let legendEntry = LegendEntry.init(label: "\(dataPoints[dataPoints.count-i-1]): \(Int(values[dataPoints.count-i-1])/60)분", form: .default, formSize: CGFloat.nan, formLineWidth: CGFloat.nan, formLineDashPhase: CGFloat.nan, formLineDashLengths: nil, formColor: legendColors[dataPoints.count-i-1])
+            
+            let legendEntry = LegendEntry.init(label: "\(dataPoints[dataPoints.count-i-1]): \(Int(values[dataPoints.count-i-1])/60)분")
+            legendEntry.formColor = legendColors[dataPoints.count-i-1]
             legendEntries.append(legendEntry)
         }
         
         mainView.currentMonthSchedulePercentageChart.legend.setCustom(entries: legendEntries)
         
         //2. Set ChartDataSet
-        let pieChartDataSet = PieChartDataSet(entries: dataEntries, label: nil)
+//        let pieChartDataSet = PieChartDataSet(entries: dataEntries, label: nil)
+        let pieChartDataSet = PieChartDataSet(entries: dataEntries, label: "")
         pieChartDataSet.highlightEnabled = false
         pieChartDataSet.colors = legendColors
         pieChartDataSet.sliceSpace = 2.0
         pieChartDataSet.yValuePosition = .outsideSlice
         pieChartDataSet.valueLinePart1Length = 0.4
         pieChartDataSet.valueTextColor = .black
+
 
         // 3. Set ChartData
         let pieChartData = PieChartData(dataSet: pieChartDataSet)
@@ -382,11 +402,11 @@ class ThirdViewController: BaseViewController {
         format.maximumFractionDigits = 1
         format.multiplier = 1
         format.percentSymbol = "%"
+
         let formatter = DefaultValueFormatter(formatter: format)
         pieChartData.setValueFormatter(formatter)
         
         mainView.currentMonthSchedulePercentageChart.data = pieChartData
-        
     }
 }
 

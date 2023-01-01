@@ -21,12 +21,18 @@ class ProfileViewController: BaseViewController {
         super.viewDidLoad()
         
         mainView.backgroundColor = .systemBackground
-        self.navigationController?.isNavigationBarHidden = false
+        
         self.tabBarController?.tabBar.isHidden = true
         self.navigationController?.navigationBar.topItem?.title = ""
         self.navigationController?.navigationBar.tintColor = .black
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "저장", style: .plain, target: self, action: #selector(saveButtonClicked))
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.navigationController?.isNavigationBarHidden = false
     }
     
     @objc func saveButtonClicked() {

@@ -184,12 +184,6 @@ class ForthView: BaseView {
             $0.centerX.equalTo(self.profileImageBackgroundView)
         }
         
-//        profileImageMoreInfoButton.snp.makeConstraints {
-//            $0.width.height.equalTo(20)
-//            $0.leadingMargin.equalTo(profileImageLabel.snp.trailing).offset(8)
-//            $0.centerY.equalTo(self.profileImageLabel)
-//        }
-        
         profileTableView.snp.makeConstraints {
             $0.leadingMargin.equalTo(20)
             $0.trailingMargin.equalTo(-20)

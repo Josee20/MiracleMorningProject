@@ -6,7 +6,6 @@
 //
 
 import UIKit
-
 import FSCalendar
 
 class SecondView: BaseView {
@@ -17,13 +16,14 @@ class SecondView: BaseView {
         view.locale = Locale.current
         view.appearance.headerDateFormat = "YYYY년 MM월"
         view.appearance.headerMinimumDissolvedAlpha = 0.3
-        view.appearance.calendar.headerHeight = 60
+        view.headerHeight = 60
         view.appearance.weekdayTextColor = .black
         view.appearance.headerTitleColor = .black
         view.appearance.headerTitleFont = .boldSystemFont(ofSize: 20)
         view.appearance.titleDefaultColor = .systemGray
         view.appearance.selectionColor = .successColor
         view.appearance.todayColor = .mainBlue
+        
         
         return view
     }()
@@ -111,7 +111,7 @@ class SecondView: BaseView {
         collectionViewHeaderLabel.snp.makeConstraints {
             $0.topMargin.equalTo(calendar.snp.bottom).offset(28)
             $0.leadingMargin.equalTo(19)
-            $0.width.equalTo(110)
+            $0.width.equalTo(120)
             $0.height.equalTo(20)
         }
         
